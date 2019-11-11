@@ -41,10 +41,10 @@
             <a class="nav-link js-scroll-trigger" href="#services">Chapitres</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#">Se connecter</a><!--TODO modale bootstrap-->
+            <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#login-modal"  href="#">Se connecter</a><!--TODO modale bootstrap-->
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#">S'inscrire</a><!--TODO modale bootstrap-->
+            <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#register-modal" href="#">S'inscrire</a><!--TODO modale bootstrap-->
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#">A propos</a><!--TODO nouvelle page en sync ou async bootstrap-->
@@ -64,6 +64,66 @@
       </div>
     </div>
   </header>
+
+  <!-- Register modal -->
+  <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Inscription</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<form action="" method="POST"> <!--TODO Compléter le action avec le bon fichier php-->
+				<p>	
+					<label>Entrez votre pseudo : 
+						<input type="text" name="pseudo" value=""  required/> 
+					</label>
+					<label>Entrez votre adresse email : 
+						<input type="email" name="email" value=""  required/> 
+					</label>
+					<label> Tapez votre mot de passe :
+						<input type="password" name="pass" required/>
+					</label>	
+					<label> Confirmez votre mot de passe :
+						<input type="password" name="pass-confirm"  required/>
+					</label>
+				</p>
+				<p>
+					<input type="submit" value="Valider informations"/>
+				</p>
+			</form>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+		  <!-- <button type="button" class="btn btn-primary">Valider</button> -->
+		</div>
+	  </div>
+	</div>
+  </div>
+
+  <!-- Login modal -->
+  <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Connexion</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  ...
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+		  <button type="button" class="btn btn-primary">Valider</button>
+		</div>
+	  </div>
+	</div>
+  </div>
 
   <!-- Chapters -->
   <section class="page-section" id="services">
