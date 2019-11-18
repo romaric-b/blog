@@ -33,4 +33,4 @@ $test = new User(
 $test->getNickname();
 
 $controller = new Controller();
-$controller->test();
+$controller->testecho();
