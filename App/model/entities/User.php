@@ -1,6 +1,6 @@
 <?php
 
-namespace model\entities;
+namespace App\model\entities;
 
 class User
 {
@@ -21,9 +21,7 @@ class User
     private $user_password2;
     private $user_role;
 
-    //RAPPEL : les Setters fournissent une donnée à mon entité. Une fois fait je peux utiliser ces données avec les getters
 
-    //Permettra de passer des données à l'instanciation directement sous forme de tableau en clé valeur
     public function __construct(array $donnees = array())
     {
         //On hydrate pas un tableau de données vide
@@ -37,18 +35,13 @@ class User
 
     public function hydrate(array $datas)
     {
-        //je fais une boucle avec le tableau de données
+
         foreach ($datas as $key => $value)
         {
-            //je récupère le nom des setters correspondants
-            //si la clé est UserId son setter est getUserId
-            //Il suffit de mettre la première lettre en MAJ et de la prefixer
             $method = 'set'.ucfirst($key);
 
             var_dump($method);
-
-            //Vérifie si la méthode existe
-            if (method_exists(array($this, $method)))
+            if (method_exists($this, $method)) // TU AS BIEN CORRIGER CA COMME JE TE L AI DIS ?
             {
                 // il existe on peut l'appeler
                 $this->$method($value);
@@ -56,7 +49,7 @@ class User
         }
     }
 
-    //Pas besoin de set id car l'id est généré automatiquement de façon auto-incrémenté dans la table user
+
 
     public function setNickname($nickname)
     {

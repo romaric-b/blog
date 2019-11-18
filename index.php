@@ -1,8 +1,11 @@
 <?php
 
+use App\controller\Controller;
+use App\model\entities\User;
+
 require 'vendor/autoload.php';
 
-use App\model\entities\User;
+
 //use model\entities\User;
 
 //require 'controller\UserController.php';
@@ -22,7 +25,12 @@ use App\model\entities\User;
 //{
 //    echo 'Erreur : ' . $e->getMessage();
 //}
+
+$maValeur = "Romaric";
 $test = new User(
-    $user_nickname = 'test'
+    ['nickname' => $maValeur]
 );
 $test->getNickname();
+
+$controller = new Controller();
+$controller->test();
