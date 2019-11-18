@@ -76,19 +76,19 @@
 		  </button>
 		</div>
 		<div class="modal-body">
-			<form action="" method="POST"> <!--TODO Compléter le action avec le bon fichier php-->
+			<form action="index.php?action=register" method="POST"> <!--TODO Compléter le action avec le bon fichier php-->
 				<p>	
 					<label>Entrez votre pseudo : 
-						<input type="text" name="pseudo" value=""  required/> 
+						<input type="text" name="nickname" value=""  required/>
 					</label>
 					<label>Entrez votre adresse email : 
 						<input type="email" name="email" value=""  required/> 
 					</label>
 					<label> Tapez votre mot de passe :
-						<input type="password" name="pass" required/>
+						<input type="password" name="password" required/>
 					</label>	
 					<label> Confirmez votre mot de passe :
-						<input type="password" name="pass-confirm"  required/>
+						<input type="password" name="password2"  required/>
 					</label>
 				</p>
 				<p>

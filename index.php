@@ -1,15 +1,28 @@
 <?php
 
-try
-{
-    //INSCRIPTION
+require 'vendor/autoload.php';
 
-    //vérifier si toutes les info du formulaires sont remplies et correctes
+use App\model\entities\User;
+//use model\entities\User;
 
-        //Si oui traitement faille XSS puis envoi en base
-
-}
-catch(Exception $e)
-{
-    echo 'Erreur : ' . $e->getMessage();
-}
+//require 'controller\UserController.php';
+//
+//try
+//{
+//    if (isset($_GET['action']))
+//    {
+//
+//    }
+//    else
+//    {
+//        listPosts(); //TODO créer class dans PostManager
+//    }
+//}
+//catch(Exception $e)
+//{
+//    echo 'Erreur : ' . $e->getMessage();
+//}
+$test = new User(
+    $user_nickname = 'test'
+);
+$test->getNickname();

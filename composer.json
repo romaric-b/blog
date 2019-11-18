@@ -1,0 +1,17 @@
+{
+  "name": "wwww/blog",
+  "description": "P4-Jean-Forteroche",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Romaric",
+      "email": "blot.romaric@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "App/"
+    }
+  }
+}
