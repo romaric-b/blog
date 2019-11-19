@@ -26,11 +26,27 @@ require 'vendor/autoload.php';
 //    echo 'Erreur : ' . $e->getMessage();
 //}
 
-$maValeur = "Romaric";
-$test = new User(
-    ['nickname' => $maValeur]
-);
-$test->getNickname();
+//$maValeur = "Romaric";
+//$test = new User( //RegistDate on le passera
+//    [
+//        'nickname' => htmlspecialchars($_POST['nickname']),
+//        'email' => htmlspecialchars($_POST['email']),
+//        'password' => htmlspecialchars($_POST['password']),
+//        'password' => htmlspecialchars($_POST['password2'])
+//    ]
+//);
 
-$controller = new Controller();
-$controller->testecho();
+$user = new User( //RegistDate on le passera
+    [
+        'nickname' => 'gérard',
+        'email' => 'ggleking@gmail.com',
+        'password' => '1234',
+        'password2' => '1234'
+    ]
+);
+
+echo $user->getNickname();
+echo $user->getEmail();
+echo $user->getPassword();
+echo $user->getPassword2();
+

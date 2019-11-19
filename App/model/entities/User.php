@@ -22,25 +22,32 @@ class User
     private $user_role;
 
 
-    public function __construct(array $donnees = array())
+    public function __construct(array $datas = array())
     {
         //On hydrate pas un tableau de données vide
-        if (!empty($donnees))
+        if (!empty($datas))
         {
-            $this->hydrate($donnees);
+            $this->hydrate($datas);
         }
     }
 
-    //SETTERS
+    //SETTERS : affecter une valeur à une propriété d'objet private
 
-    public function hydrate(array $datas)
+    //// Un tableau de données doit être passé à la fonction (d'où le préfixe « array »).
+    ///
+    /// PARCOURS du tableau $datas (avec pour clé $key et pour valeur $value)
+    //  On assigne à $setter la valeur « 'set'.$key », en mettant la 
+    //  première lettre de $key en majuscule (utilisation de ucfirst())
+    //  SI la méthode set$key de notre classe existe ALORS
+    //    On invoque set$key($valeur)
+    //  FIN SI
+    //FIN PARCOURS
+    public function hydrate(array $datas) //Et si j'ai bien compris, ça rend les setters autoexecutants comme on pouvait faire en JS lorsqu'on appelait une méthode dans son constructeur
     {
-
         foreach ($datas as $key => $value)
         {
             $method = 'set'.ucfirst($key);
-
-            var_dump($method);
+//            var_dump($method);
             if (method_exists($this, $method)) // TU AS BIEN CORRIGER CA COMME JE TE L AI DIS ?
             {
                 // il existe on peut l'appeler
@@ -53,7 +60,6 @@ class User
 
     public function setNickname($nickname)
     {
-        echo '<p>passe</p>';
         if(isset($nickname))
         {
             if (!empty($nickname))
@@ -113,55 +119,40 @@ class User
 
     public function setPassword($password)
     {
+        htmlspecialchars($password);
+
         if(isset($password))
         {
             if (!empty($password))
             {
-                if(is_string($password) <= 30 )
+                if(is_string($password) <= 30)
                 {
-                    htmlspecialchars($password);
-                    $this->user_password = password_hash($password);
+                    //est ce le bon moment pour hacher du password ???????
+                    //            $this->user_password = password_hash($password2);
                 }
                 else
                 {
-                    echo 'Mauvais format du mot de passe';
+                    //echo 'Mauvais format du mot de passe';
                 }
             }
             else
             {
-                echo 'champ mot de passe vide';
+                //echo 'Un champ mot de passe vide';
             }
         }
         else
         {
-            echo 'variable non définie';
+            //echo 'variable non définie';
         }
     }
 
     public function setPassword2($password2)
     {
-        if(isset($password2))
+        htmlspecialchars($password2);
+
+        if (isset($password2) && !empty($password2) && is_string($password2) <= 30)
         {
-            if (!empty($password2))
-            {
-                if(is_string($password2) <= 30 )
-                {
-                    htmlspecialchars($password2);
-                    $this->user_password2 = password_hash($password2);
-                }
-                else
-                {
-                    echo 'Mauvais format du mot de passe';
-                }
-            }
-            else
-            {
-                echo 'champ mot de passe vide';
-            }
-        }
-        else
-        {
-            echo 'variable non définie';
+//          $this->user_password = password_hash($password2);
         }
     }
 
@@ -170,7 +161,7 @@ class User
         $this->user_role = $role;
     }
 
-    //GETTERS
+    //GETTERS méthode chargée de renvoyer la valeur d'un attribut
 
     public function getUserId()
     {

@@ -1,20 +1,10 @@
 <?php
 
-namespace\App\model;
-use PDO;
+namespace App\model;
 
-class UserManager extends Manager
+class UserManager extends Manager //Je peux faire un final, une classe finale signifie qu'elle ne pourra pas être étendue par une classe fille
 {
 
-    /**
-     * @var \PDO $pdo l'objet sera utilisé dans plusieurs méthodes, il est utile de la stocker dans cette variable
-     */
-    private $pdo;
-
-    /**
-     * @var \PDOStatement $pdoStatement objet PDOStatement résultant de l'utilisation des méthodes PDO::query et PDO::prepare. PDOStatement sera utile dans plusieurs circonstances, donc le stocker dans une variable va permettre son utilisation dans différentes méthodes
-     */
-    private $pdoStatement;
 
     /**
      * UserManager constructor.
@@ -45,6 +35,8 @@ class UserManager extends Manager
         //Utiliser plutôt un tableau de valeur
 
         //liaison des paramètre avec pdoStatement et la méthode bindValue
+
+        //peut fonctionner mais utiliser plutôt un array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
         $this->pdoStatement->bindValue(':nickname', $user->getNickname(), PDO::PARAM_STR);
         $this->pdoStatement->bindValue(':registDate', $user->getRegistDate(), PDO::PARAM_STR);
         $this->pdoStatement->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);

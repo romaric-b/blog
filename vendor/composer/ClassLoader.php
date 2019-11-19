@@ -319,10 +319,10 @@ class ClassLoader
     public function loadClass($class)
     {
         //var_dump($class);
-        var_dump($this->findFile($class));
-        var_dump($file = $this->findFile($class));
+        /* var_dump($this->findFile($class));
+        var_dump($file = $this->findFile($class)); */
         if ($file = $this->findFile($class)) {
-            var_dump($file);
+            /* var_dump($file); */
             includeFile($file);
 
             return true;
