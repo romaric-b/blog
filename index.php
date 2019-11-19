@@ -50,3 +50,4 @@ echo $user->getEmail();
 echo $user->getPassword();
 echo $user->getPassword2();
 
+//ge
