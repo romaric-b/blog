@@ -21,48 +21,22 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
 
     /**
      * Insert un objet User dans la bdd et met à jour l'objet passé en argument en lui spécifiant un identifiant (id)
-     * @param User $user objet de type User passé par référence
+     * @param User $user objet de type User
      * @return boolean true si l'objet a bien été inséré, false si une erreur survient
      */
-    public function createMember(User &$user) //le & permet d'indiquer que je veux un passage par référence Obligé d'utiliser la class User
+    public function createMember(User $user) //le & permet d'indiquer que je veux un passage par référence Obligé d'utiliser la class User
     {
-        //Une référence n'est rien d'autre qu'une variable pointant sur une autre : elle devient un alias de la variable sur laquelle elle pointe. Si vous modifiez l'une de ces variables, les deux prendront la même valeur. Lors de la déclaration d'une référence, on fait précéder le nom de la variable à référencer d'un & ; et ce uniquement lors de sa déclaration.
+
+        $req = $this->pdo->prepare('INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_password)
+                                         VALUES (:nickname, CURRENT_DATE(), :email, :password, :role)');
 
 
-        // 1ère value id (généré auto en table donc null ici) utilisation des :parametres-nommés pour les requêtes préparées
-        $this->pdoStatement = $this->pdo->prepare('INSERT INTO blog_user VALUES (NULL , :nickname, CURRENT_DATE(), :email, :password, :role)');
-
-        //Utiliser plutôt un tableau de valeur
-
-        //liaison des paramètre avec pdoStatement et la méthode bindValue
-
-        //peut fonctionner mais utiliser plutôt un array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
-        $this->pdoStatement->bindValue(':nickname', $user->getNickname(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':registDate', $user->getRegistDate(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
-
-        //éxecution de la requête
-        $executeIsOk = $this->pdoStatement->execute();
-
-        if(!$executeIsOk)
-        {
-            return false;
-        }
-        else
-        {
-            //Je récupère l'objet inséré et je l'affecte à $user
-            //Avec lastInsertId() de pdo je récupère le dernier id inséré
-            $id = $this->pdo->lastInsertId();
-
-            //J'utilise la méthode read pour lire l'identifiant
-            $user = $this->readMember($id);
-
-            //POURQUOI FAIRE COMME CA ? Parce que dans mon entité User, je ne peut que get l'id et non lui assigné un id (car il est auto-incrémenté)
-
-            return true;
-        }
+        //array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
+        $req->execute(array(
+            'nickname' => $user->user_nickname,
+            'email' => $user->user_email,
+            'password' => $user->user_password
+        ));
     }
 
     //READ

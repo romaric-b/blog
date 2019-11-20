@@ -1,12 +1,9 @@
 <?php
 
-use App\controller\Controller;
 use App\model\entities\User;
 
 require 'vendor/autoload.php';
 
-
-//use model\entities\User;
 
 //require 'controller\UserController.php';
 //
@@ -26,15 +23,12 @@ require 'vendor/autoload.php';
 //    echo 'Erreur : ' . $e->getMessage();
 //}
 
-//$maValeur = "Romaric";
-//$test = new User( //RegistDate on le passera
-//    [
-//        'nickname' => htmlspecialchars($_POST['nickname']),
-//        'email' => htmlspecialchars($_POST['email']),
-//        'password' => htmlspecialchars($_POST['password']),
-//        'password' => htmlspecialchars($_POST['password2'])
-//    ]
-//);
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ***************************************************** PARTIE TEST TEMPORAIRE ********************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 $user = new User( //RegistDate on le passera
     [
@@ -45,9 +39,4 @@ $user = new User( //RegistDate on le passera
     ]
 );
 
-echo $user->getNickname();
-echo $user->getEmail();
-echo $user->getPassword();
-echo $user->getPassword2();
-
-//ge
+var_dump($user);

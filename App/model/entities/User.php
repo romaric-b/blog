@@ -128,7 +128,7 @@ class User
                 if(is_string($password) <= 30)
                 {
                     //est ce le bon moment pour hacher du password ???????
-                    //            $this->user_password = password_hash($password2);
+                    $this->user_password = $password;
                 }
                 else
                 {
@@ -148,11 +148,12 @@ class User
 
     public function setPassword2($password2)
     {
+
         htmlspecialchars($password2);
 
         if (isset($password2) && !empty($password2) && is_string($password2) <= 30)
         {
-//          $this->user_password = password_hash($password2);
+             $this->user_password2 = $password2;
         }
     }
 
