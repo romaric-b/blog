@@ -6,16 +6,19 @@ use App\model\entities\User;
 use App\model\UserManager ;
 
 
-// Je set les données sur mon entités, je les controle, si c'est ok : je les get dans mon manager pour préparer leurs envoies en bases et j'envoie(envoie en base)
-// OU je contrôle les $_POST dans le controleur, je set les entrées à mon entités si ok. Je get dans mon manager pour envoyer
 
 class UserController
 {
+    public function __construct()
+    {
+        $this->userManager = new UserManager();
+    }
     /**
      * Lors de l'inscription, contrôle l'existance des données utilisateur, leurs types et leurs formats, sécurise le pass et vérifier que le pseudo est pas déjà pris.
      */
     private function register()
     {
+        // 1 : L'utilisateur rentre des données dans son formulaires, elles sont affectées à User et contrôlées
         $user = new User( //RegistDate on le passera
         [
             'nickname' => htmlspecialchars($_POST['nickname']),
@@ -24,18 +27,22 @@ class UserController
             'password2' => htmlspecialchars($_POST['password2'])
         ]);
 
-        $user->getNickname();
-        $user->getEmail();
-        $user->getPassword();
-        $user->getPassword2();
+        // 2 : J'appelle l'UserManager qui va transporter ça jusqu'à la BDD et le créer
+        $this->userManager->createMember($user);
 
-        var_dump($user);
-
+        // 3 : TODO j'appelle une vue confirmant son inscription
 
     }
 
     private function login()
     {
+        // 1 : L'utilisateur rentre des données dans son formulaires, elles sont affectées à User et contrôlées
+        $user = new User( //RegistDate on le passera
+        [
+            'nickname' => htmlspecialchars($_POST['nickname']),
+            'password' => htmlspecialchars($_POST['password'])
+        ]);
+
 
 
     }

@@ -14,11 +14,14 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
     public function __construct()
     {
         $this->pdo = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        //peut-être instancier un user quelque part
     }
 
 
-    //CREATE
-
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //          CREATE
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /**
      * Insert un objet User dans la bdd et met à jour l'objet passé en argument en lui spécifiant un identifiant (id)
      * @param User $user objet de type User
@@ -27,8 +30,8 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
     public function createMember(User $user) //le & permet d'indiquer que je veux un passage par référence Obligé d'utiliser la class User
     {
 
-        $req = $this->pdo->prepare('INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_password)
-                                         VALUES (:nickname, CURRENT_DATE(), :email, :password, :role)');
+        $req = $this->pdo->prepare('INSERT INTO blog_user (user_id, user_nickname, user_regist_date, user_email, user_password, user_role)
+                                         VALUES (:nickname, NOW(), :email, :password, :role)');
 
 
         //array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
@@ -39,47 +42,29 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
         ));
     }
 
-    //READ
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //          READ
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Récupère un objet User à partir de son identifiant
-     * @param $memberId  int identifiant de l'utilisateur
-     * @return boolean|User|null : false si une erreur survient, un objet User si une correspondance est trouvée, Null s'il n'y a aucune correspondance
+     * Récupère un objet User à partir de son pseudo
+     * @param $user_nickname  string pseudo de l'utilisateur     *
      */
-    public function readMember($memberId) //Je récupère de la base //pour le login visiblement on cherche plutôt un membre par matching de nickname
+    public function readMember($user_nickname) //Je récupère de la base //pour le login visiblement on cherche plutôt un membre par matching de nickname
     {
         //TODO réviser "les paramètres nommées" PDO https://www.youtube.com/watch?v=Iau0UY7UT8w&list=PLXGXMIp685ivxQE2cp5R33VQ9ciUB_mTo
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $this->pdoStatement = $this->pdo->prepare('SELECT * FORM blog_user WHERE user_id = :id');
+        $req = $this->pdo->prepare('SELECT user_id, user_nickname, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS user_regist_date FORM blog_user WHERE user_nickname = $user_nickname');
 
-        //liaison des paramètres
-        $this->pdoStatement->bindValue(':id', $id, PDO::PARAM_INT);
+        $req->execute(array($user_nickname));
 
-        //Exécution de la requête
-        $executeIsOk = $this->pdoStatement->execute();
-
-        //Véirication de l'éxecution de la requête
-        if($executeIsOk)
-        {
-            //récupérer sous forme d'objet le résultat de la requête
-            $user = $this->pdoStatement->fetchObject('model\entites\User');
-
-            //PDO ne fait pas la différence entre une requete réussie et l'absence de donnée résultant d'une requête, je traite donc ce cas
-            if($user === false) //le cas d'une ligne vide par exemple un utilisateur supprimé
-            {
-                return null;
-            }
-            else
-            {
-                return $user;
-            }
-        }
-        else
-        {
-            return false;
-        }
+        //Peut-être conserver ce principe : @return boolean|User|null : false si une erreur survient, un objet User si une correspondance est trouvée, Null s'il n'y a aucune correspondance
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //          READ : ALL
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Récupère tous les objets User de la bdd
      *
@@ -87,22 +72,21 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      */
     public function readAllMembers()
     {
-        $this->pdoStatement = $this->pdo->query('SELECT * FORM blog_user ODER BY user_id = :id');
-
+        $req = $this->pdo->query('SELECT * FORM blog_user ODER BY user_id = :id');
         $users = [];
 
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas user false
-        while($user = $this->pdoStatement->fetchObject('model\entites\User'))
+        while($user = $req->fetchObject('model\entites\User'))
         {
             $users[] = $user;
         }
-
         return $users;
-
     }
 
-    //UPDATE USER
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //          UPDATE USER
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // * A savoir create et update pourraient être réunies en une seule méthode (save)
     /**
@@ -113,21 +97,24 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
     public function updateMember(User $user)
     {
         // j'afectionne aux champs leurs valeurs ex :  	user_nickname=:nickname
-        $this->pdoStatement = $this->pdo->prepare('UPDATE blog_user set user_nickname=:nickname, user_regist_date=:registDate, user_email=:email, user_password=:password, user_role=:role WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->pdo->prepare('UPDATE blog_user set user_nickname=:nickname, user_regist_date=:registDate, user_email=:email, user_password=:password, user_role=:role WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         //liaison des paramètres à leurs valeurs
-        $this->pdoStatement->bindValue(':nickname', $user->getNickname(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':registDate', $user->getRegistDate(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
-        $this->pdoStatement->bindValue(':id', $user->getUserId(), PDO::PARAM_INT);
+        $req->execute(array(
+            'nickname' => $user->user_nickname,
+            'email' => $user->user_email,
+            'password' => $user->user_password
+        ));
 
         //exécution de la requête
-        return $this->pdoStatement->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
+        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
     }
 
-    //DELETE USER
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //          DELETE USER
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /**
      * Supprime un objet stocké en bdd
      * @param User $user objet de type User
@@ -135,9 +122,10 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      */
     public function deleteMember(User $user)
     {
-        $this->pdoStatement = $this->pdo->prepare('DELETE FROM blog_user WHERE WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->pdo->prepare('DELETE FROM blog_user WHERE WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
-        $this->pdoStatement->bindValue(':id', $user->getUserId(), PDO::PARAM_INT);
+        //Méthode de PDO statement, le paramètre en méthode abstraite permet entre autre de sécuriser le type de donné, ici un INT
+        $req->bindValue(':id', $user->getUserId(), PDO::PARAM_INT);
 
         //exécultion de la requête
         return $this->pdoStatement->execute();

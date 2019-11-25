@@ -31,8 +31,6 @@ class User
         }
     }
 
-    //SETTERS : affecter une valeur à une propriété d'objet private
-
     //// Un tableau de données doit être passé à la fonction (d'où le préfixe « array »).
     ///
     /// PARCOURS du tableau $datas (avec pour clé $key et pour valeur $value)
@@ -57,6 +55,9 @@ class User
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///         SETTERS : affecter une valeur à une propriété d'objet private
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function setNickname($nickname)
     {
@@ -117,18 +118,82 @@ class User
         }
     }
 
-    public function setPassword($password)
+//    public function setPassword($password)
+//    {
+//        htmlspecialchars($password);
+//
+//        if(isset($password))
+//        {
+//            if (!empty($password))
+//            {
+//                if(is_string($password) <= 30)
+//                {
+//                    //est ce le bon moment pour hacher du password ???????
+//                    $this->user_password = $password;
+//                }
+//                else
+//                {
+//                    //echo 'Mauvais format du mot de passe';
+//                }
+//            }
+//            else
+//            {
+//                //echo 'Un champ mot de passe vide';
+//            }
+//        }
+//        else
+//        {
+//            //echo 'variable non définie';
+//        }
+//    }
+//
+//    public function setPassword2($password2)
+//    {
+//
+//        htmlspecialchars($password2);
+//
+//        if (isset($password2) && !empty($password2) && is_string($password2) <= 30)
+//        {
+//             $this->user_password2 = $password2;
+//        }
+//    }
+//
+//    public function setRole($role)
+//    {
+//        $this->user_role = $role;
+//    }
+
+    //je pense que ma méthode d'hydratation exisge que j'ai un setter quand même pour password2 sinon il ne sera pas assigné
+    /**
+     * @return mixed
+     */
+    public function setPassword2($password2)
+    {
+
+        htmlspecialchars($password2);
+
+        if (isset($password2) && !empty($password2) && is_string($password2) <= 30)
+        {
+             $this->user_password2 = $password2;
+        }
+    }
+
+    //V2 setPassword avec comparaison des mdp et hachage
+    public function setPassword($password, $password2) //bug possible : un un $password2 indéfini
     {
         htmlspecialchars($password);
+        $this->setPassword2($password2);
 
-        if(isset($password))
+        if(isset($password) && isset($password2))
         {
-            if (!empty($password))
+            if (!empty($password) && !empty($password2))
             {
-                if(is_string($password) <= 30)
+                if(is_string($password) <= 30 && is_string($password2) <= 30 )
                 {
-                    //est ce le bon moment pour hacher du password ???????
-                    $this->user_password = $password;
+                    if ($password === $password2)
+                    {
+                        $this->user_password = password_hash($password, PASSWORD_DEFAULT);
+                    }
                 }
                 else
                 {
@@ -146,23 +211,10 @@ class User
         }
     }
 
-    public function setPassword2($password2)
-    {
 
-        htmlspecialchars($password2);
-
-        if (isset($password2) && !empty($password2) && is_string($password2) <= 30)
-        {
-             $this->user_password2 = $password2;
-        }
-    }
-
-    public function setRole($role)
-    {
-        $this->user_role = $role;
-    }
-
-    //GETTERS méthode chargée de renvoyer la valeur d'un attribut
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //      GETTERS méthode chargée de renvoyer la valeur d'un attribut
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function getUserId()
     {
