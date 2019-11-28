@@ -31,7 +31,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
     {
 
         $req = $this->pdo->prepare('INSERT INTO blog_user (user_id, user_nickname, user_regist_date, user_email, user_password, user_role)
-                                         VALUES (:nickname, NOW(), :email, :password, :role)');
+                                         VALUES (:nickname, NOW(), :email, :password, :role)'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant
 
 
         //array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
@@ -122,7 +122,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      */
     public function deleteMember(User $user)
     {
-        $req = $this->pdo->prepare('DELETE FROM blog_user WHERE WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->pdo->prepare('DELETE FROM blog_user WHERE WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
 
         //Méthode de PDO statement, le paramètre en méthode abstraite permet entre autre de sécuriser le type de donné, ici un INT
         $req->bindValue(':id', $user->getUserId(), PDO::PARAM_INT);

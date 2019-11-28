@@ -38,16 +38,16 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav text-uppercase ml-auto">
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#services">Chapitres</a>
+            <a class="nav-link js-scroll-trigger" href="#chapters">Chapitres</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#login-modal"  href="#">Se connecter</a><!--TODO modale bootstrap-->
+            <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#login-modal"  href="#">Se connecter</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#register-modal" href="#">S'inscrire</a><!--TODO modale bootstrap-->
+            <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#register-modal" href="#">S'inscrire</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#">A propos</a><!--TODO nouvelle page en sync ou async bootstrap-->
+            <a class="nav-link js-scroll-trigger" href="#">A propos</a>
           </li>
         </ul>
       </div>
@@ -77,23 +77,23 @@
 		</div>
 		<div class="modal-body">
 			<!--<form action="index.php?action=register" method="POST">-->
-			<form action="/index.php" method="POST"> <!--TODO Compléter le action avec le bon fichier php-->
+			<form action="/index.php?action=register" method="POST">
 				<p>	
-					<label>Entrez votre pseudo : 
-						<input type="text" name="nickname" value=""  required/>
+					<label for="regist--nickname">Entrez votre pseudo : 
+						<input type="text" name="registNickname" placeholder="Pseudo" id="regist--nickname" value=""  required/>
 					</label>
-					<label>Entrez votre adresse email : 
-						<input type="email" name="email" value=""  required/> 
+					<label for="regist--email">Entrez votre adresse email : 
+						<input type="email" name="registEmail" placeholder="Email" id="regist--email" required/> 
 					</label>
-					<label> Tapez votre mot de passe :
-						<input type="password" name="password" required/>
+					<label for="regist--password">Tapez votre mot de passe :
+						<input type="password" name="registPassword" placeholder="Mot de passe" id="regist--password" required/>
 					</label>	
-					<label> Confirmez votre mot de passe :
-						<input type="password" name="password2"  required/>
+					<label for="regist--confirm-password">Confirmez votre mot de passe :
+						<input type="password" name="registPassword2" placeholder="Confirmation mot de passe" id="regist--confirm-password" required/>
 					</label>
 				</p>
 				<p>
-					<input type="submit" value="Valider informations"/>
+					<input type="submit" name="registForm" value="Valider"/>
 				</p>
 			</form>
 		</div>
@@ -116,7 +116,19 @@
 		  </button>
 		</div>
 		<div class="modal-body">
-		  ...
+			<form action="/index.php?action=login" method="POST">
+				<p>	
+					<label for="login--nickname">Entrez votre pseudo : 
+						<input type="text" name="loginNickname" placeholder="Pseudo" id="login--nickname" required/>
+					</label>
+					<label for="login--password">Tapez votre mot de passe :
+						<input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>
+					</label>
+				</p>
+				<p>
+					<input type="submit" name="loginForm" value="Se connecter"/>
+				</p>
+			</form>
 		</div>
 		<div class="modal-footer">
 		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
@@ -127,13 +139,12 @@
   </div>
 
   <!-- Chapters -->
-  <section class="page-section" id="services">
+  <section class="page-section" id="chapters">
     <div class="container">
-      <div class="row">
-		  
-		  <article class="">
+      <div class="row">		  
+		<article class="">
 
-		  </article>
+		</article>
       </div>
     </div>
   </section>

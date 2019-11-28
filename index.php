@@ -1,27 +1,30 @@
 <?php
 
+//A garder
+use App\controller\UserController;
+
+//A effacer après test :
 use App\model\entities\User;
 
 require 'vendor/autoload.php';
 
 
-//require 'controller\UserController.php';
-//
-//try
-//{
-//    if (isset($_GET['action']))
-//    {
-//
-//    }
-//    else
-//    {
-//        listPosts(); //TODO créer class dans PostManager
-//    }
-//}
-//catch(Exception $e)
-//{
-//    echo 'Erreur : ' . $e->getMessage();
-//}
+try
+{
+
+    if (isset($_GET['action']))
+    {
+
+    }
+    else
+    {
+        listPosts(); //TODO créer class dans PostManager
+    }
+}
+catch(Exception $e)
+{
+    echo 'Erreur : ' . $e->getMessage();
+}
 
 
 

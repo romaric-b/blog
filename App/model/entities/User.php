@@ -45,8 +45,8 @@ class User
         foreach ($datas as $key => $value)
         {
             $method = 'set'.ucfirst($key);
-//            var_dump($method);
-            if (method_exists($this, $method)) // TU AS BIEN CORRIGER CA COMME JE TE L AI DIS ?
+
+            if (method_exists($this, $method))
             {
                 // il existe on peut l'appeler
                 $this->$method($value);
@@ -172,7 +172,7 @@ class User
 
         htmlspecialchars($password2);
 
-        if (isset($password2) && !empty($password2) && is_string($password2) <= 30)
+        if (isset($password2) && !empty($password2) && is_string($password2))
         {
              $this->user_password2 = $password2;
         }
@@ -188,11 +188,11 @@ class User
         {
             if (!empty($password) && !empty($password2))
             {
-                if(is_string($password) <= 30 && is_string($password2) <= 30 )
+                if(is_string($password) && is_string($password2))
                 {
                     if ($password === $password2)
                     {
-                        $this->user_password = password_hash($password, PASSWORD_DEFAULT);
+                        $this->user_password = $password;
                     }
                 }
                 else
