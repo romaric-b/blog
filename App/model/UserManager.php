@@ -11,11 +11,10 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      * Initialisation de la connexion à la BDD
      *
      */
-    public function __construct()
-    {
-        $this->pdo = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        //peut-être instancier un user quelque part
-    }
+//    public function __construct()
+//    {
+//        $bdd = $this->dbConnect();
+//    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
     public function createMember(User $user) //le & permet d'indiquer que je veux un passage par référence Obligé d'utiliser la class User
     {
 
-        $req = $this->pdo->prepare('INSERT INTO blog_user (user_id, user_nickname, user_regist_date, user_email, user_password, user_role)
+        $req = $this->dbConnect()->prepare('INSERT INTO blog_user (user_id, user_nickname, user_regist_date, user_email, user_password, user_role)
                                          VALUES (:nickname, NOW(), :email, :password, :role)'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant
 
 
@@ -54,7 +53,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
     {
         //TODO réviser "les paramètres nommées" PDO https://www.youtube.com/watch?v=Iau0UY7UT8w&list=PLXGXMIp685ivxQE2cp5R33VQ9ciUB_mTo
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $req = $this->pdo->prepare('SELECT user_id, user_nickname, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS user_regist_date FORM blog_user WHERE user_nickname = $user_nickname');
+        $req = $this->dbConnect()->prepare('SELECT user_id, COUNT(user_nickname), DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS user_regist_date FORM blog_user WHERE user_nickname = $user_nickname');
 
         $req->execute(array($user_nickname));
 
@@ -72,7 +71,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      */
     public function readAllMembers()
     {
-        $req = $this->pdo->query('SELECT * FORM blog_user ODER BY user_id = :id');
+        $req = $this->dbConnect()->query('SELECT * FORM blog_user ODER BY user_id = :id');
         $users = [];
 
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas user false
@@ -97,7 +96,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
     public function updateMember(User $user)
     {
         // j'afectionne aux champs leurs valeurs ex :  	user_nickname=:nickname
-        $req = $this->pdo->prepare('UPDATE blog_user set user_nickname=:nickname, user_regist_date=:registDate, user_email=:email, user_password=:password, user_role=:role WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_user set user_nickname=:nickname, user_regist_date=:registDate, user_email=:email, user_password=:password, user_role=:role WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         //liaison des paramètres à leurs valeurs
         $req->execute(array(
@@ -122,7 +121,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      */
     public function deleteMember(User $user)
     {
-        $req = $this->pdo->prepare('DELETE FROM blog_user WHERE WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
 
         //Méthode de PDO statement, le paramètre en méthode abstraite permet entre autre de sécuriser le type de donné, ici un INT
         $req->bindValue(':id', $user->getUserId(), PDO::PARAM_INT);
