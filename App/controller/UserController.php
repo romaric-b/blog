@@ -1,6 +1,6 @@
 <?php
 namespace App\controller;
-require_once '';
+
 
 use App\model\entities\User;
 use App\model\UserManager ;
@@ -9,7 +9,7 @@ use App\model\UserManager ;
 
 class UserController
 {
-    private $msg;
+    public $msg;
 
     public function __construct()
     {
@@ -19,8 +19,10 @@ class UserController
     /**
      * Lors de l'inscription, contrôle l'existance des données utilisateur,, les formats, sécurise le pass et vérifier que le pseudo est pas déjà pris.
      */
-    private function register()
+    public function register()
     {
+//        require 'front-office/public/index.html';
+
         if(isset($_POST['registForm'])) //vérifie si notre formulaire a été envoyé (submit)
         {
             //Je passe les données utilisateur à $newUser qui contrôlera les variables
@@ -76,7 +78,7 @@ class UserController
         } //else il se passe rien d'autre
     }
 
-    private function login()
+    public function login()
     {
         if(isset($_POST['loginForm']))
         // 1 : L'utilisateur rentre des données dans son formulaires, elles sont affectées à User et nettoyées
@@ -125,17 +127,17 @@ class UserController
         }
     }
 
-    private function disconnect()
+    public function disconnect()
     {
 
     }
 
-    private function listUsers() //pour l'admin ce droit
+    public function listUsers() //pour l'admin ce droit
     {
 
     }
 
-    private function banUser() //pour l'admin ce droit
+    public function banUser() //pour l'admin ce droit
     {
 
     }

@@ -2,6 +2,7 @@
 
 //A garder
 use App\controller\UserController;
+use App\controller\FrontController;
 
 //A effacer après test :
 //use App\model\entities\User;
@@ -10,51 +11,35 @@ require 'vendor/autoload.php';
 
 try
 {
-    switch(isset($_GET['action']))
+    $userCont = new UserController();
+    $frontCont = new FrontController();
+    $frontCont->viewHome();
+
+
+    if (isset($_GET['action']))
     {
-        case 'register':
-            $userCont = new UserController(); //Comment j'évite ça à chaque fois ? class static ?
+        if ($_GET['action'] == 'register')
+        {
+            var_dump('register ok');
             $userCont->register();
-            break;
-
-        case 'login':
-            $userCont = new UserController(); //Comment j'évite ça à chaque fois ? class static ?
+            echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
+                    <a href="/index.php">Connexion</a>
+                  </p>';
+        }
+        elseif ($_GET['action'] == 'login')
+        {
             $userCont->login();
-            break;
-
-
+        }
+    }
+    else
+    {
+        $frontCont->viewHome();
     }
 }
 catch(Exception $e)
-{ // S'il y a eu une erreur, alors...
+{
     echo 'Erreur : ' . $e->getMessage();
 }
-
-
-
-
-
-
-
-
-
-//try
-//{
-//
-//    if (isset($_GET['action']))
-//    {
-//
-//
-//    }
-//    else
-//    {
-////        listPosts(); //TODO créer class dans PostManager
-//    }
-//}
-//catch(Exception $e)
-//{
-//    echo 'Erreur : ' . $e->getMessage();
-//}
 
 
 

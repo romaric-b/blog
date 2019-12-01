@@ -49,11 +49,11 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      * Récupère un objet User à partir de son pseudo
      * @param $user_nickname  string pseudo de l'utilisateur     *
      */
-    public function readMember($user_nickname) //Je récupère de la base //pour le login visiblement on cherche plutôt un membre par matching de nickname
+    public function readMember(User $user_nickname) //Je récupère de la base //pour le login visiblement on cherche plutôt un membre par matching de nickname
     {
         //TODO réviser "les paramètres nommées" PDO https://www.youtube.com/watch?v=Iau0UY7UT8w&list=PLXGXMIp685ivxQE2cp5R33VQ9ciUB_mTo
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $req = $this->dbConnect()->prepare('SELECT user_id, COUNT(user_nickname), DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS user_regist_date FORM blog_user WHERE user_nickname = $user_nickname');
+        $req = $this->dbConnect()->prepare('SELECT user_id, COUNT(user_nickname), DATE_FORMAT(user_regist_date, \'%d/%m/%Y à %Hh%imin%ss\') AS user_regist_date FROM blog_user WHERE user_nickname = $user_nickname');
 
         $req->execute(array($user_nickname));
 
