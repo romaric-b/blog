@@ -47,6 +47,8 @@ class UserController
             //J'enregistre les pseudo de la base matchant avec celui rentré dans le formulaire
             $matchedNickname = $this->userManager->readMember($registingNickname);
 
+            // TODO résoudre bug suivant :  Fatal error: Uncaught TypeError: Argument 1 passed to App\model\UserManager::readMember() must be an instance of App\model\User, string given, called in C:\wamp64\www\blog\App\controller\UserController.php on line 48 and defined in C:\wamp64\www\blog\App\model\UserManager.php on line 52
+
             //Si les pseudo matchent
             if($matchedNickname > 0)
             {
