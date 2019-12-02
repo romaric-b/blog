@@ -6,6 +6,8 @@ use App\controller\FrontController;
 
 //A effacer après test :
 //use App\model\entities\User;
+use App\model\entities\Post;
+
 
 require 'vendor/autoload.php';
 
@@ -20,11 +22,8 @@ try
     {
         if ($_GET['action'] == 'register')
         {
-            var_dump('register ok');
             $userCont->register();
-            echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
-                    <a href="/index.php">Connexion</a>
-                  </p>';
+
         }
         elseif ($_GET['action'] == 'login')
         {
@@ -60,3 +59,12 @@ catch(Exception $e)
 //
 //
 //var_dump($testPseudo);
+$post = new Post(
+    [
+        'postTitle' => 'Un titre un peu trop looooonng',
+        'postExtract' => 'Un extrait un peu trop long ',
+        'postContent' => 'Une longue histoire'
+    ]
+);
+
+var_dump($post);

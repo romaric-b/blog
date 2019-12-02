@@ -19,7 +19,7 @@ class User
     private $user_email;
     private $user_password;
     private $user_password2;
-    private $user_role;
+    private $user_role = 'member';
 
 
     public function __construct(array $datas = array())
@@ -65,7 +65,7 @@ class User
         {
             if (!empty($nickname))
             {
-                if(is_string($nickname) <= 30 )
+                if(is_string($nickname) && strlen($nickname) <= 30 )
                 {
                     $this->user_nickname = htmlspecialchars($nickname);
                 }
@@ -97,7 +97,7 @@ class User
             if (!empty($email))
             {
                 //Vérification type et format
-                if(is_string($email) <= 30 && preg_match ("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email))
+                if(is_string($email) && strlen($email) <= 30 && preg_match ("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email))
                 {
                     //C'est valide, je sécurise les éventuelles entités html
                     $this->user_email = htmlspecialchars($email);
@@ -126,9 +126,10 @@ class User
     {
         htmlspecialchars($password);
 
-        if (isset($password) && !empty($password) && is_string($password))
+        if (isset($password) && !empty($password) && is_string($password) && strlen($password) <= 30)
         {
             $this->user_password = $password;
+            var_dump($password);
         }
     }
 
@@ -137,10 +138,19 @@ class User
 
         htmlspecialchars($password2);
 
-        if (isset($password2) && !empty($password2) && is_string($password2))
+        if (isset($password2) && !empty($password2) && is_string($password2) && strlen($password2) <= 30)
         {
              $this->user_password2 = $password2;
+             var_dump($password2);
         }
+    }
+
+    /**
+     * @param mixed $user_role
+     */
+    public function setRole($user_role)
+    {
+        $this->user_role = $user_role;
     }
 
 
@@ -183,4 +193,6 @@ class User
     {
         return $this->user_role;
     }
+
+
 }

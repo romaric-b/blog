@@ -31,53 +31,34 @@ class UserController
                 //A gauche clé pour setter
                 'nickname' => trim(htmlspecialchars($_POST['registNickname'])),
                 'email' => trim(htmlspecialchars($_POST['registEmail'])),
-                'password' => trim(password_hash($_POST['registPassword'], PASSWORD_DEFAULT)),
-                'password2' => trim(password_hash($_POST['registPassword2'], PASSWORD_DEFAULT))
+                'password' => htmlspecialchars($_POST['registPassword']),
+                'password2' => htmlspecialchars($_POST['registPassword2'])
             ]);
-
+            var_dump($newUser);
             //je contrôle si le pseudo à déjà été utilisé grace à mon manager
-            $registingNickname = $newUser->getNickname();
-            $registingEmail = $newUser->getEmail();
-            $registingPassword = $newUser->getPassword();
-            $registingPassword2 = $newUser->getPassword2();
-
-            //comparaison MDP
-            $areSamePasswords = password_verify($registingPassword,  $registingPassword2);
-
-            //J'enregistre les pseudo de la base matchant avec celui rentré dans le formulaire
-            $matchedNickname = $this->userManager->readMember($registingNickname);
-
-            // TODO résoudre bug suivant :  Fatal error: Uncaught TypeError: Argument 1 passed to App\model\UserManager::readMember() must be an instance of App\model\User, string given, called in C:\wamp64\www\blog\App\controller\UserController.php on line 48 and defined in C:\wamp64\www\blog\App\model\UserManager.php on line 52
-
+            $matchedNickname = $this->userManager->readMember($newUser->getNickname());
+            var_dump($matchedNickname);
             //Si les pseudo matchent
             if($matchedNickname > 0)
             {
-                $this->msg = "Ce pseudo est déjà utilisé, choisissez en un autre";
-            }
-            else
-            {
-                $validPseudo = true;
-            }
-            //comparaison mdp
-            if (!$areSamePasswords)
-            {
-                $this->msg = "Les mots de passe entrés sont différents";
-            }
-            else
-            {
-                $validPass = true;
+                return $this->msg = "Ce pseudo est déjà utilisé, choisissez en un autre";
             }
 
-            //Explication de ma logique : pseudo et mdp étant maintenant vérifiés, les autres valeurs settées n'auraient pas remplies les conditions internes à ce setter elles vaudraient NULL donc là si elle ne sont pas NULL on envoie en base !
-            if($validPseudo == true
-                && $validPass == true
-                && $registingEmail != NULL
-                && $registingPassword !=NULL)
+            //comparaison MDP
+            if ($newUser->getPassword() !== $newUser->getPassword2())
             {
-                $this->userManager->createMember($newUser);
-                // 3 : TODO j'appelle une vue confirmant son inscription
+                return $this->msg = "Les mots de passe entrés sont différents";
             }
-        } //else il se passe rien d'autre
+            else
+            {
+                password_hash($newUser->getPassword(),PASSWORD_DEFAULT);
+            }
+            var_dump('jeeej');
+            $this->userManager->createMember($newUser);
+            echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
+                    <a href="/index.php">Connexion</a>
+                  </p>';
+        }
     }
 
     public function login()
