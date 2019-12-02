@@ -46,11 +46,13 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
     {
         var_dump('dans readMember()');
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $req = $this->dbConnect()->prepare("SELECT user_id, COUNT(user_nickname), user_regist_date FROM blog_user WHERE user_nickname = " . $user->getNickname());
+        $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_nickname = :nickname");
 
-        $req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'App\Entity\User');
-        $req->fetch();
-        $users = $req->execute(array($user));
+//        $req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'App\Entity\User');
+        var_dump($user->getNickname());
+        $users = $req->execute([
+            'nickname' => $user->getNickname()
+        ]);
 
         return $users;
 

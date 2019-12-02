@@ -34,9 +34,8 @@ class UserController
                 'password' => htmlspecialchars($_POST['registPassword']),
                 'password2' => htmlspecialchars($_POST['registPassword2'])
             ]);
-            var_dump($newUser);
             //je contrôle si le pseudo à déjà été utilisé grace à mon manager
-            $matchedNickname = $this->userManager->readMember($newUser->getNickname());
+            $matchedNickname = $this->userManager->readMember($newUser);
             var_dump($matchedNickname);
             //Si les pseudo matchent
             if($matchedNickname > 0)
@@ -53,7 +52,6 @@ class UserController
             {
                 password_hash($newUser->getPassword(),PASSWORD_DEFAULT);
             }
-            var_dump('jeeej');
             $this->userManager->createMember($newUser);
             echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
                     <a href="/index.php">Connexion</a>
