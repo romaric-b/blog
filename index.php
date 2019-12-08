@@ -7,15 +7,18 @@ use App\controller\FrontController;
 //A effacer après test :
 //use App\model\entities\User;
 //use App\model\entities\Post;
-
+//use App\model\entities\Comment;
 
 require 'vendor/autoload.php';
 
 try
 {
+    //SESSION START PAR LA POUR PAS ETRE EMMERDE AVEC LE DECOUPAGE HTML
     $userCont = new UserController();
     $frontCont = new FrontController();
     $frontCont->viewHome();
+
+//    $userCont->listUsers(); testé fonctionne
 
 
     if (isset($_GET['action']))
@@ -28,6 +31,11 @@ try
         elseif ($_GET['action'] == 'login')
         {
             $userCont->login();
+        }
+        elseif ($_GET['action'] == 'disconnect')
+        {
+            var_dump('dans action disconnect');
+            $userCont->disconnect();
         }
     }
     else
@@ -46,6 +54,15 @@ catch(Exception $e)
 // ***************************************************** PARTIE TEST TEMPORAIRE ********************************************
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//$comment = new Comment(
+//    [
+//        'commentStatus' => 'unsignaled',
+//        'commentContent' => 'Super chapitre, bonne plume et lecture agréable',
+//        'commentRead' => 'not_read'
+//    ]
+//);
+
+//var_dump($comment);
 
 //$user = new User( //RegistDate on le passera
 //    [

@@ -129,7 +129,6 @@ class User
         if (isset($password) && !empty($password) && is_string($password) && strlen($password) <= 30)
         {
             $this->user_password = $password;
-            var_dump($password);
         }
     }
 
@@ -141,7 +140,6 @@ class User
         if (isset($password2) && !empty($password2) && is_string($password2) && strlen($password2) <= 30)
         {
              $this->user_password2 = $password2;
-             var_dump($password2);
         }
     }
 

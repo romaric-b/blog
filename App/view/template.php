@@ -27,18 +27,18 @@
 <body id="page-top">
     <div class="global_page--div container-fluid">
 
-        <!-- Register modal -->
+<!--         Register modal-->
 <!--        <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="inscription-modal" aria-hidden="true">-->
 <!--            <div class="modal-dialog" role="document">-->
 <!--                <div class="modal-content">-->
-<!--                    <div class="modal-header">-->
+
+                    <div class="modal-header">
                         <h5 class="modal-title" id="inscription-modal">Inscription</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!--<form action="index.php?action=register" method="POST">-->
                         <form action="/index.php?action=register" method="POST">
                             <p>
                                 <label for="regist--nickname">Entrez votre pseudo :
@@ -61,8 +61,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <!-- <button type="button" class="btn btn-primary">Valider</button> -->
+                         <button type="button" class="btn btn-primary">Valider</button>
                     </div>
+
 <!--                </div>-->
 <!--            </div>-->
 <!--        </div>-->
@@ -71,34 +72,36 @@
 <!--        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
 <!--            <div class="modal-dialog" role="document">-->
 <!--                <div class="modal-content">-->
-<!--                    <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="exampleModalLabel">Connexion</h5>-->
-<!--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                            <span aria-hidden="true">&times;</span>-->
-<!--                        </button>-->
-<!--                    </div>-->
-<!--                    <div class="modal-body">-->
-<!--                        <form action="/index.php?action=login" method="POST">-->
-<!--                            <p>-->
-<!--                                <label for="login--nickname">Entrez votre pseudo :-->
-<!--                                    <input type="text" name="loginNickname" placeholder="Pseudo" id="login--nickname" required/>-->
-<!--                                </label>-->
-<!--                                <label for="login--password">Tapez votre mot de passe :-->
-<!--                                    <input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>-->
-<!--                                </label>-->
-<!--                                <label for="autoLogin">Se souvenir de moi :-->
-<!--                                    <input type="checkbox" name="autolog" id="autoLogin">-->
-<!--                                </label>-->
-<!--                            </p>-->
-<!--                            <p>-->
-<!--                                <input type="submit" name="loginForm" value="Se connecter"/>-->
-<!--                            </p>-->
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                    <div class="modal-footer">-->
-<!--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>-->
-<!--                        <button type="button" class="btn btn-primary">Valider</button>-->
-<!--                    </div>-->
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Connexion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/index.php?action=login" method="POST">
+                            <p>
+                                <label for="login--nickname">Entrez votre pseudo :
+                                    <input type="text" name="loginNickname" placeholder="Pseudo" id="login--nickname" required/>
+                                </label>
+                                <label for="login--password">Tapez votre mot de passe :
+                                    <input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>
+                                </label>
+                                <label for="autoLogin">Se souvenir de moi :
+                                    <input type="checkbox" name="autolog" id="autoLogin">
+                                </label>
+                            </p>
+                            <p>
+                                <input type="submit" name="loginForm" value="Se connecter"/>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-primary">Valider</button>
+                    </div>
+
 <!--                </div>-->
 <!--            </div>-->
 <!--        </div>-->
@@ -126,6 +129,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">A propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/index.php?action=disconnect">Déconnexion</a>
                     </li>
                 </ul>
             </div>

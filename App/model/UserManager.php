@@ -16,7 +16,7 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      * @param User $user objet de type User
      * @return boolean true si l'objet a bien été inséré, false si une erreur survient
      */
-    public function createMember(User $user) //le & permet d'indiquer que je veux un passage par référence Obligé d'utiliser la class User
+    public function createMember(User $user)  //fonctionne
     {
         var_dump('createUser ok');
 
@@ -28,7 +28,7 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
         $req->execute([
             'nickname' => $user->getNickname(),
             'email' => $user->getEmail(),
-            'password' => $user->getPassword(),
+            'password' => password_hash($user->getPassword(),PASSWORD_DEFAULT),
             'role' => $user->getRole()
         ]);
     }
@@ -42,25 +42,17 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      * @param User $user
      * @return bool
      */
-    public function readMember(User $user) //Je récupère de la base //pour le login visiblement on cherche plutôt un membre par matching de nickname
+    public function readMember(User $user) //fonctionne
     {
-        var_dump('dans readMember()');
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
         $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_nickname = :nickname");
 
-//        $req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'App\Entity\User');
-        var_dump($user->getNickname());
-        $users = $req->execute([
+        $req->execute([
             'nickname' => $user->getNickname()
         ]);
+        $users = $req->fetch();
 
         return $users;
-
-//        $result = $req->execute(array($user->getNickname()));
-//        $result = $req->execute(array($user));
-//        return $result;
-
-        //Peut-être conserver ce principe : @return boolean|User|null : false si une erreur survient, un objet User si une correspondance est trouvée, Null s'il n'y a aucune correspondance
     }
 
 
@@ -72,16 +64,17 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      *
      * @return array|boolean : tableau d'objets members ou un tableau vide s'il n'y a aucun objet en bdd, ou false si une erreur survient
      */
-    public function readAllMembers()
+    public function readAllMembers() //fonctionne
     {
-        $req = $this->dbConnect()->query('SELECT * FORM blog_user ODER BY user_id = :id');
+        $req = $this->dbConnect()->query('SELECT * FROM blog_user ORDER BY user_id');
         $users = [];
 
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas user false
-        while($user = $req->fetchObject('model\entites\User'))
+        while($user = $req->fetchObject('\App\model\entities\User'))
         {
             $users[] = $user;
         }
+        var_dump($users);
         return $users;
     }
 
@@ -98,8 +91,7 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      */
     public function updateMember(User $user)
     {
-        // j'afectionne aux champs leurs valeurs ex :  	user_nickname=:nickname
-        $req = $this->dbConnect()->prepare('UPDATE blog_user set user_nickname=:nickname, user_regist_date=:registDate, user_email=:email, user_password=:password, user_role=:role WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_user set user_nickname=:nickname, user_regist_date=:registDate, user_email=:email, user_password=:password, user_role=:role WHERE user_id =:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         //liaison des paramètres à leurs valeurs
         $req->execute([
@@ -116,20 +108,19 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          DELETE USER
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
     /**
      * Supprime un objet stocké en bdd
      * @param User $user objet de type User
      * @return boolean true en cas de succès ou false en cas d'erreur
      */
-    public function deleteMember(User $user)
+    public function deleteMember(User $user) //TODO a tester une fois le back office en place
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
 
         //Méthode de PDO statement, le paramètre en méthode abstraite permet entre autre de sécuriser le type de donné, ici un INT
         $req->bindValue(':id', $user->getUserId(), PDO::PARAM_INT);
 
-        //exécultion de la requête
-        return $this->pdoStatement->execute();
+        //exécution de la requête
+        return $req->execute();
     }
 }
