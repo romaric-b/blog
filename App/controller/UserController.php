@@ -50,7 +50,7 @@ class UserController
 
             $this->userManager->createMember($newUser);
             echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
-                    <a href="/index.php">Connexion</a>
+//                    <a href="/index.php">Connexion</a>
                   </p>';
         }
     }
@@ -58,12 +58,12 @@ class UserController
     public function login() //Testé et fonctionne
     {
         //Si l'utilisateur avait choisi la co automatique (cette condition est vérifiée
-        if (isset($_COOKIE['nickname']) AND isset($_COOKIE['password']))
-        {
-            echo 'Bonjour ' . $_COOKIE['nickname'] . ', vous allez être connecté automatiquement';
-            //Je redirige l'user vers son espace membre
-            //header('Location: '); TODO actualiser le statut sur connecté dans le header de l'utilisateur (peu importe la page) en faisant apparaitre 'deconnexion' au lieu de 'connexion' et 'inscription'
-        }
+//        if (isset($_COOKIE['nickname']) AND isset($_COOKIE['password']))
+//        {
+//            echo 'Bonjour ' . $_COOKIE['nickname'] . ', vous allez être connecté automatiquement';
+//            //Je redirige l'user vers son espace membre
+//            //header('Location: '); TODO actualiser le statut sur connecté dans le header de l'utilisateur (peu importe la page) en faisant apparaitre 'deconnexion' au lieu de 'connexion' et 'inscription'
+//        }
 
         //S'il se connecte manuellement
         if(isset($_POST['loginForm'])) //Name du form
@@ -92,25 +92,28 @@ class UserController
 
             if($isPasswordCorrect) //Ne rentre pas ici à cause de mot de passe
             {
-               //session_start(); //TODO a déplacer dans le template en début de page je crois
+                $hashLoginUserPass = password_hash($loginUser->getPassword(), PASSWORD_DEFAULT);
 
-//               $_SESSION['id'] = $matchedUser['id'];
-//               $_SESSION['nickname'] = $loginUser->getNickname();
+//               //Si la case à cocher connexion auto //Si j'ai le temps de faire ça... revoir comment utiliser cooki
+//               if(isset($_POST['autolog'])) //Comment checker la sécurité d'une checkbox
+//               {
+//                   //je hash le pass avant qu'il soit enregistré en cookie
+//                   $hashLoginUserPass = password_hash($loginUser->getPassword(), PASSWORD_DEFAULT);
+//                   $_COOKIE['id'] = $matchedUser['user_id'];
+//                   $_COOKIE['nickname'] = $loginUser->getNickname();
+//                   $_COOKIE['password'] = $hashLoginUserPass;
+//               }
+                //j'enregistre en session l'id utilisateur le pseudo et le mdp haché
+                $_SESSION['user_id'] = $matchedUser['user_id'];
+                $_SESSION['user_nickname'] = $loginUser->getNickname();
+                $_SESSION['user_password'] = $hashLoginUserPass;
+                $_SESSION['user_role'] = $loginUser->getRole(); //servira à rediriger suivant si admin ou membre
 
-               //Si la case à cocher connexion auto
-               if(isset($_POST['autolog'])) //Comment checker la sécurité d'une checkbox
-               {
-                   //je hash le pass avant qu'il soit enregistré en cookie
-                   $hashLoginUserPass = password_hash($loginUser->getPassword(), PASSWORD_DEFAULT);
 
-                   //j'enregistre en cookie le pseudo et le mdp
-                   $_COOKIE['nickname'] = $loginUser->getNickname();
-                   $_COOKIE['password'] = $hashLoginUserPass;
-               }
 
                //echo '<p>Vous êtes connecté !</p>';
 
-                //header('Location: '); TODO actualiser le statut sur connecté dans le header de l'utilisateur (peu importe la page) en faisant apparaitre 'deconnexion' au lieu de 'connexion' et 'inscription'
+                //header('Location: '); TODO actualiser le statut sur connecté dans le header de l'utilisateur (peu importe la page) en faisant apparaitre 'deconnexion' au lieu de 'connexion' et 'inscription' Ca se fait dans le html dans des balises php
             }
             else // Mauvais mot de passe
             {
@@ -119,25 +122,15 @@ class UserController
         }
     }
 
-    public function disconnect()
+    public function disconnect() //fonctionne
     {
-        // TODO à déplacer une fois le front préparé
-//        session_start();
-//        // Suppression des variables de session et de la session
-//        $_SESSION = array();
-//        session_destroy();
-        //Warning: Cannot modify header information - headers already sent by (output started at C:\wamp64\www\blog\App\view\template.php:8) in C:\wamp64\www\blog\App\controller\UserController.php on line 131
+        $_SESSION = array();
+        session_destroy();
 
-        // Suppression des cookies de connexion automatique
-        $forgetNickname = setcookie('nickname', '');
-        $forgetPassword = setcookie('password', '');
+//        //TODO ajaex pour les liens du header
+//        echo '<p>Vous avez bien été déconnecté, à bientôt sur mon blog</p>'; //S'est bien affiché
 
-        var_dump($forgetNickname); //RENVOIE FALSE
-        var_dump($forgetPassword);//RENVOIE FALSE
-
-        echo '<p>Vous avez bien été déconnecté, à bientôt sur mon blog</p>'; //S'est bien affiché
-
-        //On redirige vers (quoi d'ailleurs, la liste des chapitres ou la landing page ?)
+        //On redirige vers (la landing page ?)
 //        header('Location:');
     }
 

@@ -5,7 +5,7 @@ namespace App\model;
 
 use App\model\entities\Comment;
 
-class CommentManager
+class CommentManager extends Manager //testé et fonctionne
 {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,14 +22,16 @@ class CommentManager
         var_dump('createComment ok');
 
         $req = $this->dbConnect()->prepare('
-INSERT INTO blog_comments (comment_date, comment_content, comment_post_id, comment_user_id)
-    VALUES (NOW(), :content, :comment_post_id, comment_user_id)'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant : extract semble réservé en sql donc j'écris excerpt
+INSERT INTO blog_comments (comment_date, comment_status, comment_content, comment_post_id, comment_user_id, comment_read)
+    VALUES (NOW(), :status, :content, :comment_post_id, :comment_user_id, :comment_read)'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant : extract semble réservé en sql donc j'écris excerpt
 
         //array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
         $req->execute([
+            'status' => $comment->getCommentStatus(),
             'content' => $comment->getCommentContent(),
             'comment_post_id' => $comment->getCommentPostId(),
-            'comment_user_id' => $comment->getCommentUserId()
+            'comment_user_id' => $comment->getCommentUserId(),
+            'comment_read' => $comment->getCommentRead()
         ]);
     }
 
@@ -88,11 +90,14 @@ INSERT INTO blog_comments (comment_date, comment_content, comment_post_id, comme
      */
     public function updateComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_content=:content, comment_date=NOW() WHERE comment_id =:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_content = :content, comment_status = :status , comment_read = :comment_read, comment_date = NOW() WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         //liaison des paramètres à leurs valeurs
         $req->execute([
-            'content' => $comment->getCommentContent()
+            'content' => $comment->getCommentContent(),
+            'status' => $comment->getCommentStatus(),
+            'comment_read' => $comment->getCommentRead(),
+            'comment_id' => $comment->getCommentId() //Putain ce con me retourne pas d'erreur (il me retourne rien) si je me trompe d'id, bizarre
         ]);
 
         //exécution de la requête
@@ -110,14 +115,13 @@ INSERT INTO blog_comments (comment_date, comment_content, comment_post_id, comme
      */
     public function deleteComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
 
-        //Méthode de PDO statement, le paramètre en méthode abstraite permet entre autre de sécuriser le type de donné, ici un INT
-        $req->bindValue(':id', $comment->getCommentId(), PDO::PARAM_INT);
+        $req->execute([
+            'comment_id' => $comment->getCommentId()
+        ]);
 
         //exécution de la requête
         return $req->execute();
     }
-
-
 }

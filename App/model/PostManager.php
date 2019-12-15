@@ -5,7 +5,7 @@ namespace App\model;
 
 use App\model\entities\Post;
 
-class PostManager extends Manager
+class PostManager extends Manager //testé entièrement et fonctionne
 {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,6 +50,7 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
             'title' => $post->getPostTitle()
         ]);
         $post = $req->fetch();
+        var_dump($post);
 
         return $post;
     }
@@ -74,6 +75,7 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
             $posts[] = $post;
         }
         var_dump($posts);
+
         return $posts;
     }
 
@@ -89,14 +91,17 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      */
     public function updatePost(Post $post)//TODO a tester une fois le back office en place
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_posts set post_title=:title, post_extract=:excerpt , post_content=:content, post_date=NOW() WHERE post_id =:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_posts set post_id = :post_id, post_title = :title, post_extract = :excerpt , post_content = :content, post_date=NOW() WHERE post_id = :post_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         //liaison des paramètres à leurs valeurs
         $req->execute([
-            'post_title' => $post->getPostTitle(),
+            'post_id' => $post->getPostId(),
+            'title' => $post->getPostTitle(),
             'excerpt' => $post->getPostExtract(),
             'content' => $post->getPostContent()
+
         ]);
+
 
         //exécution de la requête
         //POSSIBLEMENT EN TROP :
@@ -113,10 +118,11 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      */
     public function deletePost(Post $post)//TODO a tester une fois le back office en place
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_posts WHERE post_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_posts WHERE post_id = :post_id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
 
-        //Méthode de PDO statement, le paramètre en méthode abstraite permet entre autre de sécuriser le type de donné, ici un INT
-        $req->bindValue(':id', $post->getPostId(), PDO::PARAM_INT);
+        $req->execute([
+            'post_id' => $post->getPostId()
+        ]);
 
         //exécution de la requête
         return $req->execute();

@@ -4,13 +4,12 @@ namespace App\model;
 
 use App\model\entities\User;
 
-class UserManager extends Manager //Je peux faire un final, une classe finale signifie qu'elle ne pourra pas être étendue par une classe fille
+class UserManager extends Manager //Je peux faire un final, une classe finale signifie qu'elle ne pourra pas être étendue par une classe fille TOUT FONCTIONNE
 {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          CREATE
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
     /**
      * Insert un objet User dans la bdd et met à jour l'objet passé en argument en lui spécifiant un identifiant (id)
      * @param User $user objet de type User
@@ -91,13 +90,15 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      */
     public function updateMember(User $user)
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_user set user_nickname=:nickname, user_regist_date=:registDate, user_email=:email, user_password=:password, user_role=:role WHERE user_id =:id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_user set user_nickname = :nickname, user_email = :email, user_password = :password, user_role = :role WHERE user_id = :user_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         //liaison des paramètres à leurs valeurs
         $req->execute([
             'nickname' => $user->getNickname(),
             'email' => $user->getEmail(),
-            'password' => $user->getPassword()
+            'password' => $user->getPassword(),
+            'role' => $user->getRole(),
+            'user_id' => $user->getUserId()
         ]);
 
         //exécution de la requête
@@ -113,12 +114,13 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      * @param User $user objet de type User
      * @return boolean true en cas de succès ou false en cas d'erreur
      */
-    public function deleteMember(User $user) //TODO a tester une fois le back office en place
+    public function deleteMember(User $user)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id=:id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id=:user_id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
 
-        //Méthode de PDO statement, le paramètre en méthode abstraite permet entre autre de sécuriser le type de donné, ici un INT
-        $req->bindValue(':id', $user->getUserId(), PDO::PARAM_INT);
+        $req->execute([
+            'user_id' => $user->getUserId()
+        ]);
 
         //exécution de la requête
         return $req->execute();
