@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model\entities\User;
 use App\model\UserManager ;
+use App\controller\FrontController;
 
 
 
@@ -14,7 +15,7 @@ class UserController
     public function __construct()
     {
         $this->userManager = new UserManager();
-        // TODO j'instancie la class gérant les vues
+        $this->frontController = new FrontController();
     }
     /**
      * Lors de l'inscription, contrôle l'existance des données utilisateur,, les formats, sécurise le pass et vérifier que le pseudo est pas déjà pris.
@@ -52,6 +53,7 @@ class UserController
             echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
 //                    <a href="/index.php">Connexion</a>
                   </p>';
+            $this->frontController->loadView("register");
         }
     }
 
@@ -109,39 +111,40 @@ class UserController
                 $_SESSION['user_password'] = $hashLoginUserPass;
                 $_SESSION['user_role'] = $loginUser->getRole(); //servira à rediriger suivant si admin ou membre
 
-
-
-               //echo '<p>Vous êtes connecté !</p>';
-
-                //header('Location: '); TODO actualiser le statut sur connecté dans le header de l'utilisateur (peu importe la page) en faisant apparaitre 'deconnexion' au lieu de 'connexion' et 'inscription' Ca se fait dans le html dans des balises php
+                if($_SESSION['user_role'] = 'member')
+                {
+                    header('location: index.php?action=listPosts');
+                }
+                elseif ($_SESSION['user_role'] = 'administrator')
+                {
+                    header('location: index.php?action=home_dashboard'); //le require se fera sûrement dans l'index
+                }
             }
             else // Mauvais mot de passe
             {
                 echo '<p>Mauvais identifiant ou mot de passe !</p>'; //Remarque en vrai seul l'identifiant est mauvais mais autant ne pas donner trop d'indications sur ce qui est faux exactement, par souci de sécurité mais quid de l'accessibilité ?
             }
         }
+        $this->frontController->loadView("login");
     }
 
     public function disconnect() //fonctionne
     {
         $_SESSION = array();
         session_destroy();
-
-//        //TODO ajaex pour les liens du header
-//        echo '<p>Vous avez bien été déconnecté, à bientôt sur mon blog</p>'; //S'est bien affiché
-
-        //On redirige vers (la landing page ?)
-//        header('Location:');
+        header('Location: index.php?action=viewHome');
     }
 
     public function listUsers() //testé et fonctionne TODO : voir comment sécuriser ça avec if (admin...) ou quelque chose comme
     {
         $this->userManager->readAllMembers();
+        $this->frontController->loadView("members_dashboard");
     }
 
     public function banUser() //Non testé mais à faire lorsque le back office sera en place car faisable depuis le tableau de gestion membres TODO : voir comment sécurisé, utilisable que par l'admin
     {
         $this->userManager->deleteMember();
+        $this->frontController->loadView("members_dashboard");
     }
 }
 

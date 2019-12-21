@@ -4,9 +4,12 @@ namespace App\controller;
 
 class FrontController
 {
-    public function viewHome()
+    /**
+     * @param $fileName receive string name of view's file
+     */
+    public function loadView($fileName)
     {
-        require_once('App/view/home.php');
+        require("App/View/" . $fileName .".php");
     }
 }
 

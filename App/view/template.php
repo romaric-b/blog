@@ -11,7 +11,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="./front-office/public/css/style.css" rel="stylesheet" />
+    <link href="./public/css/style.css" rel="stylesheet" />
 
 
     <!-- Custom fonts for this template -->
@@ -27,84 +27,9 @@
 <body id="page-top">
     <div class="global_page--div container-fluid">
 
-<!--         Register modal-->
-<!--        <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="inscription-modal" aria-hidden="true">-->
-<!--            <div class="modal-dialog" role="document">-->
-<!--                <div class="modal-content">-->
 
-<!--                    <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="inscription-modal">Inscription</h5>-->
-<!--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                            <span aria-hidden="true">&times;</span>-->
-<!--                        </button>-->
-<!--                    </div>-->
-<!--                    <div class="modal-body">-->
-<!--                        <form action="index.php?action=register" method="POST"> <!-- Ta gueule storm c'est le bon chemin !-->-->
-<!--                            <p>-->
-<!--                                <label for="regist--nickname">Entrez votre pseudo :-->
-<!--                                    <input type="text" name="registNickname" placeholder="Pseudo" id="regist--nickname" value=""  required/>-->
-<!--                                </label>-->
-<!--                                <label for="regist--email">Entrez votre adresse email :-->
-<!--                                    <input type="email" name="registEmail" placeholder="Email" id="regist--email" required/>-->
-<!--                                </label>-->
-<!--                                <label for="regist--password">Tapez votre mot de passe :-->
-<!--                                    <input type="password" name="registPassword" placeholder="Mot de passe" id="regist--password" required/>-->
-<!--                                </label>-->
-<!--                                <label for="regist--confirm-password">Confirmez votre mot de passe :-->
-<!--                                    <input type="password" name="registPassword2" placeholder="Confirmation mot de passe" id="regist--confirm-password" required/>-->
-<!--                                </label>-->
-<!--                            </p>-->
-<!--                            <p>-->
-<!--                                <input type="submit" name="registForm" value="Valider"/>-->
-<!--                            </p>-->
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                    <div class="modal-footer">-->
-<!--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>-->
-<!--                         <button type="button" class="btn btn-primary">Valider</button>-->
-<!--                    </div>-->
 
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
 
-        <!-- Login modal -->
-<!--        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--            <div class="modal-dialog" role="document">-->
-<!--                <div class="modal-content">-->
-
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Connexion</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="index.php?action=login" method="POST">
-                            <p>
-                                <label for="login--nickname">Entrez votre pseudo :
-                                    <input type="text" name="loginNickname" placeholder="Pseudo" id="login--nickname" required/>
-                                </label>
-                                <label for="login--password">Tapez votre mot de passe :
-                                    <input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>
-                                </label>
-                                <label for="autoLogin">Se souvenir de moi :
-                                    <input type="checkbox" name="autolog" id="autoLogin">
-                                </label>
-                            </p>
-                            <p>
-                                <input type="submit" name="loginForm" value="Se connecter"/>
-                            </p>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-primary">Valider</button>
-                    </div>
-
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
 
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -122,10 +47,10 @@
                         <a class="nav-link" href="#">Chapitres</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="modal" data-target="login-modal" href="#login-modal">Connexion</a> <!-- TODO replacer par connecté une fois logué -->
+                        <a class="nav-link" id="open-login-form" href="#login-modal?action=login">Connexion</a> <!-- TODO replacer par connecté une fois logué -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="modal" data-target="register-modal" href="#register-modal">Inscription</a>
+                        <a class="nav-link" id="open-register-form" href="index.php?action=register">Inscription</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">A propos</a>
@@ -133,11 +58,25 @@
                     <li class="nav-item">
                         <a class="nav-link"  href="index.php?action=disconnect">Déconnexion</a>
                     </li>
+
+<!--                    <li class="nav-item">-->
+<!--                        --><?php
+//                        if(!empty($_SESSION)){ ?>
+<!--                            <a class="nav-link" href="index.php?action=unlog">Se déconnecter</a>-->
+<!--                        --><?php //}
+//                        else { ?>
+<!--                            <a class="nav-link" href="index.php?action=login">Connexion</a>-->
+<!--                        --><?php //} ?>
+<!--                    </li>-->
                 </ul>
             </div>
         </nav>
 
+        <?= $modal ?>
+
         <?= $content ?>
+
+
 
         <!-- Footer -->
         <footer class="footer">
@@ -163,6 +102,7 @@
                                     <i class="fab fa-linkedin-in"></i>
                                 </a>
                             </li>
+                            <!-- TODO mention légales -->
                         </ul>
                     </div>
                 </div>
@@ -174,6 +114,17 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<!-- My Javascript -->
+<!-- gestion de la validation front des formulaires : inscription, connexion, publication de commentaire
+
+     Navigation : ouverture et fermeture des modales peut-être rajouté un type de modale pour les messages informatifs dynamiques du type "Votre signalement a bien été enregistré", "Vous êtes bien inscrit", "Vous allez être redirigé vers la page des articles" qui serait déclenché par le succès de l'action ET/OU de la requête
+
+    Header : lorsque je suis connecté, inscription et connexion disparaitront de manière à voir connecté ainsi que déconnexion
+ -->
+    <!--RAPPEL : Ajax en 1er -->
+    <script src="../blog/public/js/Modal.js"></script>
+    <script src="../blog/public/js/main.js"></script>
 
 </body>
 </html>

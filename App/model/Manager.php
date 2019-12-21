@@ -18,11 +18,10 @@ class Manager
         return $bdd;
     }
 
-
-    //class abstraite
+    //class abstraite amélioration possible voir cet exemple : https://www.youtube.com/watch?v=3Iy1KRb-bcs
 
     //methode définissant si on fait un prepare ou un query($sql)
-    //if(getter entité = null)
+    //if(getter entité = null) POSE PROBLEME
     // prepare($sql)
     //elseif (getter entité != null car pas de paramètre entré)
     // query typiquement le readAll()

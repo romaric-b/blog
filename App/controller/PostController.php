@@ -5,6 +5,7 @@ namespace App\controller;
 
 use App\model\entities\Post;
 use App\model\PostManager;
+use App\controller\FrontController;
 
 class PostController //TODO a tester
 {
@@ -13,6 +14,7 @@ class PostController //TODO a tester
     public function __construct()
     {
         $this->postManager = new PostManager();
+        $this->frontController = new FrontController();
     }
 
     public function createPost()
@@ -32,6 +34,7 @@ class PostController //TODO a tester
             return $this->msg = "Vous avez déjà posté un article comportant ce titre";
         }
         $this->postManager->createPost($createdPost);
+        $this->frontController->loadView("create_post");
     }
 
     /**
@@ -41,6 +44,7 @@ class PostController //TODO a tester
     public function listPosts()
     {
         $this->postManager->readAllPosts();
+        $this->frontController->loadView("listPosts");
     }
 
     /**
@@ -51,6 +55,7 @@ class PostController //TODO a tester
     public function viewPost($post_id)
     {
         $this->postManager->readPost($post_id);
+        $this->frontController->loadView("post");
     }
 
     /**
@@ -67,6 +72,7 @@ class PostController //TODO a tester
         );
         //On connait l'ID car il est enregistré en session avant depuis l'article qu'on visionne TODO un article vue doit passer en session
         $this->postManager->updatePost($updatedPost);
+        $this->frontController->loadView("create_post");
     }
 
     /**
@@ -77,5 +83,7 @@ class PostController //TODO a tester
     public function deletePost($post_id)
     {
         $this->postManager->deletePost($post_id);
+        $this->frontController->loadView("posts_dashboard");
+
     }
 }

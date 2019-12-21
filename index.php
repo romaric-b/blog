@@ -3,10 +3,12 @@
 //A garder
 use App\controller\UserController;
 use App\controller\FrontController;
+use App\controller\CommentController;
+use App\controller\PostController;
 
 //A effacer après test :
-use App\model\entities\User;
-use App\model\UserManager;
+//use App\model\entities\User;
+//use App\model\UserManager;
 //use App\model\entities\Post;
 //use App\model\PostManager;
 //use App\model\entities\Comment;
@@ -14,40 +16,73 @@ use App\model\UserManager;
 
 require 'vendor/autoload.php';
 
-//je démarre la session ici pour avoir une portée sur tout le site
-
-
 try
 {
     session_start();
-    $userCont = new UserController();
-    $frontCont = new FrontController();
-    $frontCont->viewHome();
 
-//    $userCont->listUsers(); testé fonctionne
-
+    /*Controllers*/
+    $userController = new UserController();
+    $postsController = new PostController();
+    $commentsController = new CommentController();
+    $frontController = new FrontController();
 
     if (isset($_GET['action']))
     {
-        if ($_GET['action'] == 'register')
+        switch ($_GET['action'])
         {
-            $userCont->register();
-
-        }
-        if ($_GET['action'] == 'login')
-        {
-            var_dump('dans login');
-            $userCont->login();
-        }
-        if ($_GET['action'] == 'disconnect')
-        {
-            var_dump('dans action disconnect');
-            $userCont->disconnect();
+            case 'register':
+                $userController->register();
+                break;
+            case 'login':
+                $userController->login();
+                break;
+            case 'listUsers':
+                $userController->listUsers();
+                break;
+            case 'banUser':
+                $userController->banUser();
+                break;
+            case 'disconnect':
+                $userController->disconnect();
+                break;
+            case 'createComment':
+                $commentsController->createComment();
+                break;
+            case 'deleteComment':
+                $commentsController->deleteComment();
+                break;
+            case 'updateComment':
+                $commentsController->updateComment();
+                break;
+            case 'listComments':
+                $commentsController->listComments();
+                break;
+            case 'viewComment':
+                $commentsController->viewComment();
+                break;
+            case 'deletePost':
+                $postsController->deletePost();
+                break;
+            case 'updatePost':
+                $postsController->updatePost();
+                break;
+            case 'createPost':
+                $postsController->createPost();
+                break;
+            case 'listPosts':
+                $postsController->listPosts();
+                break;
+            case 'viewPost':
+                $postsController->viewPost();
+                break;
+            default:
+                header('Location: index.php');
+                exit;
         }
     }
     else
     {
-        $frontCont->viewHome();
+        $frontController->loadView("home");
     }
 }
 catch(Exception $e)
