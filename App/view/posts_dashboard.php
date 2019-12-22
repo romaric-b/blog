@@ -1,9 +1,9 @@
 <?php
 
-$title = 'Tableau de bord : vue d\'ensemble'; ?>
+$title = 'Tableau de bord : Chapitres'; ?>
 
 <?php ob_start(); ?>
 
 <?php $content = ob_get_clean(); ?>
 
-        <?php require('dashboard.php'); ?>
+<?php require('template.php'); ?>

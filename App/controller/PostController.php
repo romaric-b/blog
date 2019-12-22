@@ -43,8 +43,10 @@ class PostController //TODO a tester
      */
     public function listPosts()
     {
-        $this->postManager->readAllPosts();
-        $this->frontController->loadView("listPosts");
+        $posts = $this->postManager->readAllPosts(); //return $posts
+        //var_dump($posts); //posts OK
+//        $this->frontController->loadView("listPosts"); désactivé...
+        require('App/view/listPosts.php');
     }
 
     /**

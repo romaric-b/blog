@@ -27,9 +27,85 @@
 <body id="page-top">
     <div class="global_page--div container-fluid">
 
+        <!--Login Modal-->
+        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Connexion</h5>
+                        <button type="button" id="close-login-modal" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="index.php?action=login" method="POST">
+                            <p>
+                                <label for="login--nickname">Entrez votre pseudo :
+                                    <input type="text" name="loginNickname" placeholder="Pseudo" id="login--nickname" required/>
+                                </label>
+                                <label for="login--password">Tapez votre mot de passe :
+                                    <input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>
+                                </label>
+                                <label for="autoLogin">Se souvenir de moi :
+                                    <input type="checkbox" name="autolog" id="autoLogin">
+                                </label>
+                            </p>
+                            <p>
+                                <input type="submit" name="loginForm" value="Se connecter"/>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-primary">Valider</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
 
+        <!--Register Modal-->
+        <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="inscription-modal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
 
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="inscription-modal">Inscription</h5>
+                        <button type="button" id="close-regist-modal" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="index.php?action=register" method="POST">
+                            <p>
+                                <label for="regist--nickname">Entrez votre pseudo :
+                                    <input type="text" name="registNickname" placeholder="Pseudo" id="regist--nickname" value=""  required/>
+                                </label>
+                                <label for="regist--email">Entrez votre adresse email :
+                                    <input type="email" name="registEmail" placeholder="Email" id="regist--email" required/>
+                                </label>
+                                <label for="regist--password">Tapez votre mot de passe :
+                                    <input type="password" name="registPassword" placeholder="Mot de passe" id="regist--password" required/>
+                                </label>
+                                <label for="regist--confirm-password">Confirmez votre mot de passe :
+                                    <input type="password" name="registPassword2" placeholder="Confirmation mot de passe" id="regist--confirm-password" required/>
+                                </label>
+                            </p>
+                            <p>
+                                <input type="submit" name="registForm" value="Valider"/>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-primary">Valider</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -47,36 +123,25 @@
                         <a class="nav-link" href="#">Chapitres</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="open-login-form" href="#login-modal?action=login">Connexion</a> <!-- TODO replacer par connecté une fois logué -->
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="open-register-form" href="index.php?action=register">Inscription</a>
+                        <a class="nav-link" id="open-register-form"  data-toggle="modal" data-target="#register-modal" href="#">Inscription</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">A propos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="index.php?action=disconnect">Déconnexion</a>
+                        <?php
+                        if(!empty($_SESSION)){ ?>
+                            <a class="nav-link" href="index.php?action=disconnect">Se déconnecter</a>
+                        <?php }
+                        else { ?>
+                            <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connexion</a>
+                        <?php } ?>
                     </li>
-
-<!--                    <li class="nav-item">-->
-<!--                        --><?php
-//                        if(!empty($_SESSION)){ ?>
-<!--                            <a class="nav-link" href="index.php?action=unlog">Se déconnecter</a>-->
-<!--                        --><?php //}
-//                        else { ?>
-<!--                            <a class="nav-link" href="index.php?action=login">Connexion</a>-->
-<!--                        --><?php //} ?>
-<!--                    </li>-->
                 </ul>
             </div>
         </nav>
 
-        <?= $modal ?>
-
         <?= $content ?>
-
-
 
         <!-- Footer -->
         <footer class="footer">
@@ -123,7 +188,7 @@
     Header : lorsque je suis connecté, inscription et connexion disparaitront de manière à voir connecté ainsi que déconnexion
  -->
     <!--RAPPEL : Ajax en 1er -->
-    <script src="../blog/public/js/Modal.js"></script>
+    <script src="../blog/public/js/Form.js"></script>
     <script src="../blog/public/js/main.js"></script>
 
 </body>

@@ -1,8 +1,12 @@
 <?php
-$title = 'Tableau de bord : vue d\'ensemble'; ?>
+$title = 'Tableau de bord : Membres'; ?>
 
 <?php ob_start(); ?>
 
+    <h2>Les membres de votre blog :</h2>
+    <section>
+        <p>tableau</p>
+    </section>
 <?php $content = ob_get_clean(); ?>
 
-<?php require('dashboard.php'); ?>
+<?php require('template.php'); ?>

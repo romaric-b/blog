@@ -74,7 +74,8 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
             //je stocke dans le tableau chaque $post correspondant aux lignes en bdd
             $posts[] = $post;
         }
-        var_dump($posts);
+
+//        var_dump($posts);
 
         return $posts;
     }
