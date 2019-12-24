@@ -43,15 +43,15 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
      * @param Comment $comment objet de type Comment
      * @return bool
      */
-    public function readComment(Comment $comment)
+    public function readComment($comment_id) //ou $comment_Id pour un Id de commentaire précis requêté
     {
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
         $req = $this->dbConnect()->prepare("SELECT * FROM blog_comments WHERE comment_id = :comment_id");
 
         $req->execute([
-            'comment_id' => $comment->getCommentId()
+            'comment_id' => $comment_id
         ]);
-        $comment = $req->fetch();
+        $comment = $req->fetchObject('\App\model\entities\Comment');
 
         return $comment;
     }
@@ -66,7 +66,7 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
      */
     public function readAllComments()
     {
-        $req = $this->dbConnect()->query('SELECT * FROM blog_comments ORDER BY comment_id');
+        $req = $this->dbConnect()->query('SELECT * FROM blog_comments ORDER BY comment_id DESC');
         $comments = [];
 
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas user false

@@ -120,7 +120,7 @@
                         <a class="nav-link" href="#">Accueil<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Chapitres</a>
+                        <a class="nav-link" href="index.php?action=listPosts">Chapitres</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="open-register-form"  data-toggle="modal" data-target="#register-modal" href="#">Inscription</a>

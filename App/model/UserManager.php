@@ -41,17 +41,17 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      * @param User $user
      * @return bool
      */
-    public function readMember(User $user) //fonctionne
+    public function readMember($user_id) //fonctionne
     {
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_nickname = :nickname");
+        $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_id = :user_id");
 
         $req->execute([
-            'nickname' => $user->getNickname()
+            'user_id' => $user_id
         ]);
-        $users = $req->fetch();
+        $user = $req->fetchObject('\App\model\entities\User');
 
-        return $users;
+        return $user;
     }
 
 

@@ -73,7 +73,8 @@ try
                 $postsController->listPosts();
                 break;
             case 'viewPost':
-                $postsController->viewPost();
+                var_dump($_GET['id']);
+                $postsController->viewPost($_GET['id']);
                 break;
             default:
                 header('Location: index.php');

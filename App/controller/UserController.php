@@ -53,7 +53,6 @@ class UserController
             echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
 //                    <a href="/index.php">Connexion</a>
                   </p>';
-            $this->frontController->loadView("register");
         }
     }
 
@@ -125,7 +124,7 @@ class UserController
                 echo '<p>Mauvais identifiant ou mot de passe !</p>'; //Remarque en vrai seul l'identifiant est mauvais mais autant ne pas donner trop d'indications sur ce qui est faux exactement, par souci de sécurité mais quid de l'accessibilité ?
             }
         }
-        $this->frontController->loadView("login");
+        //TODO prévoir un message de confirmation
     }
 
     public function disconnect() //fonctionne

@@ -17,10 +17,15 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
             </h3>
             <p>
                 <?=$post->getPostExtract()?>
+
             </p>
         </article>
+
+            <a class="nav-link" href="index.php?action=viewPost&amp;id=<?= $post->getPostId() ?>">Lire l'article</a>
+
         <?php endforeach;?>
 
+        <a></a>
     </section>
 
 <?php $content = ob_get_clean(); ?>

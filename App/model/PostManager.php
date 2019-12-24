@@ -41,16 +41,13 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      * @param Post $post objet de type Post
      * @return bool
      */
-    public function readPost(Post $post)
+    public function readPost($post_Id)
     {
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $req = $this->dbConnect()->prepare("SELECT * FROM blog_posts WHERE post_title = :title");
+        $req = $this->dbConnect()->prepare("SELECT * FROM blog_posts WHERE post_id = :post_id");
 
-        $req->execute([
-            'title' => $post->getPostTitle()
-        ]);
-        $post = $req->fetch();
-        var_dump($post);
+        $req->execute(array('post_id' => $post_Id));
+        $post = $req->fetchObject('\App\model\entities\Post');
 
         return $post;
     }
@@ -65,7 +62,7 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      */
     public function readAllPosts()
     {
-        $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id');
+        $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id DESC');
         $posts = [];
 
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas post false

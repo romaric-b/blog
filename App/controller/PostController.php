@@ -45,7 +45,7 @@ class PostController //TODO a tester
     {
         $posts = $this->postManager->readAllPosts(); //return $posts
         //var_dump($posts); //posts OK
-//        $this->frontController->loadView("listPosts"); désactivé...
+//        $this->frontController->loadView("listPosts");
         require('App/view/listPosts.php');
     }
 
@@ -56,8 +56,9 @@ class PostController //TODO a tester
      */
     public function viewPost($post_id)
     {
-        $this->postManager->readPost($post_id);
-        $this->frontController->loadView("post");
+        $post = $this->postManager->readPost($post_id); //Toute la liste est chargée déjà à partir de la base dans ce contexte
+        var_dump($post);
+        require('App/view/post.php');
     }
 
     /**
