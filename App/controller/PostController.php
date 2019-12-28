@@ -3,6 +3,7 @@
 
 namespace App\controller;
 
+use App\model\CommentManager;
 use App\model\entities\Post;
 use App\model\PostManager;
 use App\controller\FrontController;
@@ -14,6 +15,7 @@ class PostController //TODO a tester
     public function __construct()
     {
         $this->postManager = new PostManager();
+        $this->commentManager = new CommentManager();
         $this->frontController = new FrontController();
     }
 
@@ -50,6 +52,16 @@ class PostController //TODO a tester
     }
 
     /**
+     * used to view posts
+     * @return objects $posts
+     */
+    public function listPostsAdmin()
+    {
+        $posts = $this->postManager->readAllPosts();
+        require('App/view/listPosts.php');
+    }
+
+    /**
      * view one post
      * @return $post asked
      * @param $post_id post ID
@@ -57,7 +69,11 @@ class PostController //TODO a tester
     public function viewPost($post_id)
     {
         $post = $this->postManager->readPost($post_id); //Toute la liste est chargée déjà à partir de la base dans ce contexte
-        var_dump($post);
+//        var_dump($post);
+        //obtenir aussi les commentaires du post pour cette vue
+        $comments = $this->commentManager->readCommentsOfPost($post_id);
+//        var_dump($comments);
+
         require('App/view/post.php');
     }
 

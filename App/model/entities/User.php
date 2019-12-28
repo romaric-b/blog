@@ -19,7 +19,7 @@ class User
     private $user_email;
     private $user_password;
     private $user_password2;
-    private $user_role = 'member';
+    private $user_role;
 
 
     public function __construct(array $datas = array())

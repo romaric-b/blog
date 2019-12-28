@@ -56,6 +56,32 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
         return $comment;
     }
 
+    //INNER JOIN (example : for comments in a post view)
+    public function readCommentsOfPost($postId)
+    {
+        $req = $this->dbConnect()->prepare('SELECT comment_id, comment_content, user_nickname AS author, comment_post_id,
+        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM blog_comments 
+        INNER JOIN blog_user ON comment_user_id = user_id
+        INNER JOIN blog_posts ON comment_post_id = post_id
+        WHERE comment_post_id = ? ORDER BY comment_date DESC');
+
+//        $req->execute(array($postId));
+//        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
+//            '\App\model\entities\Comment');
+//        $comments = $req->fetchAll();
+
+        $comments = [];
+
+        $req->execute(array($postId));
+        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas false
+        while ($comment = $req->fetchObject('\App\model\entities\Comment')) {
+            //je stocke dans le tableau chaque $comment correspondant aux lignes en bdd
+            $comments[] = $comment;
+        }
+//        var_dump($comments);
+        return $comments;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ : ALL
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,29 +100,44 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
             //je stocke dans le tableau chaque $comment correspondant aux lignes en bdd
             $comments[] = $comment;
         }
-        var_dump($comments);
         return $comments;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          UPDATE
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // * A savoir create et update pourraient être réunies en une seule méthode (save)
+    //Pour que l'admin différencie les commentaires lus et nons lus
     /**
      * Met à jour un objet stocké en bdd
      * @param Comment $comment objet de type Comment
      * @return boolean true en cas de succès ou false en cas d'erreur
      */
-    public function updateComment(Comment $comment)
+    public function updateReadComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_content = :content, comment_status = :status , comment_read = :comment_read, comment_date = NOW() WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_read = :comment_read WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         //liaison des paramètres à leurs valeurs
         $req->execute([
             'content' => $comment->getCommentContent(),
             'status' => $comment->getCommentStatus(),
             'comment_read' => $comment->getCommentRead(),
+            'comment_id' => $comment->getCommentId() //Putain ce con me retourne pas d'erreur (il me retourne rien) si je me trompe d'id, bizarre
+        ]);
+
+        //exécution de la requête
+        //POSSIBLEMENT EN TROP :
+        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
+    }
+
+    //Pour qu'un membre signale un commentaire ou pour passer le statut sur modéré si l'admin
+    public function updateStatusComment(Comment $comment)
+    {
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+
+        //liaison des paramètres à leurs valeurs
+        $req->execute([
+            'status' => $comment->getCommentStatus(),
             'comment_id' => $comment->getCommentId() //Putain ce con me retourne pas d'erreur (il me retourne rien) si je me trompe d'id, bizarre
         ]);
 

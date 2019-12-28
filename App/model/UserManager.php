@@ -41,17 +41,28 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      * @param User $user
      * @return bool
      */
-    public function readMember($user_id) //fonctionne
+//    public function readMember($user_id) //fonctionne
+//    {
+//        //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
+//        $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_id = :user_id");
+//
+//        $req->execute([
+//            'user_id' => $user_id
+//        ]);
+//        $user = $req->fetchObject('\App\model\entities\User');
+//
+//        return $user;
+//    }
+    public function readMember(User $user) //fonctionne
     {
+        var_dump($user);
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_id = :user_id");
-
+        $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_nickname = :nickname");
         $req->execute([
-            'user_id' => $user_id
+            'nickname' => $user->getNickname()
         ]);
-        $user = $req->fetchObject('\App\model\entities\User');
-
-        return $user;
+        $users = $req->fetch();
+        return $users;
     }
 
 

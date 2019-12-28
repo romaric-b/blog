@@ -17,23 +17,20 @@ class CommentController
         $this->frontController = new FrontController();
     }
 
-    public function createComment()
+    public function createComment($postId)
     {
         $createdComment = new Comment(
             [
-                'commentUserId' => $_SESSION['user_id'],
-                'commentContent' => htmlspecialchars($_POST['createCommentContent'])
+//                'commentUserId' => $_SESSION['user_id'],
+                'commentUserId' => '8',
+                'commentContent' => htmlspecialchars($_POST['createCommentContent']),
+                'commentPostId' => htmlspecialchars($postId),
+                'commentStatus' => 'unsignaled',
+                'CommentRead' => 'not read'
             ]
         );
-        //Je contrôle s'il n'y a pas déjà un chapitre portant le même titre pour éviter un double Comment
-        $matchedComment = $this->postManager->readComment($createdComment);
 
-        if($matchedComment > 0)
-        {
-            return $this->msg = "Vous avez déjà posté un article comportant ce titre";
-        }
         $this->commentManager->createComment($createdComment);
-        $this->frontController->loadView("post");
     }
 
     /**
@@ -52,7 +49,6 @@ class CommentController
         {
 //            header('location: index.php?action=home_dashboard'); //le require se fera sûrement dans l'index
         }
-        $this->frontController->loadView("comments_dashboard");
     }
 
     /**
@@ -63,7 +59,6 @@ class CommentController
     public function viewComment($comment_id)
     {
         $this->commentManager->readComment($comment_id);
-        $this->frontController->loadView("comment");
     }
 
     /**
@@ -78,7 +73,18 @@ class CommentController
         );
         //On connait l'ID car il est enregistré en session avant depuis l'article qu'on visionne TODO un article vue doit passer en session
         $this->commentManager->updateComment($updatedComment);
-        $this->frontController->loadView("comment");
+    }
+
+    public function signalComment($comment_id)
+    {
+        $signaledComment = new Comment(
+            [
+                'commentId' => $comment_id,
+                'commentStatus' => 'signaled'
+            ]
+        );
+        var_dump($signaledComment);
+        $this->commentManager->updateStatusComment($signaledComment);
     }
 
     /**

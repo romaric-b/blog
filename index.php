@@ -34,6 +34,7 @@ try
                 $userController->register();
                 break;
             case 'login':
+                var_dump('action login');
                 $userController->login();
                 break;
             case 'listUsers':
@@ -46,7 +47,7 @@ try
                 $userController->disconnect();
                 break;
             case 'createComment':
-                $commentsController->createComment();
+                $commentsController->createComment($_GET['id']);
                 break;
             case 'deleteComment':
                 $commentsController->deleteComment();
@@ -60,6 +61,9 @@ try
             case 'viewComment':
                 $commentsController->viewComment();
                 break;
+            case 'signalComment':
+                $commentsController->signalComment($_GET['id']);
+                break;
             case 'deletePost':
                 $postsController->deletePost();
                 break;
@@ -72,18 +76,22 @@ try
             case 'listPosts':
                 $postsController->listPosts();
                 break;
+//            case 'listPostsAdmin':
+//                $postsController->listPostsAdmin();
+//                break;
             case 'viewPost':
-                var_dump($_GET['id']);
                 $postsController->viewPost($_GET['id']);
                 break;
             default:
+                var_dump('routeur defaut');
                 header('Location: index.php');
                 exit;
         }
     }
     else
     {
-        $frontController->loadView("home");
+//        $frontController->loadView("home");
+        require('App/View/home.php');
     }
 }
 catch(Exception $e)

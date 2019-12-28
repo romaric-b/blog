@@ -19,8 +19,6 @@ class PostManager extends Manager //testé entièrement et fonctionne
      */
     public function createPost(Post $post)
     {
-        var_dump('createPost ok');
-
         $req = $this->dbConnect()->prepare('
 INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
     VALUES (:title, :excerpt, :content, NOW())'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant : extract semble réservé en sql donc j'écris excerpt
@@ -51,6 +49,22 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
 
         return $post;
     }
+
+
+    //Read Post with his comments and members author
+//    public function getPostWithComments($postId)
+//    {
+//        $req = $this->db->prepare('SELECT post_id, post_title, users.user_name AS author, posts.content,
+//        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\')
+//        AS post_date_fr
+//        FROM posts
+//        INNER JOIN users ON posts.user_id=users.id WHERE posts.id = ?');
+//        $req->execute(array($postId));//execute la requete préparée et la range dans un array
+//        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
+//            'projet\blog\model\Post');
+//        $post = $req->fetch( );// recupére chaque ligne de la requête donc ici les posts
+//        return $post;
+//    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ : ALL
