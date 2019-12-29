@@ -9,7 +9,6 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
         <h2>Liste des chapitres</h2>
 
         <?php foreach ($posts as $post): ?>
-
         <article>
             <h3>
                 <?=$post->getPostTitle()?>
@@ -17,14 +16,10 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
             </h3>
             <p>
                 <?=$post->getPostExtract()?>
-
             </p>
         </article>
-
             <a class="nav-link" href="index.php?action=viewPost&amp;id=<?= $post->getPostId() ?>">Lire l'article</a>
-
         <?php endforeach;?>
-
         <a></a>
     </section>
 

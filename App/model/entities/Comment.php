@@ -21,6 +21,7 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
     private $comment_date_fr;
     private $comment_content;
     private $comment_post_id; //foreign key
+    private $comment_post_title;
     private $comment_user_id; //foreign key
     private $author;
     private $comment_read;
@@ -134,6 +135,17 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
     }
 
     /**
+     * @param $comment_post_title
+     */
+    public function setPostTitle($comment_post_title)
+    {
+        if(is_string($comment_post_title))
+        {
+            $this->author=$comment_post_title;
+        }
+    }
+
+    /**
      * @param mixed $comment_read
      */
     public function setCommentRead($comment_read)
@@ -200,6 +212,14 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * @return mixed comment_post_title
+     */
+    public function getPostTitle()
+    {
+        return $this->comment_post_title;
     }
 
     /**

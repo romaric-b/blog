@@ -17,15 +17,14 @@ class CommentManager extends Manager //testé et fonctionne
      * @param Comment $comment objet de type Comment
      * @return boolean true si l'objet a bien été inséré, false si une erreur survient
      */
-    public function createComment(Comment $comment) //Pas le choix si je veux pas de bordel dans le code comment_user_id sera coonnu à partir d'un cooki
+    public function createComment(Comment $comment)
     {
         var_dump('createComment ok');
 
         $req = $this->dbConnect()->prepare('
 INSERT INTO blog_comments (comment_date, comment_status, comment_content, comment_post_id, comment_user_id, comment_read)
-    VALUES (NOW(), :status, :content, :comment_post_id, :comment_user_id, :comment_read)'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant : extract semble réservé en sql donc j'écris excerpt
+    VALUES (NOW(), :status, :content, :comment_post_id, :comment_user_id, :comment_read)');
 
-        //array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
         $req->execute([
             'status' => $comment->getCommentStatus(),
             'content' => $comment->getCommentContent(),
@@ -65,20 +64,14 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
         INNER JOIN blog_posts ON comment_post_id = post_id
         WHERE comment_post_id = ? ORDER BY comment_date DESC');
 
-//        $req->execute(array($postId));
-//        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
-//            '\App\model\entities\Comment');
-//        $comments = $req->fetchAll();
-
         $comments = [];
-
         $req->execute(array($postId));
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas false
-        while ($comment = $req->fetchObject('\App\model\entities\Comment')) {
+        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
+        {
             //je stocke dans le tableau chaque $comment correspondant aux lignes en bdd
             $comments[] = $comment;
         }
-//        var_dump($comments);
         return $comments;
     }
 
@@ -96,11 +89,41 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
         $comments = [];
 
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas user false
-        while ($comment = $req->fetchObject('\App\model\entities\Comment')) {
-            //je stocke dans le tableau chaque $comment correspondant aux lignes en bdd
+        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
+        {
             $comments[] = $comment;
         }
         return $comments;
+    }
+
+    /*Request All signaled comments with their posts and authors associated*/
+    public function readAllSignaledComments()
+    {
+        $req = $this->dbConnect()->query('SELECT comment_id, comment_content, 
+        user_nickname AS author, comment_post_id, post_title AS comment_post_title, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') 
+        AS comment_date_fr FROM blog_comments 
+        INNER JOIN blog_user ON comment_user_id = user_id
+        INNER JOIN blog_posts ON comment_post_id = post_id
+        WHERE comment_status = "signaled"
+        GROUP BY comment_id ORDER BY comment_date DESC');
+
+        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
+            '\App\model\entities\Comment');
+        return $req;
+
+//        $req = $this->dbConnect()->prepare('SELECT comment_id, comment_content, user_nickname AS author, comment_post_id,
+//        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM blog_comments
+//        INNER JOIN blog_user ON comment_user_id = user_id
+//        INNER JOIN blog_posts ON comment_post_id = post_id
+//        WHERE comment_status  = "signaled" ORDER BY comment_date DESC');
+//        $comments = [];
+//        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas false
+//        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
+//        {
+//            //je stocke dans le tableau chaque $comment correspondant aux lignes en bdd
+//            $comments[] = $comment;
+//        }
+//        return $comments;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,32 +140,26 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     {
         $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_read = :comment_read WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
-        //liaison des paramètres à leurs valeurs
         $req->execute([
             'content' => $comment->getCommentContent(),
             'status' => $comment->getCommentStatus(),
             'comment_read' => $comment->getCommentRead(),
-            'comment_id' => $comment->getCommentId() //Putain ce con me retourne pas d'erreur (il me retourne rien) si je me trompe d'id, bizarre
+            'comment_id' => $comment->getCommentId()
         ]);
 
-        //exécution de la requête
-        //POSSIBLEMENT EN TROP :
-        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
+        return $req->execute();
     }
 
     //Pour qu'un membre signale un commentaire ou pour passer le statut sur modéré si l'admin
     public function updateStatusComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status WHERE comment_id = :comment_id LIMIT 1');
 
-        //liaison des paramètres à leurs valeurs
         $req->execute([
             'status' => $comment->getCommentStatus(),
             'comment_id' => $comment->getCommentId() //Putain ce con me retourne pas d'erreur (il me retourne rien) si je me trompe d'id, bizarre
         ]);
 
-        //exécution de la requête
-        //POSSIBLEMENT EN TROP :
         return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
     }
 
@@ -156,7 +173,7 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
      */
     public function deleteComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id = :comment_id LIMIT 1');
 
         $req->execute([
             'comment_id' => $comment->getCommentId()

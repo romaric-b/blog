@@ -21,7 +21,7 @@ class PostManager extends Manager //testé entièrement et fonctionne
     {
         $req = $this->dbConnect()->prepare('
 INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
-    VALUES (:title, :excerpt, :content, NOW())'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant : extract semble réservé en sql donc j'écris excerpt
+    VALUES (:title, :excerpt, :content, NOW())');
 
         //array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
         $req->execute([
@@ -30,7 +30,6 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
             'content' => $post->getPostContent()
         ]);
     }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,21 +49,18 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
         return $post;
     }
 
-
-    //Read Post with his comments and members author
-//    public function getPostWithComments($postId)
-//    {
-//        $req = $this->db->prepare('SELECT post_id, post_title, users.user_name AS author, posts.content,
-//        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\')
-//        AS post_date_fr
-//        FROM posts
-//        INNER JOIN users ON posts.user_id=users.id WHERE posts.id = ?');
-//        $req->execute(array($postId));//execute la requete préparée et la range dans un array
-//        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
-//            'projet\blog\model\Post');
-//        $post = $req->fetch( );// recupére chaque ligne de la requête donc ici les posts
-//        return $post;
-//    }
+    /**
+     * Catch the 5 last posts by page
+     */
+    public function paginateListPosts($start,$perPage)
+    {
+        $req = $this->dbConnect()->query("SELECT post_id, post_title, post_extract, post_content, 
+        DATE_FORMAT(post_date, '%d/%m/%Y à %Hh%imin%ss') AS post_date_fr FROM blog_posts        
+        ORDER BY post_date DESC LIMIT $start,$perPage");
+        $posts = $req->fetchObject('\App\model\entities\Post');
+        return $posts;
+        var_dump($posts);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ : ALL
@@ -78,17 +74,23 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
     {
         $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id DESC');
         $posts = [];
-
         //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas post false
         while($post = $req->fetchObject('\App\model\entities\Post'))
         {
             //je stocke dans le tableau chaque $post correspondant aux lignes en bdd
             $posts[] = $post;
         }
-
-//        var_dump($posts);
-
         return $posts;
+    }
+
+    /**
+     * get the count of posts
+     */
+    public function countPost()
+    {
+        $count=(int)$this->dbConnect()->query('SELECT COUNT(post_id) FROM blog_posts')->fetch()[0];
+        return $count;
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,8 +115,6 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
             'content' => $post->getPostContent()
 
         ]);
-
-
         //exécution de la requête
         //POSSIBLEMENT EN TROP :
         return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
@@ -130,12 +130,10 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      */
     public function deletePost(Post $post)//TODO a tester une fois le back office en place
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_posts WHERE post_id = :post_id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
-
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_posts WHERE post_id = :post_id LIMIT 1');
         $req->execute([
             'post_id' => $post->getPostId()
         ]);
-
         //exécution de la requête
         return $req->execute();
     }

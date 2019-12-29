@@ -1,22 +1,28 @@
 <?php
 
-
 namespace App\controller;
 
-use App\model\CommentManager;
+use App\model\entities\Comment;
 use App\model\entities\Post;
 use App\model\PostManager;
-use App\controller\FrontController;
+use App\model\UserManager;
+use App\model\CommentManager;
 
-class PostController //TODO a tester
+class BackController
 {
     public $msg;
 
     public function __construct()
     {
-        $this->postManager = new PostManager();
+        $this->userManager = new UserManager();
         $this->commentManager = new CommentManager();
-        $this->frontController = new FrontController();
+        $this->postManager = new PostManager();
+    }
+
+    public function listUsers() //testé et fonctionne TODO : voir comment sécuriser ça avec if (admin...) ou quelque chose comme
+    {
+        $this->userManager->readAllMembers();
+        require('App/view/members_dashboard.php');
     }
 
     public function createPost()
@@ -30,7 +36,6 @@ class PostController //TODO a tester
         );
         //Je contrôle s'il n'y a pas déjà un chapitre portant le même titre pour éviter un double post
         $matchedPost = $this->postManager->readPost($createdPost);
-
         if($matchedPost > 0)
         {
             return $this->msg = "Vous avez déjà posté un article comportant ce titre";
@@ -39,16 +44,12 @@ class PostController //TODO a tester
         $this->frontController->loadView("create_post");
     }
 
-    /**
-     * used to view posts
-     * @return objects $posts
-     */
-    public function listPosts()
+    public function viewHomeDashboard()
     {
-        $posts = $this->postManager->readAllPosts(); //return $posts
-        //var_dump($posts); //posts OK
-//        $this->frontController->loadView("listPosts");
-        require('App/view/listPosts.php');
+        $signaledComments = $this->commentManager->readAllSignaledComments();
+
+        $posts = $this->postManager->readAllPosts(); //A caler dans un tableau à overflow scroll en vertical
+        require('App/view/home_dashboard.php');
     }
 
     /**
@@ -59,22 +60,6 @@ class PostController //TODO a tester
     {
         $posts = $this->postManager->readAllPosts();
         require('App/view/listPosts.php');
-    }
-
-    /**
-     * view one post
-     * @return $post asked
-     * @param $post_id post ID
-     */
-    public function viewPost($post_id)
-    {
-        $post = $this->postManager->readPost($post_id); //Toute la liste est chargée déjà à partir de la base dans ce contexte
-//        var_dump($post);
-        //obtenir aussi les commentaires du post pour cette vue
-        $comments = $this->commentManager->readCommentsOfPost($post_id);
-//        var_dump($comments);
-
-        require('App/view/post.php');
     }
 
     /**
@@ -89,9 +74,22 @@ class PostController //TODO a tester
                 'postContent' => htmlspecialchars($_POST['createContent'])
             ]
         );
-        //On connait l'ID car il est enregistré en session avant depuis l'article qu'on visionne TODO un article vue doit passer en session
         $this->postManager->updatePost($updatedPost);
-        $this->frontController->loadView("create_post");
+    }
+
+    /**
+     * Update a comment on moderated status
+     * @param $comment_id
+     */
+    public function unsignalComment($comment_id)
+    {
+        $signaledComment = new Comment(
+            [
+                'commentId' => $comment_id,
+                'commentStatus' => 'moderated'
+            ]
+        );
+        $this->commentManager->updateStatusComment($signaledComment);
     }
 
     /**
@@ -102,7 +100,20 @@ class PostController //TODO a tester
     public function deletePost($post_id)
     {
         $this->postManager->deletePost($post_id);
-        $this->frontController->loadView("posts_dashboard");
+    }
 
+    /**
+     * Delete one comment
+     * $comment asked
+     * @param $comment_id comment ID
+     */
+    public function deleteComment($comment_id)
+    {
+        $this->commentManager->deleteComment($comment_id);
+    }
+
+    public function banUser() //Non testé mais à faire lorsque le back office sera en place car faisable depuis le tableau de gestion membres TODO : voir comment sécurisé, utilisable que par l'admin
+    {
+        $this->userManager->deleteMember();
     }
 }

@@ -132,6 +132,14 @@
                         <?php
                         if(!empty($_SESSION)){ ?>
                             <a class="nav-link" href="index.php?action=disconnect">Se déconnecter</a>
+
+                            <?php if($_SESSION['role'] = 'administrator'){ ?>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=viewHomeDashboard">Tableau de bord</a>
+                    </li>
+                            <?php }?>
+
                         <?php }
                         else { ?>
                             <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connexion</a>
