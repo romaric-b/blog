@@ -56,11 +56,6 @@
                             </p>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-primary">Valider</button>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -98,11 +93,6 @@
                             </p>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-primary">Valider</button>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -130,21 +120,29 @@
                     </li>
                     <li class="nav-item">
                         <?php
-                        if(!empty($_SESSION)){ ?>
+                        if(!empty($_SESSION['role'])){ ?>
                             <a class="nav-link" href="index.php?action=disconnect">Se déconnecter</a>
-
-                            <?php if($_SESSION['role'] = 'administrator'){ ?>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?action=viewHomeDashboard">Tableau de bord</a>
-                    </li>
-                            <?php }?>
 
                         <?php }
                         else { ?>
                             <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connexion</a>
                         <?php } ?>
                     </li>
+                    <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'administrator'){ ?>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?action=viewHomeDashboard">Tableau de bord</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?action=viewCommentDashboard">Gérer commentaires</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?action=viewPostDashboard">Gérer articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?action=viewMemberDashboard">Gérer Membres</a>
+                        </li>
+                    <?php }?>
                 </ul>
             </div>
         </nav>
@@ -185,6 +183,7 @@
 
     <!--TinyMCE-->
     <script src="https://cdn.tiny.cloud/1/sguduqeo4kbrmiicmeazgnj892slxkt1nd2wz04afbus4c3y/tinymce/5/tinymce.min.js"></script>
+    <script>tinymce.init({selector:'.tinymce-edition'});</script>
 <!-- Bootstrap core JavaScript -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

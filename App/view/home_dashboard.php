@@ -42,7 +42,7 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
                         <td><?=$signaledComment->getCommentStatus()?></td>
                         <td class="btn-group" role="group" aria-label="actions">
                             <a href="index.php?action=deleteComment&commentId=<?=$signaledComment->getCommentId()?>" class="btn btn-danger p-1">Effacer commentaire</a>
-                            <a href="index.php?action=unsignalComment&commentId=<?=$signaledComment->getCommentId()?>" class="btn btn-secondary p-1">Annuler signalement</a>
+                            <a href="index.php?action=unsignalReadedComment&commentId=<?=$signaledComment->getCommentId()?>" class="btn btn-secondary p-1">Annuler signalement</a>
                         </td>
                     </tr>
 

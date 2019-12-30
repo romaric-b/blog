@@ -84,7 +84,6 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
         {
             $users[] = $user;
         }
-        var_dump($users);
         return $users;
     }
 
@@ -125,13 +124,11 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      * @param User $user objet de type User
      * @return boolean true en cas de succès ou false en cas d'erreur
      */
-    public function deleteMember(User $user)
+    public function deleteMember($user_id)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id=:user_id LIMIT 1'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id = ?'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
 
-        $req->execute([
-            'user_id' => $user->getUserId()
-        ]);
+        $req->execute(array($user_id));
 
         //exécution de la requête
         return $req->execute();

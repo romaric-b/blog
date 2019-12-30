@@ -32,17 +32,14 @@ try
                 $frontController->listPosts();
                 break;
             case 'viewPost':
-                $frontController->viewPost($_GET['id']);
+                $frontController->viewPost($_GET['post']);
                 break;
             case 'listComments':
                 $frontController->listComments();
                 break;
-            case 'viewComment':
-                $frontController->viewComment();
-                break;
-            case 'updateComment':
-                $frontController->updateComment();
-                break;
+//            case 'viewComment':
+//                $frontController->viewComment();
+//                break;
             case 'signalComment':
                 $frontController->signalComment($_GET['id']);
                 break;
@@ -50,14 +47,23 @@ try
                 $frontController->disconnect();
                 break;
 
-                ////////////////////////////////////////
-                //  Back actions
-                ///////////////////////////////////////
+            ////////////////////////////////////////
+            //  Back actions
+            ///////////////////////////////////////
             case 'createPost':
                 $backController->createPost();
                 break;
             case 'viewHomeDashboard':
                 $backController->viewHomeDashboard();
+                break;
+            case 'viewCommentDashboard':
+                $backController->viewCommentDashboard();
+                break;
+            case 'viewPostDashboard':
+                $backController->viewPostDashboard();
+                break;
+            case 'viewMemberDashboard':
+                $backController->viewMemberDashboard();
                 break;
             case 'listUsers':
                 $backController->listUsers();
@@ -65,14 +71,20 @@ try
             case 'updatePost':
                 $backController->updatePost();
                 break;
+            case 'unsignalReadedComment':
+                $backController->unsignalReadedComment($_GET['commentId']);
+                break;
+            case 'updateReadedComment':
+                $backController->updateReadedComment($_GET['commentId']);
+                break;
             case 'deletePost':
-                $backController->deletePost();
+                $backController->deletePost($_GET['postId']);
                 break;
             case 'deleteComment':
-                $backController->deleteComment();
+                $backController->deleteComment($_GET['commentId']);
                 break;
             case 'banUser':
-                $backController->banUser();
+                $backController->banUser($_GET['userId']);
                 break;
             default:
                 var_dump('routeur defaut');

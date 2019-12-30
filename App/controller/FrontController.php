@@ -87,15 +87,20 @@ class FrontController
                     $_SESSION['user_password'] = $hashLoginUserPass;
                     $_SESSION['role'] = $matchedUser['user_role']; //servira à rediriger suivant si admin ou membre
 
-                    if($_SESSION['role'] == 'member')
+                    if($_SESSION['role'] === 'member')
                     {
+                        var_dump('if membre logn');
+                        var_dump($_SESSION['role']);
                         header('location: index.php?action=listPosts');
+//                        header('location : index.php');
+                        return;
                     }
-                    elseif($_SESSION['role'] == 'administrator')
+                    elseif($_SESSION['role'] === 'administrator')
                     {
                         //TODO transformer ça en header avec un action car les commentaires signalés, la liste des articles, commantires etc... doivent être chargés
 //                        require('App/view/home_dashboard.php');
                         header('Location: index.php?action=viewHomeDashboard');
+                        return;
                     }
                 }
                 else // Mauvais mot de passe
@@ -120,36 +125,21 @@ class FrontController
      */
     public function listPosts()
     {
-//        $count = $this->postManager->countPost();
-//        var_dump($count);
-//
-//        $currentPage = $_GET['page'] ?? 1;
-//        var_dump($currentPage);
-//
-//        if(!filter_var($currentPage, FILTER_VALIDATE_INT))
-//        {
-//            $this->msg='Numéro de page invalide';
-//            echo 'Numéro de page invalide';
-//        }
-//        if($currentPage <= 0)
-//        {
-//            $this->msg='Numéro de page invalide';
-//            echo 'Numéro de page invalide';
-//        }
-//        if($currentPage === '1')
-//        {
-//            header('Location: index.php?action=listPosts');
-//        }
-//        $perPage = 5;
-//        $start = $perPage * ($currentPage-1);
-//        $pages = ceil($count /$perPage);
-//        if ($currentPage > $pages){
-//            $this->msg='Cette page n\'existe pas';
-//        }
-//        $posts = $this->postManager->paginateListPosts($start,$perPage);
-
         $posts = $this->postManager->readAllPosts();
         require('App/view/listPosts.php');
+    }
+
+
+//    public function viewPost($post_id)
+//    {
+//        $post = $this->postManager->readPost($post_id);
+//        //obtenir aussi les commentaires du post pour cette vue
+//        $comments = $this->commentManager->readCommentsOfPost($post_id);
+//        require('App/view/post.php');
+//    }
+    public function viewHome()
+    {
+        require('App/view/home.php');
     }
 
     /**
@@ -157,11 +147,10 @@ class FrontController
      * @return $post asked
      * @param $post_id post ID
      */
-    public function viewPost($post_id)
+    public function viewPost($postId)
     {
-        $post = $this->postManager->readPost($post_id);
         //obtenir aussi les commentaires du post pour cette vue
-        $comments = $this->commentManager->readCommentsOfPost($post_id);
+        $comments = $this->commentManager->readCommentsOfPost($postId);
         require('App/view/post.php');
     }
 
@@ -169,7 +158,7 @@ class FrontController
     {
         $createdComment = new Comment(
             [
-                'commentUserId' => '8',
+                'commentUserId' => $_SESSION['user_id'],
                 'commentContent' => htmlspecialchars($_POST['createCommentContent']),
                 'commentPostId' => htmlspecialchars($postId),
                 'commentStatus' => 'unsignaled',
@@ -201,15 +190,15 @@ class FrontController
      * @return $Comment asked
      * @param $comment_id comment ID
      */
-    public function viewComment($comment_id)
-    {
-        $this->commentManager->readComment($comment_id);
-    }
+//    public function viewComment($comment_id)
+//    {
+//        $this->commentManager->readComment($comment_id);
+//    }
 
     /**
      * update a comment
      */
-    public function updateComment()
+    public function updateCommentContent() //TODO si j'ai le temps
     {
         $updatedComment = new Comment(
             [
@@ -229,6 +218,8 @@ class FrontController
             ]
         );
         $this->commentManager->updateStatusComment($signaledComment);
+        echo '<p>Votre signalement a bien été transmis, le commentaire sera éxaminé par l\'aministrateur.</p>';
+
     }
 }
 ?>

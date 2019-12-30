@@ -49,19 +49,6 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
         return $post;
     }
 
-    /**
-     * Catch the 5 last posts by page
-     */
-    public function paginateListPosts($start,$perPage)
-    {
-        $req = $this->dbConnect()->query("SELECT post_id, post_title, post_extract, post_content, 
-        DATE_FORMAT(post_date, '%d/%m/%Y à %Hh%imin%ss') AS post_date_fr FROM blog_posts        
-        ORDER BY post_date DESC LIMIT $start,$perPage");
-        $posts = $req->fetchObject('\App\model\entities\Post');
-        return $posts;
-        var_dump($posts);
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ : ALL
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,12 +115,10 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      * @param Post $post objet de type Post
      * @return boolean true en cas de succès ou false en cas d'erreur
      */
-    public function deletePost(Post $post)//TODO a tester une fois le back office en place
+    public function deletePost($post_id)//TODO a tester une fois le back office en place
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_posts WHERE post_id = :post_id LIMIT 1');
-        $req->execute([
-            'post_id' => $post->getPostId()
-        ]);
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_posts WHERE post_id = ? LIMIT 1');
+        $req->execute(array($post_id));
         //exécution de la requête
         return $req->execute();
     }

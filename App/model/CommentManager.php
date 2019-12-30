@@ -19,8 +19,6 @@ class CommentManager extends Manager //testé et fonctionne
      */
     public function createComment(Comment $comment)
     {
-        var_dump('createComment ok');
-
         $req = $this->dbConnect()->prepare('
 INSERT INTO blog_comments (comment_date, comment_status, comment_content, comment_post_id, comment_user_id, comment_read)
     VALUES (NOW(), :status, :content, :comment_post_id, :comment_user_id, :comment_read)');
@@ -110,25 +108,41 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
         $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
             '\App\model\entities\Comment');
         return $req;
+    }
 
-//        $req = $this->dbConnect()->prepare('SELECT comment_id, comment_content, user_nickname AS author, comment_post_id,
-//        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM blog_comments
-//        INNER JOIN blog_user ON comment_user_id = user_id
-//        INNER JOIN blog_posts ON comment_post_id = post_id
-//        WHERE comment_status  = "signaled" ORDER BY comment_date DESC');
-//        $comments = [];
-//        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas false
-//        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
-//        {
-//            //je stocke dans le tableau chaque $comment correspondant aux lignes en bdd
-//            $comments[] = $comment;
-//        }
-//        return $comments;
+    public function readAllCommentsForDashboard()
+    {
+        $req = $this->dbConnect()->query('SELECT comment_id, comment_content, comment_status, comment_read,
+        user_nickname AS author, comment_post_id, post_title AS comment_post_title, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') 
+        AS comment_date_fr FROM blog_comments 
+        INNER JOIN blog_user ON comment_user_id = user_id
+        INNER JOIN blog_posts ON comment_post_id = post_id
+        GROUP BY comment_id ORDER BY comment_date DESC');
+
+        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
+            '\App\model\entities\Comment');
+        return $req;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          UPDATE
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    //Pour qu'un membre signale un commentaire ou pour passer le statut sur modéré si l'admin
+    public function updateStatusComment(Comment $comment)
+    {
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status, comment_read = :readed WHERE comment_id = :comment_id LIMIT 1');
+
+        $req->execute([
+            'status' => $comment->getCommentStatus(),
+            'readed' => $comment->getCommentRead(),
+            'comment_id' => $comment->getCommentId()
+        ]);
+
+        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
+    }
 
     //Pour que l'admin différencie les commentaires lus et nons lus
     /**
@@ -136,31 +150,16 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
      * @param Comment $comment objet de type Comment
      * @return boolean true en cas de succès ou false en cas d'erreur
      */
-    public function updateReadComment(Comment $comment)
+    public function updateReadedComment(Comment $comment)
     {
         $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_read = :comment_read WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
 
         $req->execute([
-            'content' => $comment->getCommentContent(),
-            'status' => $comment->getCommentStatus(),
             'comment_read' => $comment->getCommentRead(),
             'comment_id' => $comment->getCommentId()
         ]);
 
         return $req->execute();
-    }
-
-    //Pour qu'un membre signale un commentaire ou pour passer le statut sur modéré si l'admin
-    public function updateStatusComment(Comment $comment)
-    {
-        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status WHERE comment_id = :comment_id LIMIT 1');
-
-        $req->execute([
-            'status' => $comment->getCommentStatus(),
-            'comment_id' => $comment->getCommentId() //Putain ce con me retourne pas d'erreur (il me retourne rien) si je me trompe d'id, bizarre
-        ]);
-
-        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,13 +170,11 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
      * @param Comment $comment objet de type Comment
      * @return boolean true en cas de succès ou false en cas d'erreur
      */
-    public function deleteComment(Comment $comment)
+    public function deleteComment($comment_id)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id = :comment_id LIMIT 1');
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id = ?');
 
-        $req->execute([
-            'comment_id' => $comment->getCommentId()
-        ]);
+        $req->execute(array($comment_id));
 
         //exécution de la requête
         return $req->execute();

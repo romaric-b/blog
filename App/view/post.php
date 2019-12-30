@@ -2,7 +2,11 @@
 
 $title = 'Blog de Jean Forteroche : Chapitres'; ?>
 
-<?php ob_start(); ?>
+<?php ob_start();
+$post = $_SESSION['post' . $postId];
+//unset($_SESSION['post' . $postId]);
+?>
+
 <h2>Article</h2>
 <section>
     <article>
@@ -33,7 +37,7 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
     </form>
     <?php endif;?>
 <?php endif;?>
-<?php if(empty($_SESSION)): ?>
+<?php if(empty($_SESSION['user_nickname'])): ?>
     <p>
         <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connectez-vous pour écrire un commantaire</a>
     </p>

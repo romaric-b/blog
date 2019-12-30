@@ -7,6 +7,7 @@ use App\model\entities\Post;
 use App\model\PostManager;
 use App\model\UserManager;
 use App\model\CommentManager;
+use http\Header;
 
 class BackController
 {
@@ -29,19 +30,15 @@ class BackController
     {
         $createdPost = new Post(
             [
-                'postTitle' =>  htmlspecialchars($_POST['createTitle']),
-                'postExtract' => htmlspecialchars($_POST['createExtract']),
-                'postContent' => htmlspecialchars($_POST['createContent'])
+                'postTitle' =>  $_POST['createTitle'],
+                'postExtract' => $_POST['createExtract'],
+                'postContent' => $_POST['createContent']
             ]
         );
-        //Je contrôle s'il n'y a pas déjà un chapitre portant le même titre pour éviter un double post
-        $matchedPost = $this->postManager->readPost($createdPost);
-        if($matchedPost > 0)
-        {
-            return $this->msg = "Vous avez déjà posté un article comportant ce titre";
-        }
+
         $this->postManager->createPost($createdPost);
-        $this->frontController->loadView("create_post");
+
+        echo '<p>article envoyé avec succès</p>';
     }
 
     public function viewHomeDashboard()
@@ -50,6 +47,24 @@ class BackController
 
         $posts = $this->postManager->readAllPosts(); //A caler dans un tableau à overflow scroll en vertical
         require('App/view/home_dashboard.php');
+    }
+
+    public function viewCommentDashboard()
+    {
+        $comments = $this->commentManager->readAllCommentsForDashboard();
+        require('App/view/comments_dashboard.php');
+    }
+
+    public function viewPostDashboard()
+    {
+        $posts = $this->postManager->readAllPosts();
+        require('App/view/posts_dashboard.php');
+    }
+
+    public function viewMemberDashboard()
+    {
+        $users = $this->userManager->readAllMembers();
+        require('App/view/members_dashboard.php');
     }
 
     /**
@@ -67,6 +82,9 @@ class BackController
      */
     public function updatePost()
     {
+        //1 lire le post en question et tenter afficher
+
+
         $updatedPost = new Post(
             [
                 'postTitle' =>  htmlspecialchars($_POST['createTitle']),
@@ -81,15 +99,32 @@ class BackController
      * Update a comment on moderated status
      * @param $comment_id
      */
-    public function unsignalComment($comment_id)
+    public function unsignalReadedComment($comment_id)
     {
         $signaledComment = new Comment(
             [
                 'commentId' => $comment_id,
-                'commentStatus' => 'moderated'
+                'commentStatus' => 'moderated',
+                'commentRead' => 'read'
             ]
         );
         $this->commentManager->updateStatusComment($signaledComment);
+    }
+
+    /**
+     * Update a comment on moderated status
+     * @param $comment_id
+     */
+    public function updateReadedComment($comment_id)
+    {
+        $readedComment = new Comment(
+            [
+                'commentId' => $comment_id,
+                'commentRead' => 'read'
+            ]
+        );
+        var_dump($readedComment);
+        $this->commentManager->updateReadedComment($readedComment);
     }
 
     /**
@@ -112,8 +147,10 @@ class BackController
         $this->commentManager->deleteComment($comment_id);
     }
 
-    public function banUser() //Non testé mais à faire lorsque le back office sera en place car faisable depuis le tableau de gestion membres TODO : voir comment sécurisé, utilisable que par l'admin
+    public function banUser($user_id) //Non testé mais à faire lorsque le back office sera en place car faisable depuis le tableau de gestion membres TODO : voir comment sécurisé, utilisable que par l'admin
     {
-        $this->userManager->deleteMember();
+        $this->userManager->deleteMember($user_id);
+        echo 'Le membre a été supprimé avec succès';
+        header('location: index.php?action=viewMemberDashboard');
     }
 }
