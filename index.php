@@ -62,6 +62,9 @@ try
             case 'viewPostDashboard':
                 $backController->viewPostDashboard();
                 break;
+            case 'viewPostToUpdate':
+                $backController->viewPostToUpdate($_GET['post']);
+                break;
             case 'viewMemberDashboard':
                 $backController->viewMemberDashboard();
                 break;
@@ -69,7 +72,7 @@ try
                 $backController->listUsers();
                 break;
             case 'updatePost':
-                $backController->updatePost();
+                $backController->updatePost($_GET['postId']);
                 break;
             case 'unsignalReadedComment':
                 $backController->unsignalReadedComment($_GET['commentId']);

@@ -21,15 +21,20 @@ $title = 'Tableau de bord : Chapitres'; ?>
             <td><?=$post->getPostExtract()?></td>
             <td><?=$post->getPostDate()?></td>
             <td class="btn-group" role="group" aria-label="actions">
-                <a href="index.php?action=updatePost&amp;postId=<?=$post->getPostId()?>" class="btn btn-secondary p-1">modifier article</a>
                 <?php $_SESSION['post' . $post->getPostId()] = $post;?>
-                <a class="nav-link" target="_blank" href="index.php?action=viewPost&amp;postId=<?=$post->getPostId()?>">Lire l'article</a>
+                <a class="btn btn-primary" target="_blank" href="index.php?action=viewPostToUpdate&amp;post=<?=$post->getPostId()?>" >modifier article</a>
+                <a class="nav-link" target="_blank" href="index.php?action=viewPost&amp;post=<?=$post->getPostId()?>">Lire l'article</a>
                 <a href="index.php?action=deletePost&amp;postId=<?=$post->getPostId()?>" class="btn btn-danger p-1">Effacer article</a>
             </td>
         </tr>
     <?php endforeach;?>
 </table>
 <section>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#create_post" aria-expanded="false" aria-controls="collapseExample">
+        Ecrire un nouvel article
+    </button>
+</section>
+<section id="create_post" class="creation_post--section collapse">
     <form action="index.php?action=createPost" method="POST" class="flex-column">
         <label for="post_title">Titre :
             <input id="post_title" name="createTitle" id="title">
@@ -46,7 +51,6 @@ $title = 'Tableau de bord : Chapitres'; ?>
             <input type="submit"  value="Valider"/>
         </p>
     </form>
-
 </section>
 
 <?php $content = ob_get_clean(); ?>

@@ -67,6 +67,11 @@ class BackController
         require('App/view/members_dashboard.php');
     }
 
+    public function viewPostToUpdate($postId)
+    {
+        require('App/view/postToUpdate.php');
+    }
+
     /**
      * used to view posts
      * @return objects $posts
@@ -80,16 +85,17 @@ class BackController
     /**
      * update a post
      */
-    public function updatePost()
+    public function updatePost($postId)
     {
         //1 lire le post en question et tenter afficher
 
 
         $updatedPost = new Post(
             [
-                'postTitle' =>  htmlspecialchars($_POST['createTitle']),
-                'postExtract' => htmlspecialchars($_POST['createExtract']),
-                'postContent' => htmlspecialchars($_POST['createContent'])
+                'postId' => $postId,
+                'postTitle' =>  htmlspecialchars($_POST['updateTitle']),
+                'postExtract' => $_POST['updateExtract'],
+                'postContent' => $_POST['updateContent']
             ]
         );
         $this->postManager->updatePost($updatedPost);

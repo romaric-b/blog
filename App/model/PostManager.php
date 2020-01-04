@@ -30,6 +30,7 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
             'content' => $post->getPostContent()
         ]);
     }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,11 +74,23 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
     /**
      * get the count of posts
      */
-    public function countPost()
-    {
-        $count=(int)$this->dbConnect()->query('SELECT COUNT(post_id) FROM blog_posts')->fetch()[0];
-        return $count;
+//    public function countPost()
+//    {
+//        $count=(int)$this->dbConnect()->query('SELECT COUNT(post_id) FROM blog_posts')->fetch()[0];
+//        return $count;
+//    }
 
+    public function countPost() //pagination par 5
+    {
+        $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id DESC LIMIT 0,5');
+        $posts = [];
+        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas post false
+        while($post = $req->fetchObject('\App\model\entities\Post'))
+        {
+            //je stocke dans le tableau chaque $post correspondant aux lignes en bdd
+            $posts[] = $post;
+        }
+        return $posts;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +113,6 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
             'title' => $post->getPostTitle(),
             'excerpt' => $post->getPostExtract(),
             'content' => $post->getPostContent()
-
         ]);
         //exécution de la requête
         //POSSIBLEMENT EN TROP :
