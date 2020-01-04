@@ -40,6 +40,14 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
             <a class="nav-link" href="index.php?action=viewPost&amp;post=<?=$post->getPostId()?>">Lire l'article</a>
         <?php endforeach;?>
 
+        <?php
+
+        for($i=1; $i<=$totalPages; $i++)
+        {
+            echo '<a href="index.php?action=listPosts&amp;page='.$i.'">'.$i.'</a> ';
+        }
+            ?>
+
     </section>
 
 <?php $content = ob_get_clean(); ?>

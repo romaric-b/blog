@@ -80,17 +80,16 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
 //        return $count;
 //    }
 
-    public function countPost() //pagination par 5
+    public function countPost($start, $postPerpage) //pagination par 5
     {
-        $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id DESC LIMIT 0,5');
-        $posts = [];
-        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas post false
+        $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id DESC LIMIT '. $start .',' .$postPerpage);
         while($post = $req->fetchObject('\App\model\entities\Post'))
         {
             //je stocke dans le tableau chaque $post correspondant aux lignes en bdd
             $posts[] = $post;
         }
         return $posts;
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

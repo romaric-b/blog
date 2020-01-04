@@ -125,7 +125,21 @@ class FrontController
      */
     public function listPosts()
     {
-        $posts = $this->postManager->readAllPosts();
+        $totalPosts = count($this->postManager->readAllPosts());
+        $postPerpage = 5;
+        $totalPages = ceil($totalPosts/$postPerpage); //ceil around superior number
+        if(isset($_GET['page']) AND !empty($_GET['page']) AND $_GET['page'] > 0)
+        {
+            $_GET['page'] = intval($_GET['page']);
+            $currentPage = $_GET['page'];
+        }
+        else
+        {
+            $currentPage = 1;
+        }
+        $start = ($currentPage - 1)*$postPerpage;
+        var_dump($start);
+        $posts = $this->postManager->countPost($start, $postPerpage);
         require('App/view/listPosts.php');
     }
 

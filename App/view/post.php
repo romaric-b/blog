@@ -7,6 +7,7 @@ $post = $_SESSION['post' . $postId];
 //unset($_SESSION['post' . $postId]);
 ?>
 
+
 <h2>Article</h2>
 <section>
     <article>
