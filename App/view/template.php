@@ -25,7 +25,7 @@
 </head>
 
 <body id="page-top">
-    <div class="global_page--div container-fluid flex-column">
+    <div class="global_page--div container-fluid flex-column bg_home">
 
         <!--Login Modal-->
         <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

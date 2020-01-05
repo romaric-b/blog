@@ -4,7 +4,7 @@ $title = 'Blog de Jean Forteroche'; ?>
 
 <?php ob_start(); ?>
 
-    <main class="main-content bg_home" id="home">
+    <main class="main-content " id="home">
         <div class="container bg-light h-80">
             <div class="column mx-auto">
                 <h1 class="border-bottom border-dark">Bienvenue sur le blog de Jean Forteroche</h1>
