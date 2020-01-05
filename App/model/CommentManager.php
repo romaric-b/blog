@@ -127,10 +127,21 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          UPDATE
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function updateSignalComment(Comment $comment)
+    {
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status WHERE comment_id = :comment_id LIMIT 1');
+
+        $req->execute([
+            'status' => $comment->getCommentStatus(),
+            'comment_id' => $comment->getCommentId()
+        ]);
+
+        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
+    }
 
 
 
-    //Pour qu'un membre signale un commentaire ou pour passer le statut sur modéré si l'admin
+    //Pour que l'admin change le statut d'un commentaire dans le cas d'un signalement ou pour passer le statut sur modéré si l'admin
     public function updateStatusComment(Comment $comment)
     {
         $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status, comment_read = :readed WHERE comment_id = :comment_id LIMIT 1');

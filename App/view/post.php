@@ -5,9 +5,11 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
 <?php ob_start();
 $post = $_SESSION['post' . $postId];
 //unset($_SESSION['post' . $postId]);
+if(!isset($post))
+{
+    header('location: index.php?action=viewErrorPage');
+}
 ?>
-
-
 <h2>Article</h2>
 <section>
     <article>
@@ -56,5 +58,4 @@ $post = $_SESSION['post' . $postId];
 <?php endforeach; ?>
 </section>
 <?php $content = ob_get_clean(); ?>
-
 <?php require('template.php'); ?>

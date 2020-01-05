@@ -17,8 +17,6 @@ class UserManager extends Manager //Je peux faire un final, une classe finale si
      */
     public function createMember(User $user)  //fonctionne
     {
-        var_dump('createUser ok');
-
         $req = $this->dbConnect()->prepare('
 INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_password, user_role)
     VALUES (:nickname, NOW(), :email, :password, :role)'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant
@@ -55,7 +53,6 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
 //    }
     public function readMember(User $user) //fonctionne
     {
-        var_dump($user);
         //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
         $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_nickname = :nickname");
         $req->execute([

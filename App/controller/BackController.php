@@ -7,7 +7,7 @@ use App\model\entities\Post;
 use App\model\PostManager;
 use App\model\UserManager;
 use App\model\CommentManager;
-use http\Header;
+//use http\Header;
 
 class BackController
 {
@@ -35,10 +35,12 @@ class BackController
                 'postContent' => $_POST['createContent']
             ]
         );
-
         $this->postManager->createPost($createdPost);
-
-        echo '<p>article envoyé avec succès</p>';
+        $msg =  '<p>Le nouvel article a bien été crée.</p>
+                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+                 <a href="index.php?action=viewPostDashboard">Aller à la gestion des articles</a>
+                 ';
+        require('App/view/messageView.php');
     }
 
     public function viewHomeDashboard()
@@ -76,20 +78,17 @@ class BackController
      * used to view posts
      * @return objects $posts
      */
-    public function listPostsAdmin()
-    {
-        $posts = $this->postManager->readAllPosts();
-        require('App/view/listPosts.php');
-    }
+//    public function listPostsAdmin()
+//    {
+//        $posts = $this->postManager->readAllPosts();
+//        require('App/view/listPosts.php');
+//    }
 
     /**
      * update a post
      */
     public function updatePost($postId)
     {
-        //1 lire le post en question et tenter afficher
-
-
         $updatedPost = new Post(
             [
                 'postId' => $postId,
@@ -99,6 +98,12 @@ class BackController
             ]
         );
         $this->postManager->updatePost($updatedPost);
+        $msg =  '<p>L\'article a bien été modifié.</p>
+                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+                 <a href="index.php?action=viewPostDashboard">Aller à la gestion des articles</a>
+                 ';
+        require('App/view/messageView.php');
+
     }
 
     /**
@@ -115,6 +120,11 @@ class BackController
             ]
         );
         $this->commentManager->updateStatusComment($signaledComment);
+        $msg =  '<p>Le commantaire a bien été modéré.</p>
+                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
+                 ';
+        require('App/view/messageView.php');
     }
 
     /**
@@ -129,8 +139,12 @@ class BackController
                 'commentRead' => 'read'
             ]
         );
-        var_dump($readedComment);
         $this->commentManager->updateReadedComment($readedComment);
+        $msg =  '<p>Le commantaire a bien été marqué comme lu.</p>
+                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
+                 ';
+        require('App/view/messageView.php');
     }
 
     /**
@@ -141,6 +155,11 @@ class BackController
     public function deletePost($post_id)
     {
         $this->postManager->deletePost($post_id);
+        $msg =  '<p>L\'article a bien été supprimé.</p>
+                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+                 <a href="index.php?action=viewPostDashboard">Aller à la gestion des articles</a>
+                 ';
+        require('App/view/messageView.php');
     }
 
     /**
@@ -151,12 +170,20 @@ class BackController
     public function deleteComment($comment_id)
     {
         $this->commentManager->deleteComment($comment_id);
+        $msg =  '<p>Le commantaire a bien été effacé.</p>
+                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
+                 ';
+        require('App/view/messageView.php');
     }
 
     public function banUser($user_id) //Non testé mais à faire lorsque le back office sera en place car faisable depuis le tableau de gestion membres TODO : voir comment sécurisé, utilisable que par l'admin
     {
         $this->userManager->deleteMember($user_id);
-        echo 'Le membre a été supprimé avec succès';
-        header('location: index.php?action=viewMemberDashboard');
+        $msg =  '<p>Le membre a bien été bannis.</p>
+                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+                 <a href="index.php?action=viewMemberDashboard">Aller à la gestion des membres</a>
+                 ';
+        require('App/view/messageView.php');
     }
 }

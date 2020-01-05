@@ -21,34 +21,26 @@ class User
     private $user_password2;
     private $user_role;
 
+    public $msg;
+
 
     public function __construct(array $datas = array())
     {
-        //On hydrate pas un tableau de données vide
         if (!empty($datas))
         {
             $this->hydrate($datas);
         }
     }
 
-    //// Un tableau de données doit être passé à la fonction (d'où le préfixe « array »).
-    ///
-    /// PARCOURS du tableau $datas (avec pour clé $key et pour valeur $value)
-    //  On assigne à $setter la valeur « 'set'.$key », en mettant la 
-    //  première lettre de $key en majuscule (utilisation de ucfirst())
-    //  SI la méthode set$key de notre classe existe ALORS
-    //    On invoque set$key($valeur)
-    //  FIN SI
-    //FIN PARCOURS
     public function hydrate(array $datas) //Et si j'ai bien compris, ça rend les setters autoexecutants comme on pouvait faire en JS lorsqu'on appelait une méthode dans son constructeur
     {
         foreach ($datas as $key => $value)
         {
             $method = 'set'.ucfirst($key);
 
+            //call the good method of my class if she exists
             if (method_exists($this, $method))
             {
-                // il existe on peut l'appeler
                 $this->$method($value);
             }
         }
@@ -79,17 +71,20 @@ class User
                 }
                 else
                 {
-                    echo 'Mauvais format du champ pseudo';
+                    $this->msg = 'Mauvais format du champ pseudo';
+                    return;
                 }
             }
             else
             {
-                echo 'champ pseudo vide';
+                $this->msg = 'champ pseudo vide';
+                return;
             }
         }
         else
         {
-            echo 'variable non définie';
+            $this->msg = 'variable non définie';
+            return;
         }
     }
 
@@ -112,23 +107,25 @@ class User
                 }
                 else
                 {
-                    echo 'Mauvais format du champ email';
+                    $this->msg = 'Mauvais format du champ email';
+                    return;
                 }
             }
             else
             {
-                echo 'champ email vide';
+                $this->msg = 'champ email vide';
+                return;
             }
         }
         else
         {
-            echo 'variable non définie';
+            $this->msg = 'variable non définie';
+            return;
         }
     }
 
-    //je pense que ma méthode d'hydratation exisge que j'ai un setter pour password et password2 sinon il ne sera pas assigné
     /**
-     * @return mixed
+     * @return mixed $password
      */
     public function setPassword($password) //bug possible : un un $password2 indéfini
     {
@@ -200,5 +197,8 @@ class User
         return $this->user_role;
     }
 
-
+    public function getMessage()
+    {
+        return $this->msg;
+    }
 }

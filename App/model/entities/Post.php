@@ -66,7 +66,8 @@ class Post //Testé et fonctionne
                 }
                 else
                 {
-                    return $this->msg = 'Le titre est trop long';
+                    $this->msg = 'Le titre est trop long';
+                    return;
                 }
             }
         }
@@ -87,7 +88,8 @@ class Post //Testé et fonctionne
                 }
                 else
                 {
-                    return $this->msg = 'Erreur sur le format de cet extrait';
+                    $this->msg = 'Erreur sur le format de cet extrait';
+                    return;
                 }
             }
         }
@@ -108,7 +110,8 @@ class Post //Testé et fonctionne
                 }
                 else
                 {
-                    return $this->msg = 'Erreur sur le format du contenu de l\'article';
+                    $this->msg = 'Erreur sur le format du contenu de l\'article';
+                    return;
                 }
             }
         }
@@ -158,6 +161,11 @@ class Post //Testé et fonctionne
     public function getPostContent()
     {
         return $this->post_content;
+    }
+
+    public function getMessage()
+    {
+        return $this->msg;
     }
 
     /**

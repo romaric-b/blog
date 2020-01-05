@@ -11,8 +11,6 @@ use App\model\PostManager;
 
 class FrontController
 {
-    public $msg;
-
     public function __construct()
     {
         $this->userManager = new UserManager();
@@ -35,25 +33,43 @@ class FrontController
                     'password2' => htmlspecialchars($_POST['registPassword2']),
                     'role' => 'member'
                 ]);
-            //je contrôle si le pseudo à déjà été utilisé grace à mon manager
+            //I call used same nicknames
             $matchedNickname = $this->userManager->readMember($newUser);
-            //Si les pseudo matchent
+            //If nicknames match
             if($matchedNickname > 0)
             {
-                echo "Ce pseudo est déjà utilisé, choisissez en un autre";
-                header('location: index.php?action=listPosts');
+                $msg = "<p>Ce pseudo est déjà utilisé, choisissez en un autre.
+                                <a href=\"index.php?action=viewHome\">Retourner à l'accueil</a>
+                              </p>";
+                require('App/view/messageView.php');
                 return;
             }
-            //comparaison MDP
+            //comparison of passwords entered by the user
             if ($newUser->getPassword() !== $newUser->getPassword2())
             {
-                header('location: index.php?action=listPosts');
+                $msg = '<p>Les mots de passe rentrés sont différents. 
+                    <a href="index.php?action=viewHome">Retourner à l\'accueil</a>
+                  </p>';
+                require('App/view/messageView.php');
                 return;
             }
-            $this->userManager->createMember($newUser);
-            echo '<p>Inscription bien validées, vous pouvez dès à présent vous connecter : 
-                    <a href="index.php?action=login">Connexion</a>
+            //If my object user as an error interne of entity, it will rapport message
+            if ($newUser->getMessage())
+            {
+                $msg = $newUser->getMessage();
+                require('App/view/messageView.php');
+                return;
+
+            }
+            elseif($newUser->getMessage() == NULL)
+            {
+                $this->userManager->createMember($newUser);
+                $msg = '<p>Inscription validée. 
+                    <a href="index.php?action=listPosts">Retourner à la liste des chapitres</a>
                   </p>';
+                require('App/view/messageView.php');
+                return;
+            }
         }
     }
 
@@ -68,14 +84,18 @@ class FrontController
                 ]);
             //je contrôle si le pseudo à déjà été utilisé grace à mon manager
             $matchedUser = $this->userManager->readMember($loginUser);
-            //Si pas d'utilisateur correspondant trouvé
+            //User account doesn't exist
             if(!$matchedUser)
             {
-                echo '<p>Mauvais identifiant ou mot de passe !</p>';
+                //For security not give exactly information to user
+                $msg =  '<p>Mauvais identifiant ou mot de passe.</p>
+                                <a href="index.php?action=viewHome">Retourner à l\'accueil</a>';
+                require('App/view/messageView.php');
+                return;
             }
-            else //Le cas ou le pseudo match avec un existant
+            else
             {
-                // Comparaison du pass envoyé via le form en param gauche avec celui du matching base en param droit
+                //comparison of passwords entered by the user with an eventualy matching from database
                 $isPasswordCorrect = password_verify($loginUser->getPassword(), $matchedUser['user_password']);
 
                 if($isPasswordCorrect)
@@ -89,34 +109,41 @@ class FrontController
 
                     if($_SESSION['role'] === 'member')
                     {
-                        var_dump('if membre logn');
-                        var_dump($_SESSION['role']);
-                        header('location: index.php?action=listPosts');
-//                        header('location : index.php');
+                        $msg =  '<p>Vous êtes bien connecté</p>
+                                <a href="index.php?action=viewHome">Aller à l\'accueil</a>
+                                <a href="index.php?action=listPosts">Aller à la liste des chapitres</a>
+                                ';
+                        require('App/view/messageView.php');
                         return;
                     }
                     elseif($_SESSION['role'] === 'administrator')
                     {
-                        //TODO transformer ça en header avec un action car les commentaires signalés, la liste des articles, commantires etc... doivent être chargés
-//                        require('App/view/home_dashboard.php');
-                        header('Location: index.php?action=viewHomeDashboard');
-                        return;
+                        $msg =  '<p>Vous êtes bien connecté</p>
+                                <a href="index.php?action=viewHomeDashboard">Aller au tableau de bord</a><br>
+                                <a href="index.php?action=listPosts">Aller à la liste des chapitres</a>
+                                ';
                     }
                 }
-                else // Mauvais mot de passe
+                else
                 {
-                    echo '<p>Mauvais identifiant ou mot de passe !</p>';
+                    $msg =  '<p>Mauvais identifiant ou mot de passe.</p>
+                             <a href="index.php?action=viewHome">Retourner à l\'accueil</a>';
+                    require('App/view/messageView.php');
+                    return;
                 }
             }
+            require('App/view/messageView.php');
         }
-        //TODO prévoir un message de confirmation
     }
 
     public function disconnect() //fonctionne
     {
         $_SESSION = array();
         session_destroy();
-        header('Location: index.php?action=viewHome');
+        //header('Location: index.php?action=viewHome');
+        $msg = '<p>Vous êtes bien déconnecté</p>
+                <a href="index.php?action=viewHome">Retourner à l\'accueil</a>';
+        require('App/view/messageView.php');
     }
 
     /**
@@ -138,7 +165,6 @@ class FrontController
             $currentPage = 1;
         }
         $start = ($currentPage - 1)*$postPerpage;
-        var_dump($start);
         $posts = $this->postManager->countPost($start, $postPerpage);
         require('App/view/listPosts.php');
     }
@@ -180,24 +206,27 @@ class FrontController
             ]
         );
         $this->commentManager->createComment($createdComment);
+        $msg = '<p>Votre commentaire a bien été ajouté</p>
+                <a href="index.php?action=listPosts">Retourner à la liste des articles</a>';
+        require('App/view/messageView.php');
     }
 
     /**
      * used to view Comments
      * @return objects $Comments
      */
-    public function listComments()
-    {
-        $this->commentManager->readAllComments();
-        if($_SESSION['user_role'] = 'member')
-        {
+//    public function listComments()
+//    {
+//        $this->commentManager->readAllComments();
+//        if($_SESSION['user_role'] = 'member')
+//        {
 //            header('location: index.php?action=listPosts');
-        }
-        elseif ($_SESSION['user_role'] = 'administrator')
-        {
-//            header('location: index.php?action=home_dashboard'); //le require se fera sûrement dans l'index
-        }
-    }
+//        }
+//        elseif ($_SESSION['user_role'] = 'administrator')
+//        {
+//              header('location: index.php?action=home_dashboard'); //le require se fera sûrement dans l'index
+//        }
+//    }
 
     /**
      * view one Comment
@@ -209,18 +238,9 @@ class FrontController
 //        $this->commentManager->readComment($comment_id);
 //    }
 
-    /**
-     * update a comment
-     */
-    public function updateCommentContent() //TODO si j'ai le temps
+    public function viewErrorPage()
     {
-        $updatedComment = new Comment(
-            [
-                'CommentContent' => htmlspecialchars($_POST['createContent'])
-            ]
-        );
-        //On connait l'ID car il est enregistré en session avant depuis l'article qu'on visionne
-        $this->commentManager->updateComment($updatedComment);
+        require('App/view/errorPage.php');
     }
 
     public function signalComment($comment_id)
@@ -231,9 +251,15 @@ class FrontController
                 'commentStatus' => 'signaled'
             ]
         );
-        $this->commentManager->updateStatusComment($signaledComment);
-        echo '<p>Votre signalement a bien été transmis, le commentaire sera éxaminé par l\'aministrateur.</p>';
-
+        //$this->commentManager->updateSignalComment($signaledComment);
+        $this->commentManager->updateSignalComment($signaledComment);
+        $msg =  '<p>Le commentaire a bien été signalé et sera éxaminé par l\'aministrateur .</p>
+                 <a href="index.php?action=listPosts">Aller à la liste des chapitres</a>';
+        require('App/view/messageView.php');
     }
+
+
+
+
 }
 ?>

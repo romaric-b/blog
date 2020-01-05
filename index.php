@@ -19,45 +19,45 @@ try
             ////////////////////////////////////////
             //  Front actions
             ///////////////////////////////////////
+            case 'viewHome':
+                $frontController->viewHome();
+                break;
             case 'register':
-                $frontController->register();
+                $frontController->register(); //ok
                 break;
             case 'login':
-                $frontController->login();
+                $frontController->login(); //ok
                 break;
             case 'createComment':
-                $frontController->createComment($_GET['id']);
+                $frontController->createComment($_GET['id']); //ok
                 break;
             case 'listPosts':
-                $frontController->listPosts();
+                $frontController->listPosts(); //ok
                 break;
             case 'viewPost':
-                $frontController->viewPost($_GET['post']);
+                $frontController->viewPost($_GET['post']); //ok
                 break;
-            case 'listComments':
-                $frontController->listComments();
-                break;
-//            case 'viewComment':
-//                $frontController->viewComment();
+//            case 'listComments':
+//                $frontController->listComments();
 //                break;
             case 'signalComment':
-                $frontController->signalComment($_GET['id']);
+                $frontController->signalComment($_GET['id']); //ok
                 break;
             case 'disconnect':
-                $frontController->disconnect();
+                $frontController->disconnect(); //ok
                 break;
 
             ////////////////////////////////////////
             //  Back actions
             ///////////////////////////////////////
             case 'createPost':
-                $backController->createPost();
+                $backController->createPost(); //ok
                 break;
             case 'viewHomeDashboard':
-                $backController->viewHomeDashboard();
+                $backController->viewHomeDashboard(); //ok
                 break;
             case 'viewCommentDashboard':
-                $backController->viewCommentDashboard();
+                $backController->viewCommentDashboard(); //ok
                 break;
             case 'viewPostDashboard':
                 $backController->viewPostDashboard();
@@ -90,14 +90,17 @@ try
                 $backController->banUser($_GET['userId']);
                 break;
             default:
-                var_dump('routeur defaut');
-                header('Location: index.php');
+//                var_dump('routeur defaut');
+//                header('Location: index.php');
+//                $frontController->viewHome();
+                $frontController->viewErrorPage();
                 exit;
         }
     }
     else
     {
-        require('App/View/home.php');
+        //landing page
+        $frontController->viewHome();
     }
 }
 catch(Exception $e)

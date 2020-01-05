@@ -95,7 +95,7 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
     /**
      * @param mixed $comment_content
      */
-    public function setCommentContent($comment_content) // TODO voir si limite de caractère à prévoir, genre 500 caractères
+    public function setCommentContent($comment_content)
     {
         if(isset($comment_content) && !empty($comment_content) && is_string($comment_content) && strlen($comment_content) <= 500)
         {
@@ -103,14 +103,15 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
         }
         else
         {
-            return $this->msg = 'Le format ou la longueur de votre commentaire n\'est pas correct';
+            $this->msg = 'Le format ou la longueur de votre commentaire n\'est pas correct';
+            return;
         }
     }
 
     /**
      * @param mixed $comment_post_id
      */
-    public function setCommentPostId($comment_post_id) //clé étrangère
+    public function setCommentPostId($comment_post_id)
     {
         $this->comment_post_id = $comment_post_id;
     }
@@ -118,7 +119,7 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
     /**
      * @param mixed $comment_user_id
      */
-    public function setCommentUserId($comment_user_id) //clé étrangère
+    public function setCommentUserId($comment_user_id)
     {
         $this->comment_user_id = $comment_user_id;
     }
@@ -220,6 +221,11 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
     public function getPostTitle()
     {
         return $this->comment_post_title;
+    }
+
+    public function getMessage()
+    {
+        return $this->msg;
     }
 
     /**

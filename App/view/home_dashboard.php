@@ -3,16 +3,34 @@
 $title = 'Tableau de bord : vue d\'ensemble'; ?>
 
 <?php ob_start(); ?>
-
-    <div class="text-center  mb-4">
-        <h2>Panneau d'administration</h2>
-
 <?php if (isset($_SESSION)): ?>
-    <?php if ($_SESSION['role'] == 'administrator'): ?>
+    <?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
+        <div class="text-center  mb-4">
+            <h1>Panneau d'administration</h1>
         <p>Bonjour Jean Forteroche et bienvenu sur votre tableau de bord</p>
-
-        <a href="index.php?action=addPost" class="btn btn-primary p-1">Créer un article</a>
-    </div>
+        <section>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#create_post" aria-expanded="false" aria-controls="collapseExample">
+                Ecrire un nouvel article
+            </button>
+        </section>
+        <section id="create_post" class="creation_post--section collapse">
+            <form action="index.php?action=createPost" method="POST" class="flex-column">
+                <label for="post_title">Titre :
+                    <input id="post_title" name="createTitle" id="title">
+                </label>
+                <label for="post_extract">Rédigez un extrait de votre article :
+                    <textarea class="tinymce-edition" id="post_extract" name="createExtract">
+                        </textarea>
+                </label>
+                <label for="post_content">Rédigez le contenu de votre article :
+                    <textarea class="tinymce-edition" id="post_content" name="createContent">
+                        </textarea>
+                </label>
+                <p>
+                    <input type="submit"  value="Valider"/>
+                </p>
+            </form>
+        </section>
 
         <section class="admin-report text-center mb-4">
             <h3>Commentaires signalés</h3>
@@ -28,7 +46,6 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
                     <th>Titre</th>
                     <th>Auteur</th>
                     <th>Commentaire</th>
-                    <th>Signalement</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -39,7 +56,6 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
                         <td><?= htmlspecialchars($signaledComment->getPostTitle())?></td>
                         <td><?=$signaledComment->getAuthor()?></td>
                         <td><?= htmlspecialchars($signaledComment->getCommentContent())?></td>
-                        <td><?=$signaledComment->getCommentStatus()?></td>
                         <td class="btn-group" role="group" aria-label="actions">
                             <a href="index.php?action=deleteComment&commentId=<?=$signaledComment->getCommentId()?>" class="btn btn-danger p-1">Effacer commentaire</a>
                             <a href="index.php?action=unsignalReadedComment&commentId=<?=$signaledComment->getCommentId()?>" class="btn btn-secondary p-1">Annuler signalement</a>
@@ -53,9 +69,8 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
         </section>
 
 
-    <?php elseif (!empty($_SESSION['role'])):
-        header('Location: index.php?action=listPosts');
-//    var_dump('redirection car membbre');
+    <?php elseif (empty($_SESSION['role']) OR $_SESSION['role'] == 'member'):
+        header('Location: index.php?action=viewHome');
         exit;
     endif;
 endif;

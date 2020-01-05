@@ -47,9 +47,6 @@
                                 <label for="login--password">Tapez votre mot de passe :
                                     <input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>
                                 </label>
-                                <label for="autoLogin">Se souvenir de moi :
-                                    <input type="checkbox" name="autolog" id="autoLogin">
-                                </label>
                             </p>
                             <p>
                                 <input type="submit" name="loginForm" value="Se connecter"/>
@@ -75,16 +72,17 @@
                     <div class="modal-body">
                         <form action="index.php?action=register" method="POST">
                             <p>
-                                <label for="regist--nickname">Entrez votre pseudo :
+                                <span>* Ces champs sont obligatoires</span>
+                                <label for="regist--nickname">Entrez votre pseudo comportant 1 à 30 caractères * :
                                     <input type="text" name="registNickname" placeholder="Pseudo" id="regist--nickname" value=""  required/>
                                 </label>
-                                <label for="regist--email">Entrez votre adresse email :
+                                <label for="regist--email">Entrez votre adresse email * :
                                     <input type="email" name="registEmail" placeholder="Email" id="regist--email" required/>
                                 </label>
-                                <label for="regist--password">Tapez votre mot de passe :
+                                <label for="regist--password">Tapez votre mot de passe comportant 1 à 30 caractères * :
                                     <input type="password" name="registPassword" placeholder="Mot de passe" id="regist--password" required/>
                                 </label>
-                                <label for="regist--confirm-password">Confirmez votre mot de passe :
+                                <label for="regist--confirm-password">Confirmez votre mot de passe * :
                                     <input type="password" name="registPassword2" placeholder="Confirmation mot de passe" id="regist--confirm-password" required/>
                                 </label>
                             </p>
@@ -99,7 +97,7 @@
 
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Jean Forteroche</a>
+            <a class="navbar-brand" href="index.php?action=viewHome">Jean Forteroche</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main--navbar" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -107,17 +105,14 @@
             <div class="collapse navbar-collapse" id="main--navbar">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Accueil<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="index.php?action=viewHome">Accueil<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?action=listPosts">Chapitres</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="open-register-form"  data-toggle="modal" data-target="#register-modal" href="#">Inscription</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">A propos</a>
-                    </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">A propos</a>-->
+<!--                    </li>-->
                     <li class="nav-item">
                         <?php
                         if(!empty($_SESSION['role'])){ ?>
@@ -125,9 +120,11 @@
 
                         <?php }
                         else { ?>
+                            <a class="nav-link" id="open-register-form"  data-toggle="modal" data-target="#register-modal" href="#">Inscription</a>
+                        </li>
                             <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connexion</a>
                         <?php } ?>
-                    </li>
+                        </li>
                     <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'administrator'){ ?>
                         </li>
                         <li class="nav-item">
@@ -188,17 +185,5 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-<!-- My Javascript -->
-<!-- gestion de la validation front des formulaires : inscription, connexion, publication de commentaire
-
-     Navigation : ouverture et fermeture des modales peut-être rajouté un type de modale pour les messages informatifs dynamiques du type "Votre signalement a bien été enregistré", "Vous êtes bien inscrit", "Vous allez être redirigé vers la page des articles" qui serait déclenché par le succès de l'action ET/OU de la requête
-
-    Header : lorsque je suis connecté, inscription et connexion disparaitront de manière à voir connecté ainsi que déconnexion
- -->
-    <!--RAPPEL : Ajax en 1er -->
-    <script src="../blog/public/js/Form.js"></script>
-    <script src="../blog/public/js/main.js"></script>
-
 </body>
 </html>
