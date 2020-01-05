@@ -51,7 +51,7 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
     //          READ : ALL
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Receive all user objets from database     *
+     * Receive all user objets from database
      * @return array which contains each $user object
      */
     public function readAllMembers()

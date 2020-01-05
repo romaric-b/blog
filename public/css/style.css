@@ -1,0 +1,17 @@
+/*Images and background */
+
+.bg_home
+{
+    background-image: url('/public/img/home_bg.jpg') !important;
+
+    /* Full height */
+    height: 100%;
+    width: 100%;
+
+
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
