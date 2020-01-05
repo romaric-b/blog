@@ -4,7 +4,7 @@
 namespace App\model\entities;
 
 
-class Comment //test unitaire ok restera les données dynamiques (jointures, dates, auteur id etc)
+class Comment
 {
     /**
      * @var int $comment_id
@@ -30,23 +30,16 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
 
     public function __construct(array $datas = array())
     {
-        //On hydrate pas un tableau de données vide
         if (!empty($datas))
         {
             $this->hydrate($datas);
         }
     }
 
-    //// Un tableau de données doit être passé à la fonction (d'où le préfixe « array »).
-    ///
-    /// PARCOURS du tableau $datas (avec pour clé $key et pour valeur $value)
-    //  On assigne à $setter la valeur « 'set'.$key », en mettant la 
-    //  première lettre de $key en majuscule (utilisation de ucfirst())
-    //  SI la méthode set$key de notre classe existe ALORS
-    //    On invoque set$key($valeur)
-    //  FIN SI
-    //FIN PARCOURS
-    public function hydrate(array $datas) //Et si j'ai bien compris, ça rend les setters autoexecutants comme on pouvait faire en JS lorsqu'on appelait une méthode dans son constructeur
+    /**
+     * @param array $datas setted to my entity's parameters
+     */
+    public function hydrate(array $datas)
     {
         foreach ($datas as $key => $value)
         {
@@ -54,20 +47,15 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
 
             if (method_exists($this, $method))
             {
-                // il existe on peut l'appeler
                 $this->$method($value);
             }
         }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///         SETTERS : affecter une valeur à une propriété d'objet private
+    ///         SETTERS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ///////////////
-    // VERIFICATIONS : En théorie la seule input utilisateur est le comment_content
-    //////////////
-    ///
     /**
      * @param mixed $comment_id
      */
@@ -156,7 +144,7 @@ class Comment //test unitaire ok restera les données dynamiques (jointures, dat
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //      GETTERS méthode chargée de renvoyer la valeur d'un attribut
+    //      GETTERS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**

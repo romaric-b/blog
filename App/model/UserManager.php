@@ -4,24 +4,22 @@ namespace App\model;
 
 use App\model\entities\User;
 
-class UserManager extends Manager //Je peux faire un final, une classe finale signifie qu'elle ne pourra pas être étendue par une classe fille TOUT FONCTIONNE
+class UserManager extends Manager
 {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          CREATE
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Insert un objet User dans la bdd et met à jour l'objet passé en argument en lui spécifiant un identifiant (id)
-     * @param User $user objet de type User
-     * @return boolean true si l'objet a bien été inséré, false si une erreur survient
+     * Insert user object in database
+     * @param User $user object of type Class User
      */
-    public function createMember(User $user)  //fonctionne
+    public function createMember(User $user)
     {
         $req = $this->dbConnect()->prepare('
 INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_password, user_role)
-    VALUES (:nickname, NOW(), :email, :password, :role)'); //A savoir je peux mettre ce que je veux dans les values il faut juste quelque chose de parlant
+    VALUES (:nickname, NOW(), :email, :password, :role)');
 
-        //array( 'clé' => 'valeur' , ... ) qui sera plus lisible et compréhensible
         $req->execute([
             'nickname' => $user->getNickname(),
             'email' => $user->getEmail(),
@@ -35,48 +33,32 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
     //          READ
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Récupère un objet User à partir de son pseudo
+     * Receive an object user. Used for login et registring.
      * @param User $user
-     * @return bool
+     * @return $user the matched user
      */
-//    public function readMember($user_id) //fonctionne
-//    {
-//        //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-//        $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_id = :user_id");
-//
-//        $req->execute([
-//            'user_id' => $user_id
-//        ]);
-//        $user = $req->fetchObject('\App\model\entities\User');
-//
-//        return $user;
-//    }
-    public function readMember(User $user) //fonctionne
+    public function readMember(User $user)
     {
-        //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
         $req = $this->dbConnect()->prepare("SELECT * FROM blog_user WHERE user_nickname = :nickname");
         $req->execute([
             'nickname' => $user->getNickname()
         ]);
-        $users = $req->fetch();
-        return $users;
+        $user = $req->fetch();
+        return $user;
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ : ALL
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Récupère tous les objets User de la bdd
-     *
-     * @return array|boolean : tableau d'objets members ou un tableau vide s'il n'y a aucun objet en bdd, ou false si une erreur survient
+     * Receive all user objets from database     *
+     * @return array which contains each $user object
      */
-    public function readAllMembers() //fonctionne
+    public function readAllMembers()
     {
         $req = $this->dbConnect()->query('SELECT * FROM blog_user ORDER BY user_id');
         $users = [];
 
-        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas user false
         while($user = $req->fetchObject('\App\model\entities\User'))
         {
             $users[] = $user;
@@ -89,45 +71,41 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
     //          UPDATE USER
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // * A savoir create et update pourraient être réunies en une seule méthode (save)
-    /**
-     * Met à jour un objet stocké en bdd
-     * @param User $user objet de type User
-     * @return boolean true en cas de succès ou false en cas d'erreur
+    /** NOT USED
+     * Update an object user
+     * @param User $user object type Class User which will be updated
+     * @return boolean true success | false fail
      */
-    public function updateMember(User $user)
-    {
-        $req = $this->dbConnect()->prepare('UPDATE blog_user set user_nickname = :nickname, user_email = :email, user_password = :password, user_role = :role WHERE user_id = :user_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
-
-        //liaison des paramètres à leurs valeurs
-        $req->execute([
-            'nickname' => $user->getNickname(),
-            'email' => $user->getEmail(),
-            'password' => $user->getPassword(),
-            'role' => $user->getRole(),
-            'user_id' => $user->getUserId()
-        ]);
-
-        //exécution de la requête
-        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
-    }
+//    public function updateMember(User $user)
+//    {
+//        $req = $this->dbConnect()->prepare('UPDATE blog_user set user_nickname = :nickname, user_email = :email, user_password = :password, user_role = :role WHERE user_id = :user_id LIMIT 1');
+//
+//        $req->execute([
+//            'nickname' => $user->getNickname(),
+//            'email' => $user->getEmail(),
+//            'password' => $user->getPassword(),
+//            'role' => $user->getRole(),
+//            'user_id' => $user->getUserId()
+//        ]);
+//
+//        return $req->execute();
+//    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          DELETE USER
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Supprime un objet stocké en bdd
-     * @param User $user objet de type User
-     * @return boolean true en cas de succès ou false en cas d'erreur
+     * Delete an object user of database
+     * @param $user_id id of the user to delete
+     * @return boolean true success | false fail
      */
     public function deleteMember($user_id)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id = ?'); //LIMIT 1 signifie que lors de l\'update ceci ne peut s\'appliquer qu\'à UNE SEULE ligne ce qui limite fortement les erreurs possibles
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id = ?');
 
         $req->execute(array($user_id));
 
-        //exécution de la requête
         return $req->execute();
     }
 }

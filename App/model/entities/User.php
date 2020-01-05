@@ -32,12 +32,14 @@ class User
         }
     }
 
-    public function hydrate(array $datas) //Et si j'ai bien compris, ça rend les setters autoexecutants comme on pouvait faire en JS lorsqu'on appelait une méthode dans son constructeur
+    /**
+     * @param array $datas setted to my entity's parameters
+     */
+    public function hydrate(array $datas)
     {
         foreach ($datas as $key => $value)
         {
             $method = 'set'.ucfirst($key);
-
             //call the good method of my class if she exists
             if (method_exists($this, $method))
             {
@@ -48,7 +50,7 @@ class User
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///         SETTERS : affecter une valeur à une propriété d'objet private
+    ///         SETTERS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
      /**
@@ -99,10 +101,8 @@ class User
         {
             if (!empty($email))
             {
-                //Vérification type et format
                 if(is_string($email) && strlen($email) <= 30 && preg_match ("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email))
                 {
-                    //C'est valide, je sécurise les éventuelles entités html
                     $this->user_email = htmlspecialchars($email);
                 }
                 else
@@ -127,7 +127,7 @@ class User
     /**
      * @return mixed $password
      */
-    public function setPassword($password) //bug possible : un un $password2 indéfini
+    public function setPassword($password)
     {
         htmlspecialchars($password);
 
@@ -159,7 +159,7 @@ class User
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //      GETTERS méthode chargée de renvoyer la valeur d'un attribut
+    //      GETTERS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function getUserId()

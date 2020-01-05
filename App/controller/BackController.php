@@ -11,8 +11,6 @@ use App\model\CommentManager;
 
 class BackController
 {
-    public $msg;
-
     public function __construct()
     {
         $this->userManager = new UserManager();
@@ -20,7 +18,7 @@ class BackController
         $this->postManager = new PostManager();
     }
 
-    public function listUsers() //testé et fonctionne TODO : voir comment sécuriser ça avec if (admin...) ou quelque chose comme
+    public function listUsers()
     {
         $this->userManager->readAllMembers();
         require('App/view/members_dashboard.php');
@@ -46,8 +44,7 @@ class BackController
     public function viewHomeDashboard()
     {
         $signaledComments = $this->commentManager->readAllSignaledComments();
-
-        $posts = $this->postManager->readAllPosts(); //A caler dans un tableau à overflow scroll en vertical
+        $posts = $this->postManager->readAllPosts();
         require('App/view/home_dashboard.php');
     }
 
@@ -69,23 +66,17 @@ class BackController
         require('App/view/members_dashboard.php');
     }
 
+    /**
+     * @param $postId id of the post to update
+     */
     public function viewPostToUpdate($postId)
     {
         require('App/view/postToUpdate.php');
     }
 
     /**
-     * used to view posts
-     * @return objects $posts
-     */
-//    public function listPostsAdmin()
-//    {
-//        $posts = $this->postManager->readAllPosts();
-//        require('App/view/listPosts.php');
-//    }
-
-    /**
      * update a post
+     * @param $postId id of post to update
      */
     public function updatePost($postId)
     {
@@ -103,11 +94,10 @@ class BackController
                  <a href="index.php?action=viewPostDashboard">Aller à la gestion des articles</a>
                  ';
         require('App/view/messageView.php');
-
     }
 
     /**
-     * Update a comment on moderated status
+     * Update a comment on moderated status. For comment whose been signaled and administrator want unsignal
      * @param $comment_id
      */
     public function unsignalReadedComment($comment_id)
@@ -128,7 +118,7 @@ class BackController
     }
 
     /**
-     * Update a comment on moderated status
+     * Update a comment on read status
      * @param $comment_id
      */
     public function updateReadedComment($comment_id)
@@ -177,7 +167,11 @@ class BackController
         require('App/view/messageView.php');
     }
 
-    public function banUser($user_id) //Non testé mais à faire lorsque le back office sera en place car faisable depuis le tableau de gestion membres TODO : voir comment sécurisé, utilisable que par l'admin
+    /**
+     * delete a user of database
+     * @param $user_id id of the choised user
+     */
+    public function banUser($user_id)
     {
         $this->userManager->deleteMember($user_id);
         $msg =  '<p>Le membre a bien été bannis.</p>

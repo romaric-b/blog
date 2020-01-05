@@ -4,7 +4,7 @@
 namespace App\model\entities;
 
 
-class Post //Testé et fonctionne
+class Post
 {
 
     private $post_id;
@@ -18,13 +18,15 @@ class Post //Testé et fonctionne
 
     public function __construct(array $datas = array())
     {
-        //On hydrate pas un tableau de données vide
         if (!empty($datas))
         {
             $this->hydrate($datas);
         }
     }
 
+    /**
+     * @param array $datas setted to my entity's parameters
+     */
     public function hydrate(array $datas)
     {
         foreach ($datas as $key => $value)
@@ -33,7 +35,6 @@ class Post //Testé et fonctionne
 
             if (method_exists($this, $method))
             {
-                // il existe on peut l'appeler
                 $this->$method($value);
             }
         }
@@ -46,7 +47,7 @@ class Post //Testé et fonctionne
     /**
      * @param mixed $post_id
      */
-    public function setPostId($post_id) //Normalement pas besoin
+    public function setPostId($post_id)
     {
         $this->post_id = $post_id;
     }
@@ -128,7 +129,7 @@ class Post //Testé et fonctionne
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //      GETTERS méthode chargée de renvoyer la valeur d'un attribut
+    //      GETTERS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**

@@ -5,7 +5,7 @@ namespace App\model;
 
 use App\model\entities\Comment;
 
-class CommentManager extends Manager //testé et fonctionne
+class CommentManager extends Manager
 {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,9 +13,8 @@ class CommentManager extends Manager //testé et fonctionne
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /**
-     * Insert un objet Comment dans la bdd et met à jour l'objet passé en argument en lui spécifiant un identifiant (id)
-     * @param Comment $comment objet de type Comment
-     * @return boolean true si l'objet a bien été inséré, false si une erreur survient
+     * Insert object Comment on database
+     * @param Comment $comment object of type class Comment
      */
     public function createComment(Comment $comment)
     {
@@ -35,25 +34,13 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     * Récupère un objet Comment à partir de son titre
-     * @param Comment $comment objet de type Comment
-     * @return bool
+     * INNER JOIN (example : for comments in a post view)
+     * join comments of a post
+     * @param $postId id of the post
+     * @return array ojects $comments
      */
-    public function readComment($comment_id) //ou $comment_Id pour un Id de commentaire précis requêté
-    {
-        //J'affecte à ma variable pdoStatement le résultat de la préparation de cette requête
-        $req = $this->dbConnect()->prepare("SELECT * FROM blog_comments WHERE comment_id = :comment_id");
-
-        $req->execute([
-            'comment_id' => $comment_id
-        ]);
-        $comment = $req->fetchObject('\App\model\entities\Comment');
-
-        return $comment;
-    }
-
-    //INNER JOIN (example : for comments in a post view)
     public function readCommentsOfPost($postId)
     {
         $req = $this->dbConnect()->prepare('SELECT comment_id, comment_content, user_nickname AS author, comment_post_id,
@@ -64,10 +51,10 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
 
         $comments = [];
         $req->execute(array($postId));
-        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas false
+        //PDO runs the lines as long as there are results
         while ($comment = $req->fetchObject('\App\model\entities\Comment'))
         {
-            //je stocke dans le tableau chaque $comment correspondant aux lignes en bdd
+            //Save result in an array
             $comments[] = $comment;
         }
         return $comments;
@@ -76,25 +63,11 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          READ : ALL
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     * Récupère tous les objets Comment de la bdd
-     *
-     * @return array|boolean : tableau d'objets comment ou un tableau vide s'il n'y a aucun objet en bdd, ou false si une erreur survient
+     * Request All signaled comments with their posts and authors associated
+     * @return false|\PDOStatement
      */
-    public function readAllComments()
-    {
-        $req = $this->dbConnect()->query('SELECT * FROM blog_comments ORDER BY comment_id DESC');
-        $comments = [];
-
-        //pdo va parcourir les lignes tant qu'il ne tombera pas sur un cas user false
-        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
-        {
-            $comments[] = $comment;
-        }
-        return $comments;
-    }
-
-    /*Request All signaled comments with their posts and authors associated*/
     public function readAllSignaledComments()
     {
         $req = $this->dbConnect()->query('SELECT comment_id, comment_content, 
@@ -110,6 +83,10 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
         return $req;
     }
 
+    /**
+     * Request all comments for the admin dashboard
+     * @return false|\PDOStatement
+     */
     public function readAllCommentsForDashboard()
     {
         $req = $this->dbConnect()->query('SELECT comment_id, comment_content, comment_status, comment_read,
@@ -127,24 +104,32 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //          UPDATE
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Update only status status of comment
+     * @param Comment $comment the comment to update
+     * @return bool true success | false fail
+     */
     public function updateSignalComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status WHERE comment_id = :comment_id LIMIT 1');
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status WHERE comment_id = :comment_id LIMIT 1'); //Limit 1 for secure update only 1 object
 
         $req->execute([
             'status' => $comment->getCommentStatus(),
             'comment_id' => $comment->getCommentId()
         ]);
 
-        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
+        return $req->execute();
     }
 
-
-
-    //Pour que l'admin change le statut d'un commentaire dans le cas d'un signalement ou pour passer le statut sur modéré si l'admin
+    /**
+     * To change status of a comment. Exemple : if Administrator want unsignal an already readed comment
+     * @param Comment $comment
+     * @return bool true success | false fail
+     */
     public function updateStatusComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status, comment_read = :readed WHERE comment_id = :comment_id LIMIT 1');
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_status = :status, comment_read = :readed WHERE comment_id = :comment_id LIMIT 1'); //Limit 1 for secure update only 1 object
 
         $req->execute([
             'status' => $comment->getCommentStatus(),
@@ -152,18 +137,18 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
             'comment_id' => $comment->getCommentId()
         ]);
 
-        return $req->execute(); //renverra true si ça a fonctionné false si ça n'est pas le cas
+        return $req->execute();
     }
 
-    //Pour que l'admin différencie les commentaires lus et nons lus
+
     /**
-     * Met à jour un objet stocké en bdd
-     * @param Comment $comment objet de type Comment
-     * @return boolean true en cas de succès ou false en cas d'erreur
+     * Update readed status of a comment
+     * @param Comment $comment object of type Class Comment
+     * @return boolean true for success | false for error
      */
     public function updateReadedComment(Comment $comment)
     {
-        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_read = :comment_read WHERE comment_id = :comment_id LIMIT 1'); //LIMIT 1 signifie que lors de l'update ceci ne peut s'appliquer qu'à UNE SEULE ligne ce qui limite fortement les erreurs de MAJ possible
+        $req = $this->dbConnect()->prepare('UPDATE blog_comments set comment_read = :comment_read WHERE comment_id = :comment_id LIMIT 1'); //Limit 1 for secure update only 1 object
 
         $req->execute([
             'comment_read' => $comment->getCommentRead(),
@@ -177,9 +162,9 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     //          DELETE
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Supprime un objet stocké en bdd
+     * Delete a comment in database
      * @param Comment $comment objet de type Comment
-     * @return boolean true en cas de succès ou false en cas d'erreur
+     * @return boolean true for success | false for error
      */
     public function deleteComment($comment_id)
     {
@@ -187,7 +172,6 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
 
         $req->execute(array($comment_id));
 
-        //exécution de la requête
         return $req->execute();
     }
 }

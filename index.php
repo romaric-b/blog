@@ -23,41 +23,38 @@ try
                 $frontController->viewHome();
                 break;
             case 'register':
-                $frontController->register(); //ok
+                $frontController->register();
                 break;
             case 'login':
-                $frontController->login(); //ok
+                $frontController->login();
                 break;
             case 'createComment':
-                $frontController->createComment($_GET['id']); //ok
+                $frontController->createComment($_GET['id']);
                 break;
             case 'listPosts':
-                $frontController->listPosts(); //ok
+                $frontController->listPosts();
                 break;
             case 'viewPost':
-                $frontController->viewPost($_GET['post']); //ok
+                $frontController->viewPost($_GET['post']);
                 break;
-//            case 'listComments':
-//                $frontController->listComments();
-//                break;
             case 'signalComment':
-                $frontController->signalComment($_GET['id']); //ok
+                $frontController->signalComment($_GET['id']);
                 break;
             case 'disconnect':
-                $frontController->disconnect(); //ok
+                $frontController->disconnect();
                 break;
 
             ////////////////////////////////////////
             //  Back actions
             ///////////////////////////////////////
             case 'createPost':
-                $backController->createPost(); //ok
+                $backController->createPost();
                 break;
             case 'viewHomeDashboard':
-                $backController->viewHomeDashboard(); //ok
+                $backController->viewHomeDashboard();
                 break;
             case 'viewCommentDashboard':
-                $backController->viewCommentDashboard(); //ok
+                $backController->viewCommentDashboard();
                 break;
             case 'viewPostDashboard':
                 $backController->viewPostDashboard();
@@ -90,9 +87,6 @@ try
                 $backController->banUser($_GET['userId']);
                 break;
             default:
-//                var_dump('routeur defaut');
-//                header('Location: index.php');
-//                $frontController->viewHome();
                 $frontController->viewErrorPage();
                 exit;
         }

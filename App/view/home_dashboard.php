@@ -31,14 +31,10 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
                 </p>
             </form>
         </section>
-
         <section class="admin-report text-center mb-4">
             <h3>Commentaires signalés</h3>
-
             <?php if (empty($signaledComments)): ?>
-
                 <p>Aucun commentaire signalé</p>
-
             <?php else: ?>
             <table class="text-center table-striped table-borderless table-responsive table w-100 d-block d-sm-table d-md-table">
                 <thead class="thead-dark">
@@ -49,9 +45,7 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
                     <th>Action</th>
                 </tr>
                 </thead>
-
                 <?php foreach ($signaledComments as $signaledComment): ?>
-
                     <tr>
                         <td><?= htmlspecialchars($signaledComment->getPostTitle())?></td>
                         <td><?=$signaledComment->getAuthor()?></td>
@@ -61,14 +55,10 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
                             <a href="index.php?action=unsignalReadedComment&commentId=<?=$signaledComment->getCommentId()?>" class="btn btn-secondary p-1">Annuler signalement</a>
                         </td>
                     </tr>
-
                 <?php endforeach;?>
                 <?php endif;?>
-
             </table>
         </section>
-
-
     <?php elseif (empty($_SESSION['role']) OR $_SESSION['role'] == 'member'):
         header('Location: index.php?action=viewHome');
         exit;

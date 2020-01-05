@@ -19,7 +19,7 @@ class FrontController
     }
 
     /**
-     * Lors de l'inscription, contrôle l'existance des données utilisateur,, les formats, sécurise le pass et vérifier que le pseudo est pas déjà pris.
+     * Register users will be control their nickname, password and confirmation, then
      */
     public function register()
     {
@@ -65,6 +65,14 @@ class FrontController
             {
                 $this->userManager->createMember($newUser);
                 $msg = '<p>Inscription validée. 
+                    <a href="index.php?action=listPosts">Aller à la liste des chapitres</a>
+                  </p>';
+                require('App/view/messageView.php');
+                return;
+            }
+            else
+            {
+                $msg = '<p>Inscription non valide. 
                     <a href="index.php?action=listPosts">Retourner à la liste des chapitres</a>
                   </p>';
                 require('App/view/messageView.php');
@@ -82,10 +90,9 @@ class FrontController
                     'nickname' => trim(htmlspecialchars($_POST['loginNickname'])),
                     'password' => htmlspecialchars($_POST['loginPassword']) //le mot de passe est haché plus tard
                 ]);
-            //je contrôle si le pseudo à déjà été utilisé grace à mon manager
+            //I request matched user
             $matchedUser = $this->userManager->readMember($loginUser);
-            //User account doesn't exist
-            if(!$matchedUser)
+            if(!$matchedUser)//if user account doesn't exist
             {
                 //For security not give exactly information to user
                 $msg =  '<p>Mauvais identifiant ou mot de passe.</p>
@@ -101,11 +108,11 @@ class FrontController
                 if($isPasswordCorrect)
                 {
                     $hashLoginUserPass = password_hash($loginUser->getPassword(), PASSWORD_DEFAULT);
-                    //j'enregistre en session l'id utilisateur le pseudo et le mdp haché
+                    //I save user informations in session
                     $_SESSION['user_id'] = $matchedUser['user_id'];
                     $_SESSION['user_nickname'] = $loginUser->getNickname();
                     $_SESSION['user_password'] = $hashLoginUserPass;
-                    $_SESSION['role'] = $matchedUser['user_role']; //servira à rediriger suivant si admin ou membre
+                    $_SESSION['role'] = $matchedUser['user_role'];
 
                     if($_SESSION['role'] === 'member')
                     {
@@ -140,7 +147,6 @@ class FrontController
     {
         $_SESSION = array();
         session_destroy();
-        //header('Location: index.php?action=viewHome');
         $msg = '<p>Vous êtes bien déconnecté</p>
                 <a href="index.php?action=viewHome">Retourner à l\'accueil</a>';
         require('App/view/messageView.php');
@@ -169,14 +175,9 @@ class FrontController
         require('App/view/listPosts.php');
     }
 
-
-//    public function viewPost($post_id)
-//    {
-//        $post = $this->postManager->readPost($post_id);
-//        //obtenir aussi les commentaires du post pour cette vue
-//        $comments = $this->commentManager->readCommentsOfPost($post_id);
-//        require('App/view/post.php');
-//    }
+    /**
+     * to the landing page
+     */
     public function viewHome()
     {
         require('App/view/home.php');
@@ -189,7 +190,7 @@ class FrontController
      */
     public function viewPost($postId)
     {
-        //obtenir aussi les commentaires du post pour cette vue
+        //request comments of the post
         $comments = $this->commentManager->readCommentsOfPost($postId);
         require('App/view/post.php');
     }
@@ -212,37 +213,16 @@ class FrontController
     }
 
     /**
-     * used to view Comments
-     * @return objects $Comments
+     * the error page if bad URL action
      */
-//    public function listComments()
-//    {
-//        $this->commentManager->readAllComments();
-//        if($_SESSION['user_role'] = 'member')
-//        {
-//            header('location: index.php?action=listPosts');
-//        }
-//        elseif ($_SESSION['user_role'] = 'administrator')
-//        {
-//              header('location: index.php?action=home_dashboard'); //le require se fera sûrement dans l'index
-//        }
-//    }
-
-    /**
-     * view one Comment
-     * @return $Comment asked
-     * @param $comment_id comment ID
-     */
-//    public function viewComment($comment_id)
-//    {
-//        $this->commentManager->readComment($comment_id);
-//    }
-
     public function viewErrorPage()
     {
         require('App/view/errorPage.php');
     }
 
+    /**
+     * @param $comment_id id of the comment to signal
+     */
     public function signalComment($comment_id)
     {
         $signaledComment = new Comment(
@@ -251,15 +231,10 @@ class FrontController
                 'commentStatus' => 'signaled'
             ]
         );
-        //$this->commentManager->updateSignalComment($signaledComment);
         $this->commentManager->updateSignalComment($signaledComment);
         $msg =  '<p>Le commentaire a bien été signalé et sera éxaminé par l\'aministrateur .</p>
                  <a href="index.php?action=listPosts">Aller à la liste des chapitres</a>';
         require('App/view/messageView.php');
     }
-
-
-
-
 }
 ?>
