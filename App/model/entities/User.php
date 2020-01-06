@@ -16,6 +16,7 @@ class User
     private $user_id;
     private $user_nickname;
     private $user_regist_date;
+    private $user_regist_date_fr;
     private $user_email;
     private $user_password;
     private $user_password2;
@@ -93,6 +94,11 @@ class User
     public function setRegistDate($user_regist_date)
     {
         $this->user_regist_date = $user_regist_date;
+    }
+
+    public function setRegistDateFr($user_regist_date_fr)
+    {
+        $this->user_regist_date_fr = $user_regist_date_fr;
     }
 
     public function setEmail($email)
@@ -174,7 +180,7 @@ class User
 
     public function getRegistDate()
     {
-        return $this->user_regist_date;
+        return $this->user_regist_date_fr;
     }
 
     public function getEmail()

@@ -47,6 +47,7 @@
                                 <label for="login--password">Tapez votre mot de passe :
                                     <input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>
                                 </label>
+                                Vous n'êtes pas inscrit ? <a class="nav-link" id="open-register-form" data-dismiss="modal" data-toggle="modal" data-target="#register-modal" href="#">Inscrivez-vous ici</a>
                             </p>
                             <p>
                                 <input type="submit" name="loginForm" value="Se connecter"/>

@@ -4,6 +4,7 @@ $title = 'Tableau de bord : Commentaires'; ?>
 <?php ob_start(); ?>
 <?php if (isset($_SESSION)): ?>
     <?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
+
         <h1>Gestion des commentaires</h1>
             <table class="text-center table-striped table-borderless table-responsive table w-100 d-block d-sm-table d-md-table">
                 <thead class="thead-dark">

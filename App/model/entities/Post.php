@@ -12,7 +12,7 @@ class Post
     private $post_extract;
     private $post_content;
     private $post_date;
-
+    private $post_date_fr;
     public $msg;
 
 
@@ -127,6 +127,22 @@ class Post
         $this->post_date = $post_date;
     }
 
+    /**
+     * @param mixed $post_date_fr
+     */
+    public function setPostDateFr($post_date_fr)
+    {
+        $this->post_date_fr = $post_date_fr;
+    }
+
+    /**
+     * @return mixed
+     */
+//    public function getPostDateFr()
+//    {
+//        return $this->post_date_fr;
+//    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //      GETTERS
@@ -174,6 +190,6 @@ class Post
      */
     public function getPostDate()
     {
-        return $this->post_date;
+        return $this->post_date_fr;
     }
 }

@@ -4,7 +4,13 @@ $title = 'Blog de Jean Forteroche : Modification article'; ?>
 
 <?php ob_start();
 $post = $_SESSION['post' . $postId];
+if($post == NULL)
+{
+    header('location: index.php?action=viewErrorPage');
+}
 ?>
+<?php if (isset($_SESSION)): ?>
+<?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
 
 <section id="update_post" class="update_post--section">
     <form action="index.php?action=updatePost&amp;postId=<?=$post->getPostId()?>" method="POST" class="flex-column">
@@ -26,7 +32,11 @@ $post = $_SESSION['post' . $postId];
         </p>
     </form>
 </section>
-
-<?php $content = ob_get_clean(); ?>
+ <?php elseif (empty($_SESSION['role']) OR $_SESSION['role'] == 'member'):
+        header('Location: index.php?action=viewHome');
+        exit;
+    endif;
+endif;
+ $content = ob_get_clean(); ?>
 
 <?php require('template.php'); ?>

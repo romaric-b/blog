@@ -43,8 +43,8 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
      */
     public function readCommentsOfPost($postId)
     {
-        $req = $this->dbConnect()->prepare('SELECT comment_id, comment_content, user_nickname AS author, comment_post_id,
-        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM blog_comments 
+        $req = $this->dbConnect()->prepare('SELECT comment_id, comment_content, comment_status, user_nickname AS author, comment_post_id,
+        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin\') AS comment_date_fr FROM blog_comments 
         INNER JOIN blog_user ON comment_user_id = user_id
         INNER JOIN blog_posts ON comment_post_id = post_id
         WHERE comment_post_id = ? ORDER BY comment_date DESC');
@@ -71,16 +71,21 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     public function readAllSignaledComments()
     {
         $req = $this->dbConnect()->query('SELECT comment_id, comment_content, 
-        user_nickname AS author, comment_post_id, post_title AS comment_post_title, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') 
+        user_nickname AS author, comment_post_id, post_title AS comment_post_title, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin\') 
         AS comment_date_fr FROM blog_comments 
         INNER JOIN blog_user ON comment_user_id = user_id
         INNER JOIN blog_posts ON comment_post_id = post_id
         WHERE comment_status = "signaled"
         GROUP BY comment_id ORDER BY comment_date DESC');
 
-        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
-            '\App\model\entities\Comment');
-        return $req;
+        $comments = [];
+        //PDO runs the lines as long as there are results
+        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
+        {
+            //Save result in an array
+            $comments[] = $comment;
+        }
+        return $comments;
     }
 
     /**
@@ -90,15 +95,20 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     public function readAllCommentsForDashboard()
     {
         $req = $this->dbConnect()->query('SELECT comment_id, comment_content, comment_status, comment_read,
-        user_nickname AS author, comment_post_id, post_title AS comment_post_title, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') 
+        user_nickname AS author, comment_post_id, post_title AS comment_post_title,DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin\')
         AS comment_date_fr FROM blog_comments 
         INNER JOIN blog_user ON comment_user_id = user_id
         INNER JOIN blog_posts ON comment_post_id = post_id
         GROUP BY comment_id ORDER BY comment_date DESC');
 
-        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
-            '\App\model\entities\Comment');
-        return $req;
+        $comments = [];
+        //PDO runs the lines as long as there are results
+        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
+        {
+            //Save result in an array
+            $comments[] = $comment;
+        }
+        return $comments;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

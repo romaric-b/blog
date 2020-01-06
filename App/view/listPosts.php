@@ -4,7 +4,9 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
 
 <?php ob_start(); ?>
     <section id="chapters-list">
+
         <h2>Liste des chapitres</h2>
+
         <?php foreach ($posts as $post): ?>
         <article>
             <h3>

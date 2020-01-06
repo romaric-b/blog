@@ -37,7 +37,7 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      */
     public function readPost($post_Id)
     {
-        $req = $this->dbConnect()->prepare("SELECT * FROM blog_posts WHERE post_id = :post_id");
+        $req = $this->dbConnect()->prepare("SELECT post_id, post_title, post_extract, post_content, DATE_FORMAT(post_date, '%d/%m/%Y à %Hh%imin') AS post_date_fr FROM blog_posts WHERE post_id = :post_id");
 
         $req->execute(array('post_id' => $post_Id));
         $post = $req->fetchObject('\App\model\entities\Post');
@@ -54,7 +54,8 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      */
     public function readAllPosts()
     {
-        $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id DESC');
+
+        $req = $this->dbConnect()->query('SELECT post_id, post_title, post_extract, post_content, DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin\') AS post_date_fr FROM blog_posts ORDER BY post_id DESC');
         $posts = [];
         while($post = $req->fetchObject('\App\model\entities\Post'))
         {
@@ -71,7 +72,7 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
      */
     public function countPost($start, $postPerpage)
     {
-        $req = $this->dbConnect()->query('SELECT * FROM blog_posts ORDER BY post_id DESC LIMIT '. $start .',' .$postPerpage);
+        $req = $this->dbConnect()->query('SELECT post_id, post_title, post_extract, post_content, DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin\') AS post_date_fr FROM blog_posts ORDER BY post_id DESC LIMIT '. $start .',' .$postPerpage);
         while($post = $req->fetchObject('\App\model\entities\Post'))
         {
             $posts[] = $post;

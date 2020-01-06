@@ -2,7 +2,7 @@
 
 .bg_home
 {
-    background-image: url('/public/img/home_bg.jpg') !important;
+    background-image: url('../img/home_bg.jpg') !important;
 
     /* Full height */
     height: 100%;

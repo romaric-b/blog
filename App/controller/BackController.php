@@ -110,11 +110,11 @@ class BackController
             ]
         );
         $this->commentManager->updateStatusComment($signaledComment);
-        $msg =  '<p>Le commantaire a bien été modéré.</p>
-                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
-                 ';
-        require('App/view/messageView.php');
+//        $msg =  '<p>Le commantaire a bien été modéré.</p>
+//                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
+//                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
+//                 ';
+//        require('App/view/messageView.php');
     }
 
     /**

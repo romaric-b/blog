@@ -5,13 +5,14 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
 <?php ob_start();
 $post = $_SESSION['post' . $postId];
 //unset($_SESSION['post' . $postId]);
-if(!isset($post))
+if($post == NULL)
 {
     header('location: index.php?action=viewErrorPage');
 }
 ?>
-<h2>Article</h2>
-<section>
+
+<section class="bg-light">
+    <h2>Chapitres</h2>
     <article>
         <h3>
             <?=$post->getPostTitle()?>
@@ -42,7 +43,7 @@ if(!isset($post))
 <?php endif;?>
 <?php if(empty($_SESSION['user_nickname'])): ?>
     <p>
-        <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connectez-vous pour écrire un commantaire</a>
+        <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connectez-vous pour écrire un commentaire</a>
     </p>
 <?php endif;?>
 <!--Commentaires existants -->
@@ -51,7 +52,15 @@ if(!isset($post))
         <p>
             <span><?=$comment->getAuthor()?>, </span>
             <span>le <?=$comment->getCommentDate()?></span>
+            <?php if($comment->getCommentStatus() == 'signaled'):?>
+            <span class="font-italic">Commentaire signalé</span>
+            <?php endif;?>
+            <?php if($comment->getCommentStatus() == 'moderated'):?>
+            <span class="font-italic">Commentaire modéré</span>
+            <?php endif;?>
+            <?php if($comment->getCommentStatus() == 'unsignaled'): ?>
             <a href="index.php?action=signalComment&amp;id=<?= $comment->getCommentId() ?>">Signaler Commentaire</a>
+            <?php endif;?>
             <?=$comment->getCommentContent()?>
         </p>
     </div>

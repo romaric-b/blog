@@ -208,7 +208,7 @@ class FrontController
         );
         $this->commentManager->createComment($createdComment);
         $msg = '<p>Votre commentaire a bien été ajouté</p>
-                <a href="index.php?action=listPosts">Retourner à la liste des articles</a>';
+                <a href="index.php?action=viewPost">Retourner à la liste des articles</a>';
         require('App/view/messageView.php');
     }
 
