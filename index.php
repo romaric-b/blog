@@ -56,6 +56,12 @@ try
             case 'viewCommentDashboard':
                 $backController->viewCommentDashboard();
                 break;
+            case 'viewCommentDashboardOrderByNotRead':
+                $backController->viewCommentDashboardOrderByNotRead();
+                break;
+            case 'viewCommentDashboardOrderByRead':
+                $backController->viewCommentDashboardOrderByRead();
+                break;
             case 'viewPostDashboard':
                 $backController->viewPostDashboard();
                 break;

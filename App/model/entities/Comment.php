@@ -17,6 +17,7 @@ class Comment
      */
     private $comment_id;
     private $comment_status;
+    private $comment_status_fr;
     private $comment_date;
     private $comment_date_fr;
     private $comment_content;
@@ -25,6 +26,7 @@ class Comment
     private $comment_user_id; //foreign key
     private $author;
     private $comment_read;
+    private $comment_read_fr;
 
     public $msg;
 
@@ -163,6 +165,22 @@ class Comment
         return $this->comment_status;
     }
 
+    public function getCommentStatusFr()
+    {
+        if($this->comment_status == 'unsignaled')
+        {
+            return $this->comment_status_fr = 'Non signalé';
+        }
+        elseif($this->comment_status == 'signaled')
+        {
+            return $this->comment_status_fr = 'Signalé';
+        }
+        elseif($this->comment_status == 'moderated')
+        {
+            return $this->comment_status_fr = 'Modéré';
+        }
+    }
+
     /**
      * @return mixed date fr
      */
@@ -222,5 +240,17 @@ class Comment
     public function getCommentRead()
     {
         return $this->comment_read;
+    }
+
+    public function getCommentReadFr()
+    {
+        if($this->comment_read == 'read')
+        {
+            return $this->comment_read_fr = 'Lu';
+        }
+        elseif($this->comment_read == 'not read')
+        {
+            return $this->comment_read_fr = 'Non lu';
+        }
     }
 }

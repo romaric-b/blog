@@ -89,7 +89,7 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
     }
 
     /**
-     * Request all comments for the admin dashboard
+     * Request all comments for the admin dashboard order by date
      * @return false|\PDOStatement
      */
     public function readAllCommentsForDashboard()
@@ -100,6 +100,52 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
         INNER JOIN blog_user ON comment_user_id = user_id
         INNER JOIN blog_posts ON comment_post_id = post_id
         GROUP BY comment_id ORDER BY comment_date DESC');
+
+        $comments = [];
+        //PDO runs the lines as long as there are results
+        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
+        {
+            //Save result in an array
+            $comments[] = $comment;
+        }
+        return $comments;
+    }
+
+    /**
+     * Request all comments for the admin dashboard sort by not read
+     * @return false|\PDOStatement
+     */
+    public function readAllCommentsForDashboardOrderByNotRead()
+    {
+        $req = $this->dbConnect()->query('SELECT comment_id, comment_content, comment_status, comment_read,
+        user_nickname AS author, comment_post_id, post_title AS comment_post_title,DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin\')
+        AS comment_date_fr FROM blog_comments 
+        INNER JOIN blog_user ON comment_user_id = user_id
+        INNER JOIN blog_posts ON comment_post_id = post_id
+        GROUP BY comment_id ORDER BY comment_read DESC');
+
+        $comments = [];
+        //PDO runs the lines as long as there are results
+        while ($comment = $req->fetchObject('\App\model\entities\Comment'))
+        {
+            //Save result in an array
+            $comments[] = $comment;
+        }
+        return $comments;
+    }
+
+    /**
+     * Request all comments for the admin dashboard sort by read
+     * @return false|\PDOStatement
+     */
+    public function readAllCommentsForDashboardOrderByRead()
+    {
+        $req = $this->dbConnect()->query('SELECT comment_id, comment_content, comment_status, comment_read,
+        user_nickname AS author, comment_post_id, post_title AS comment_post_title,DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin\')
+        AS comment_date_fr FROM blog_comments 
+        INNER JOIN blog_user ON comment_user_id = user_id
+        INNER JOIN blog_posts ON comment_post_id = post_id
+        GROUP BY comment_id ORDER BY comment_read ASC');
 
         $comments = [];
         //PDO runs the lines as long as there are results

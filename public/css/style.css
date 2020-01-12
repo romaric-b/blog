@@ -1,17 +1,222 @@
-/*Images and background */
+/************************************************************************************
+                    Generic properties
+ *********************************************************************************/
+li
+{
+    list-style: none;
+}
+
+/*pictos*/
+.far, .fas
+{
+    margin-right: 0.5rem;
+}
+
+.outline
+{
+    outline: solid red 1px;
+}
+
+/* Table */
+.my-custom-scrollbar
+{
+    position: relative;
+    height: 500px;
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y
+{
+    display: block;
+}
+
+.marg-top-strong
+{
+    margin-top: 3rem;
+}
+
+.marg-top
+{
+    margin-top: 1rem;
+}
+
+.marg-auto
+{
+    margin: auto;
+}
+
+.marg-bot
+{
+    margin-bottom: 3rem;
+}
+
+.marg-h
+{
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.title--h2
+{
+    margin-top: 2%;
+    font-size: 2rem;
+    font-family: 'Dancing Script', cursive;
+}
+
+w-25
+{
+    width: 25%;
+}
+
+/************************************************************************************
+                    Body
+ **********************************************************************************/
+body
+{
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.global_page--div
+{
+    min-height: 100vh;
+}
 
 .bg_home
 {
     background-image: url('../img/home_bg.jpg') !important;
-
     /* Full height */
     height: 100%;
     width: 100%;
-
-
-
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+
+/*************************************************************************************
+                Header
+ ***********************************************************************************/
+.header--a
+{
+    width: 25%;
+    padding: 0.625rem;
+    font-family: 'Dancing Script', cursive;
+}
+
+.header_title--h1
+{
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    font-size  : 1.25rem;
+}
+
+.title_name
+{
+
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-left: 5%;
+    margin-right: 0;
+}
+
+.title--span
+{
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.header-logo
+{
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    margin: 0 1% 1% 0;
+    background-image: url('../img/header.png') !important;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/*************************************************************************************
+                HOME
+ ************************************************************************************/
+.main-content
+{
+    display: flex;
+    min-height: 80vh;
+}
+
+.wellcome-blog--h1
+{
+    font-family: 'Dancing Script', cursive;
+    font-weight: 700;
+}
+
+.button-go-chapter
+{
+    margin: 10% auto !important;
+}
+
+/************************************************************************************
+                List of posts
+ ***********************************************************************************/
+.date-post-title
+{
+    font-size: 0.925rem;
+}
+
+.bg-light-opacity
+{
+    background-color: rgba(245, 245, 245, 0.8);
+}
+
+.link-view-chapter
+{
+    font-style: italic;
+    width: 15%;
+}
+
+.chapter--article
+{
+    border-radius: 0 0 10px 10px;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+/***********************************************************************************
+                    Home dashboard
+*********************************************************************************/
+.ml-5
+{
+    margin-left: 10% !important;
+}
+
+.mr-5
+{
+    margin-right: 10% !important;
+}
+
+.dashboard_stats--li
+{
+    width: 10rem;
+    height: 10rem;
+    padding: 4rem;
+    border-radius : 50%;
+}
+
+
+/*****************************************************************************************************************************************************************
+                        RESPONSIVE
+ ****************************************************************************************************************************************************************/
+@media screen and (max-width: 400px)
+{
+    .header_title--h1
+    {
+        font-size: 1rem !important;
+    }
+
 }

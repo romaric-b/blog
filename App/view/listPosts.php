@@ -3,23 +3,24 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
 <!--testé et fonctionne-->
 
 <?php ob_start(); ?>
-    <section id="chapters-list">
+    <section class="bg-light-opacity container" id="chapters-list">
 
-        <h2>Liste des chapitres</h2>
+        <h2 class="marg-top">Chapitres</h2>
 
         <?php foreach ($posts as $post): ?>
-        <article>
+        <article class="bg-light chapter--article">
             <h3>
                 <?=$post->getPostTitle()?>
-                <?=$post->getPostDate() ?>
+                <span class="font-italic date-post-title text-secondary">le <?=$post->getPostDate() ?></span>
             </h3>
             <p>
+                Extrait de ce chapitre :
                 <?=$post->getPostExtract()?>
             </p>
         </article>
         <?php $_SESSION['post' . $post->getPostId()] = $post;
         ?>
-            <a class="nav-link" href="index.php?action=viewPost&amp;post=<?=$post->getPostId()?>">Lire l'article</a>
+            <a class="nav-link text-black-50 link-view-chapter" href="index.php?action=viewPost&amp;post=<?=$post->getPostId()?>"><i class="fas fa-book-open"></i>Lire ce chapitre</a>
         <?php endforeach;?>
         <div>Pages :</div>
         <?php

@@ -12,17 +12,17 @@ if($post == NULL)
 <?php if (isset($_SESSION)): ?>
 <?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
 
-<section id="update_post" class="update_post--section">
+<section id="update_post" class="update_post--section bg-light container">
     <form action="index.php?action=updatePost&amp;postId=<?=$post->getPostId()?>" method="POST" class="flex-column">
         <label for="post_title">Titre :
             <input id="post_title" name="updateTitle" id="title" value="<?= htmlspecialchars($post->getPostTitle())?>">
         </label>
-        <label for="post_extract">Rédigez un extrait de votre article :
+        <label for="post_extract">Rédigez un extrait de votre chapitre :
             <textarea class="tinymce-edition" id="post_extract" name="updateExtract">
                 <?=$post->getPostExtract()?>
             </textarea>
         </label>
-        <label for="post_content">Rédigez le contenu de votre article :
+        <label for="post_content">Rédigez le contenu de votre chapitre :
             <textarea class="tinymce-edition" id="post_content" name="updateContent">
                 <?=$post->getPostContent()?>
             </textarea>

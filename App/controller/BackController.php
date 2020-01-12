@@ -35,8 +35,7 @@ class BackController
         );
         $this->postManager->createPost($createdPost);
         $msg =  '<p>Le nouvel article a bien été crée.</p>
-                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-                 <a href="index.php?action=viewPostDashboard">Aller à la gestion des articles</a>
+                 <a href="index.php?action=viewPostDashboard">Retourner à la gestion des articles</a>
                  ';
         require('App/view/messageView.php');
     }
@@ -44,13 +43,29 @@ class BackController
     public function viewHomeDashboard()
     {
         $signaledComments = $this->commentManager->readAllSignaledComments();
-        $posts = $this->postManager->readAllPosts();
+        //for blog overview
+        $totalPosts = count($this->postManager->readAllPosts());
+        $totalComments = count($this->commentManager->readAllCommentsForDashboard());
+        $totalMembers = count($this->userManager->readAllMembers());
+
         require('App/view/home_dashboard.php');
     }
 
     public function viewCommentDashboard()
     {
         $comments = $this->commentManager->readAllCommentsForDashboard();
+        require('App/view/comments_dashboard.php');
+    }
+
+    public function viewCommentDashboardOrderByNotRead()
+    {
+        $comments = $this->commentManager->readAllCommentsForDashboardOrderByNotRead();
+        require('App/view/comments_dashboard.php'); //si pas ok tenter header loc
+    }
+
+    public function viewCommentDashboardOrderByRead()
+    {
+        $comments = $this->commentManager->readAllCommentsForDashboardOrderByRead();
         require('App/view/comments_dashboard.php');
     }
 
@@ -90,8 +105,7 @@ class BackController
         );
         $this->postManager->updatePost($updatedPost);
         $msg =  '<p>L\'article a bien été modifié.</p>
-                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-                 <a href="index.php?action=viewPostDashboard">Aller à la gestion des articles</a>
+                 <a href="index.php?action=viewPostDashboard">Retourner à la gestion des articles</a>
                  ';
         require('App/view/messageView.php');
     }
@@ -110,11 +124,10 @@ class BackController
             ]
         );
         $this->commentManager->updateStatusComment($signaledComment);
-//        $msg =  '<p>Le commantaire a bien été modéré.</p>
-//                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-//                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
-//                 ';
-//        require('App/view/messageView.php');
+        $msg =  '<p>Le commantaire a bien été modéré.</p>
+                 <a href="index.php?action=viewCommentDashboard">Retourner à la gestion des commentaires</a>
+                 ';
+        require('App/view/messageView.php');
     }
 
     /**
@@ -131,8 +144,7 @@ class BackController
         );
         $this->commentManager->updateReadedComment($readedComment);
         $msg =  '<p>Le commantaire a bien été marqué comme lu.</p>
-                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
+                 <a href="index.php?action=viewCommentDashboard">Retourner à la gestion des commentaires</a>
                  ';
         require('App/view/messageView.php');
     }
@@ -146,8 +158,7 @@ class BackController
     {
         $this->postManager->deletePost($post_id);
         $msg =  '<p>L\'article a bien été supprimé.</p>
-                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-                 <a href="index.php?action=viewPostDashboard">Aller à la gestion des articles</a>
+                 <a href="index.php?action=viewPostDashboard">Retourner à la gestion des articles</a>
                  ';
         require('App/view/messageView.php');
     }
@@ -161,8 +172,7 @@ class BackController
     {
         $this->commentManager->deleteComment($comment_id);
         $msg =  '<p>Le commantaire a bien été effacé.</p>
-                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-                 <a href="index.php?action=viewCommentDashboard">Aller à la gestion des commentaires</a>
+                 <a href="index.php?action=viewCommentDashboard">Retourner à la gestion des commentaires</a>
                  ';
         require('App/view/messageView.php');
     }
@@ -175,8 +185,7 @@ class BackController
     {
         $this->userManager->deleteMember($user_id);
         $msg =  '<p>Le membre a bien été bannis.</p>
-                 <a href="index.php?action=viewHomeDashboard">Aller sur le tableau de bord</a>
-                 <a href="index.php?action=viewMemberDashboard">Aller à la gestion des membres</a>
+                 <a href="index.php?action=viewMemberDashboard">Retourner à la gestion des membres</a>
                  ';
         require('App/view/messageView.php');
     }

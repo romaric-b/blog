@@ -15,9 +15,9 @@
 
 
     <!-- Custom fonts for this template -->
-<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet" type="text/css">-->
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script:400,500,600,700&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
@@ -25,7 +25,7 @@
 </head>
 
 <body id="page-top">
-    <div class="global_page--div container-fluid flex-column bg_home">
+    <div class="global_page--div col-xl container-fluid flex-column bg_home">
 
         <!--Login Modal-->
         <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -97,15 +97,20 @@
         </div>
 
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="index.php?action=viewHome">Jean Forteroche</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light container">
+            <a class="header--a navbar-brand d-flex row" href="index.php?action=viewHome">
+                <h1 class="header_title--h1 row">
+                    <div class="header-logo"></div>
+                    <div class="title_name">Jean Forteroche</div><span class="title--span">Billet simple pour l'Alaska</span>
+                </h1>
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main--navbar" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="main--navbar">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="index.php?action=viewHome">Accueil<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
@@ -135,7 +140,7 @@
                             <a class="nav-link" href="index.php?action=viewCommentDashboard">Gérer commentaires</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=viewPostDashboard">Gérer articles</a>
+                            <a class="nav-link" href="index.php?action=viewPostDashboard">Gérer chapitres</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?action=viewMemberDashboard">Gérer Membres</a>
@@ -148,31 +153,14 @@
         <?= $content ?>
 
         <!-- Footer -->
-        <footer class="footer">
+        <footer class="footer container bg-light">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4">
                         <span class="copyright">Copyright &copy; Jean Forteroche 2019</span>
                     </div>
                     <div class="col-md-4">
-                        <ul class="list-inline social-buttons">
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                            </li>
-                            <!-- TODO mention légales -->
-                        </ul>
+                        <a class="nav-link text-black-50" href="#">Mentions légales</a>
                     </div>
                 </div>
             </div>

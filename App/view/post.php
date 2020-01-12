@@ -11,7 +11,7 @@ if($post == NULL)
 }
 ?>
 
-<section class="bg-light">
+<section class="bg-light container">
     <h2>Chapitres</h2>
     <article>
         <h3>
@@ -36,14 +36,14 @@ if($post == NULL)
         <br>
         <div id="success-send"></div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" id="sendMessageButton">Soumettre</button>
+            <button type="submit" class="btn btn-primary" id="sendMessageButton"><i class="far fa-comment"></i> Soumettre</button>
         </div>
     </form>
     <?php endif;?>
 <?php endif;?>
 <?php if(empty($_SESSION['user_nickname'])): ?>
     <p>
-        <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#">Connectez-vous pour écrire un commentaire</a>
+        <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#"><i class="fas fa-sign-in-alt"></i>Connectez-vous pour écrire un commentaire</a>
     </p>
 <?php endif;?>
 <!--Commentaires existants -->

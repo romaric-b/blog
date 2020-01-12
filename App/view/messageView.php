@@ -3,11 +3,9 @@ $title = 'Blog de Jean Forteroche : message'; ?>
 
 <?php ob_start(); ?>
 
-<h1>Message</h1>
+<h2>Information</h2>
 
-<div><?= $msg ?><div>
-
-
+<div class="bg-light d-flex flex-column container" ><?= $msg ?><div>
 
 <?php $content = ob_get_clean(); ?>
 
