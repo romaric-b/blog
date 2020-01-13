@@ -31,7 +31,6 @@
         <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Connexion</h5>
                         <button type="button" id="close-login-modal" class="close" data-dismiss="modal" aria-label="Close">
@@ -39,18 +38,19 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="index.php?action=login" method="POST">
-                            <p>
-                                <label for="login--nickname">Entrez votre pseudo :
+                        <form class="d-flex flex-column" action="index.php?action=login" method="POST">
+                            <p class="d-flex flex-column">
+                                <span>* Ces champs sont obligatoires</span>
+                                <label class="d-flex flex-column" for="login--nickname">Entrez votre pseudo * :
                                     <input type="text" name="loginNickname" placeholder="Pseudo" id="login--nickname" required/>
                                 </label>
-                                <label for="login--password">Tapez votre mot de passe :
+                                <label class="d-flex flex-column" for="login--password">Tapez votre mot de passe * :
                                     <input type="password" name="loginPassword" placeholder="Mot de passe"  id="login--password" required/>
                                 </label>
                                 Vous n'êtes pas inscrit ? <a class="nav-link" id="open-register-form" data-dismiss="modal" data-toggle="modal" data-target="#register-modal" href="#">Inscrivez-vous ici</a>
                             </p>
                             <p>
-                                <input type="submit" name="loginForm" value="Se connecter"/>
+                                <input  class="btn btn-primary"  type="submit" name="loginForm" value="Se connecter"/>
                             </p>
                         </form>
                     </div>
@@ -71,24 +71,24 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="index.php?action=register" method="POST">
+                        <form class="d-flex flex-column" action="index.php?action=register" method="POST">
                             <p>
                                 <span>* Ces champs sont obligatoires</span>
-                                <label for="regist--nickname">Entrez votre pseudo comportant 1 à 30 caractères * :
+                                <label class="d-flex flex-column" for="regist--nickname">Entrez votre pseudo comportant 1 à 30 caractères * :
                                     <input type="text" name="registNickname" placeholder="Pseudo" id="regist--nickname" value=""  required/>
                                 </label>
-                                <label for="regist--email">Entrez votre adresse email * :
+                                <label class="d-flex flex-column" for="regist--email">Entrez votre adresse email * :
                                     <input type="email" name="registEmail" placeholder="Email" id="regist--email" required/>
                                 </label>
-                                <label for="regist--password">Tapez votre mot de passe comportant 1 à 30 caractères * :
+                                <label class="d-flex flex-column" for="regist--password">Tapez votre mot de passe comportant 1 à 30 caractères * :
                                     <input type="password" name="registPassword" placeholder="Mot de passe" id="regist--password" required/>
                                 </label>
-                                <label for="regist--confirm-password">Confirmez votre mot de passe * :
+                                <label class="d-flex flex-column" for="regist--confirm-password">Confirmez votre mot de passe * :
                                     <input type="password" name="registPassword2" placeholder="Confirmation mot de passe" id="regist--confirm-password" required/>
                                 </label>
                             </p>
                             <p>
-                                <input type="submit" name="registForm" value="Valider"/>
+                                <input class="btn btn-primary" type="submit" name="registForm" value="Valider"/>
                             </p>
                         </form>
                     </div>
@@ -169,7 +169,7 @@
 
     <!--TinyMCE-->
     <script src="https://cdn.tiny.cloud/1/sguduqeo4kbrmiicmeazgnj892slxkt1nd2wz04afbus4c3y/tinymce/5/tinymce.min.js"></script>
-    <script>tinymce.init({selector:'.tinymce-edition'});</script>
+    <script>tinymce.init({selector:'.tinymce-edition', language : 'fr_FR'});</script>
 <!-- Bootstrap core JavaScript -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

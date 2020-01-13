@@ -3,6 +3,7 @@
 namespace App\controller;
 
 use App\model\entities\Comment;
+use App\model\entities\User;
 use App\model\entities\Post;
 use App\model\PostManager;
 use App\model\UserManager;

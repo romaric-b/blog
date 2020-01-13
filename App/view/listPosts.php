@@ -3,18 +3,18 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
 <!--testé et fonctionne-->
 
 <?php ob_start(); ?>
-    <section class="bg-light-opacity container" id="chapters-list">
+    <section class="bg-light-opacity container full-vh" id="chapters-list">
 
-        <h2 class="marg-top">Chapitres</h2>
+        <h2 class="marg-top d-inline-flex">Chapitres</h2>
 
         <?php foreach ($posts as $post): ?>
         <article class="bg-light chapter--article">
-            <h3>
+            <h3 class="border-bottom pad-light">
                 <?=$post->getPostTitle()?>
                 <span class="font-italic date-post-title text-secondary">le <?=$post->getPostDate() ?></span>
             </h3>
-            <p>
-                Extrait de ce chapitre :
+            <p class="d-flex flex-column">
+                <span class="text-black-50">Extrait :</span>
                 <?=$post->getPostExtract()?>
             </p>
         </article>
@@ -26,7 +26,7 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
         <?php
         for($i=1; $i<=$totalPages; $i++)
         {
-            echo '<a href="index.php?action=listPosts&amp;page='.$i.'">'.$i.'</a> ';
+            echo '<a class="text-black-50" href="index.php?action=listPosts&amp;page='.$i.'">'.$i.'</a> ';
         }
             ?>
     </section>

@@ -5,7 +5,7 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
 <?php ob_start(); ?>
 <?php if (isset($_SESSION)): ?>
     <?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
-    <div class="bg-light container">
+    <div class="bg-light full-vh container">
         <div class="text-center  mb-4">
             <h2>Tableau de bord</h2>
         <p>Bonjour Jean Forteroche et bienvenu sur votre tableau de bord</p>
@@ -13,40 +13,39 @@ $title = 'Tableau de bord : vue d\'ensemble'; ?>
 
         <section class="admin-report text-center marg-top-strong mb-4">
             <h3 class="marg-top-strong">Votre blog en quelques chiffres</h3>
-
             <ul class="d-flex justify-content-center marg-top-strong">
-                <li class="flex-column dashboard_stats--li shadow p-3 bg-info">
-                    <i class="fas fa-book"></i>
-                    <p><?= $totalPosts ?> chapitres</p>
+                <li class="flex-column dashboard_stats--li shadow p-3 bg-secondary text-light">
+                    <span class="font-weight-bold stats-number"><?= $totalPosts ?></span>
+                    <p class="d-block row marg-auto align-items-center"><i class="fas fa-book"></i> chapitres</p>
                 </li>
-                <li class="flex-column ml-5 mr-5 dashboard_stats--li shadow p-3 bg-info">
-                    <i class="far fa-comment"></i>
-                    <p><?= $totalComments ?> commentaires</p>
+                <li class="flex-column ml-5 mr-5 dashboard_stats--li shadow p-3 bg-secondary text-light">
+                    <span class="font-weight-bold stats-number"><?= $totalComments ?></span>
+                    <p class="d-block row marg-auto align-items-center"><i class="far fa-comment"></i> commentaires</p>
                 </li>
-                <li class="flex-column dashboard_stats--li shadow p-3 bg-info">
-                    <i class="fas fa-user"></i>
-                    <p><?= $totalMembers ?> membres</p>
+                <li class="flex-column dashboard_stats--li shadow p-3 bg-secondary text-light">
+                    <span class="font-weight-bold stats-number"><?= $totalMembers ?></span>
+                    <p class="d-block row marg-auto align-items-center"><i class="fas fa-user"></i> membres</p>
                 </li>
             </ul>
 
             <button class="btn btn-primary marg-top-strong" type="button" data-toggle="collapse" data-target="#create_post" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-pencil-alt"></i>
-                Ecrire un nouveau chapitre
+                Écrire un nouveau chapitre
             </button>
-            <div id="create_post" class="creation_post--section collapse">
-                <form action="index.php?action=createPost" method="POST" class="flex-column">
-                    <label for="post_title">Titre :
+            <div id="create_post" class="creation_post--section marg-h border-top border-bottom collapse">
+                <form action="index.php?action=createPost" method="POST" class="d-flex marg-auto flex-column w-80">
+                    <label class="marg-bot-small marg-top-strong" for="post_title">Titre :
                         <input id="post_title" name="createTitle" id="title">
                     </label>
-                    <label for="post_extract">Rédigez un extrait de votre chapitre :
-                        <textarea class="tinymce-edition" id="post_extract" name="createExtract">
+                    <label class="marg-bot-small"  for="post_extract">Rédigez un extrait de votre chapitre :
+                        <textarea class="tinymce-edition marg-top" id="post_extract" name="createExtract">
                         </textarea>
                     </label>
-                    <label for="post_content">Rédigez le contenu de votre chapitre :
-                        <textarea class="tinymce-edition" id="post_content" name="createContent">
+                    <label class="marg-bot-small"  for="post_content">Rédigez le contenu de votre chapitre :
+                        <textarea class="tinymce-edition marg-top" id="post_content" name="createContent">
                         </textarea>
                     </label>
                     <p>
-                        <input type="submit"  value="Valider"/>
+                        <input type="submit" class="btn btn-primary text-light" value="Valider ce chapitre"/>
                     </p>
                 </form>
             </div>

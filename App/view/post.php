@@ -11,25 +11,23 @@ if($post == NULL)
 }
 ?>
 
-<section class="bg-light container">
-    <h2>Chapitres</h2>
-    <article>
-        <h3>
-            <?=$post->getPostTitle()?>
-            <?=$post->getPostDate() ?>
-        </h3>
-        <p>
+<section class="bg-light-opacity full-vh container pad-2">
+    <article class="bg-light pad-2">
+        <h2 class="d-flex flex-column">
+            <span class="border-bottom pad-light"><?=$post->getPostTitle()?></span>
+            <span class="font-italic date-post-title text-secondary marg-top">le <?=$post->getPostDate() ?></span>
+        </h2>
+        <p class="marg-top">
             <?=$post->getPostContent()?>
         </p>
     </article>
 <!--Edition du commentaire -->
 <?php if(isset($_SESSION)): ?>
     <?php if(!empty($_SESSION['user_nickname'])): ?>
-    <h2>Commentaires</h2>
-    <form action="index.php?action=createComment&amp;id=<?= $post->getPostId() ?>" method="post">
+    <form class="marg-top" action="index.php?action=createComment&amp;id=<?= $post->getPostId() ?>" method="post">
         <div class="control-group">
             <div class="form-group floating-label-form-group controls">
-                <label for="message">Commentaire</label>
+                <label for="message">Commentez ce chapitre :</label>
                 <textarea rows="5" class="form-control" name="createCommentContent" placeholder="Tapez votre commentaire" id="message" required></textarea>
             </div>
         </div>
@@ -42,25 +40,28 @@ if($post == NULL)
     <?php endif;?>
 <?php endif;?>
 <?php if(empty($_SESSION['user_nickname'])): ?>
-    <p>
+    <p class="marg-top">
         <a class="nav-link" data-toggle="modal" data-target="#login-modal"  href="#"><i class="fas fa-sign-in-alt"></i>Connectez-vous pour écrire un commentaire</a>
     </p>
 <?php endif;?>
 <!--Commentaires existants -->
+    <h3 class="marg-top">Commentaires des membres</h3>
 <?php foreach ($comments as $comment): ?>
     <div>
-        <p>
-            <span><?=$comment->getAuthor()?>, </span>
-            <span>le <?=$comment->getCommentDate()?></span>
-            <?php if($comment->getCommentStatus() == 'signaled'):?>
-            <span class="font-italic">Commentaire signalé</span>
+        <p class="d-flex flex-column">
+            <div class="d-flex row pad-light comment-head--div">
+                <span><?=$comment->getAuthor()?>, &nbsp;</span>
+                <span class="font-italic text-secondary"> le <?=$comment->getCommentDate()?></span>
+                <?php if($comment->getCommentStatus() == 'signaled'):?>
+                    <span class="font-italic text-secondary"">&nbsp; Commentaire signalé</span>
+                <?php endif;?>
+                <?php if($comment->getCommentStatus() == 'moderated'):?>
+                    <span class="font-italic text-secondary"">&nbsp; Commentaire modéré</span>
+                <?php endif;?>
+                <?php if($comment->getCommentStatus() == 'unsignaled'): ?>
+                    <a class="text-danger" href="index.php?action=signalComment&amp;id=<?= $comment->getCommentId() ?>">&nbsp;  <i class="fas fa-exclamation-triangle"></i> Signaler Commentaire</a>
             <?php endif;?>
-            <?php if($comment->getCommentStatus() == 'moderated'):?>
-            <span class="font-italic">Commentaire modéré</span>
-            <?php endif;?>
-            <?php if($comment->getCommentStatus() == 'unsignaled'): ?>
-            <a href="index.php?action=signalComment&amp;id=<?= $comment->getCommentId() ?>">Signaler Commentaire</a>
-            <?php endif;?>
+            </div>
             <?=$comment->getCommentContent()?>
         </p>
     </div>

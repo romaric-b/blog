@@ -5,7 +5,7 @@ namespace App\model\entities;
 class User
 {
     /**
-     * @var int $user_id
+     * @var  $user_id
      * @var string $user_nickname
      * @var string $user_regist_date
      * @var string $user_email

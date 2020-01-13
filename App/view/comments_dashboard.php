@@ -4,9 +4,9 @@ $title = 'Tableau de bord : Commentaires'; ?>
 <?php ob_start(); ?>
 <?php if (isset($_SESSION)): ?>
     <?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
-    <div class="bg-light container">
+    <div class="bg-light container full-vh">
         <h1>Gestion des commentaires</h1>
-        <div class="d-flex marg-top-strong flex-column">
+        <div class="d-flex marg-top-strong row">
             <a class="btn btn-secondary p-1 marg-auto marg-top marg-bot w-25" href="index?action=viewCommentDashboardOrderByNotRead"><i class="fas fa-book"></i>Trier par commentaires non lus</a>
             <a class="btn btn-secondary p-1 marg-auto marg-bot w-25" href="index?action=viewCommentDashboardOrderByRead"><i class="fas fa-book-open"></i>Trier par commentaires déjà lus</a>
         </div>
@@ -30,36 +30,15 @@ $title = 'Tableau de bord : Commentaires'; ?>
                     <td><?=$comment->getCommentStatusFr()?></td>
                     <td><?=$comment->getCommentReadFr()?></td>
                     <td class="btn-group" role="group" aria-label="actions">
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#delete-modal"  href="#"><i class="far fa-trash-alt"></i>Effacer commentaire</a>
-                        <a href="index.php?action=unsignalReadedComment&amp;commentId=<?=$comment->getCommentId()?>" class="btn btn-secondary p-1"><i class="fas fa-undo"></i>Annuler signalement</a>
-                        <a href="index.php?action=updateReadedComment&amp;commentId=<?=$comment->getCommentId()?>" class="btn btn-danger p-1"><i class="fas fa-book-open"></i>Marquer comme lu</a>
+                        <?php $_SESSION['comment' . $comment->getCommentId()] = $comment;
+                        ?>
+                        <a href="index.php?action=deleteComment&amp;&commentId=<?=$comment->getCommentId()?>" class="btn btn-danger p-1"><i class="far fa-trash-alt"></i>Effacer commentaire</a>
+                        <a href="index.php?action=unsignalReadedComment&amp;commentId=<?=$comment->getCommentId()?>" class="btn btn-warning p-1"><i class="fas fa-undo"></i>Annuler signalement</a>
+                        <a href="index.php?action=updateReadedComment&amp;commentId=<?=$comment->getCommentId()?>" class="btn btn-secondary p-1"><i class="fas fa-book-open"></i>Marquer comme lu</a>
                     </td>
                 </tr>
                 <?php endforeach;?>
             </table>
-        </div>
-        <!--delete Modal-->
-        <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Connexion</h5>
-                        <button type="button" id="close-login-modal" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="index.php?action=login" method="POST">
-                            <p>
-                                Êtes-vous sûr de vouloir Effacer ce commentaire ?
-                            </p>
-                            <p>
-                                <a href="index.php?action=deleteComment&commentId=<?=$comment->getCommentId()?>" class="btn btn-danger p-1"><i class="far fa-trash-alt"></i>Effacer commentaire</a>
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

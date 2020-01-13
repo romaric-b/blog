@@ -56,7 +56,7 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      */
     public function readAllMembers()
     {
-        $req = $this->dbConnect()->query('SELECT  user_nickname, DATE_FORMAT(user_regist_date, \'%d/%m/%Y à %Hh%imin\') AS user_regist_date_fr, user_email, user_password, user_role  FROM blog_user ORDER BY user_id');
+        $req = $this->dbConnect()->query('SELECT user_id ,user_nickname, DATE_FORMAT(user_regist_date, \'%d/%m/%Y à %Hh%imin\') AS user_regist_date_fr, user_email, user_password, user_role  FROM blog_user ORDER BY user_id');
         $users = [];
 
         while($user = $req->fetchObject('\App\model\entities\User'))
@@ -102,7 +102,7 @@ INSERT INTO blog_user (user_nickname, user_regist_date, user_email, user_passwor
      */
     public function deleteMember($user_id)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id = ?');
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_user WHERE user_id = ? LIMIT 1');
 
         $req->execute(array($user_id));
 

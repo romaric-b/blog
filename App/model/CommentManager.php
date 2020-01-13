@@ -224,7 +224,7 @@ INSERT INTO blog_comments (comment_date, comment_status, comment_content, commen
      */
     public function deleteComment($comment_id)
     {
-        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id = ?');
+        $req = $this->dbConnect()->prepare('DELETE FROM blog_comments WHERE comment_id = ?  LIMIT 1');
 
         $req->execute(array($comment_id));
 
