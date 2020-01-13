@@ -7,6 +7,11 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
 
         <h2 class="marg-top d-inline-flex">Chapitres</h2>
 
+        <?php if(empty($posts) OR $posts == NULL): ?>
+            <p>Aucun chapitre.</p>
+
+        <?php elseif(!empty($posts)): ?>
+
         <?php foreach ($posts as $post): ?>
         <article class="bg-light chapter--article">
             <h3 class="border-bottom pad-light">
@@ -29,6 +34,7 @@ $title = 'Blog de Jean Forteroche : Chapitres'; ?>
             echo '<a class="text-black-50" href="index.php?action=listPosts&amp;page='.$i.'">'.$i.'</a> ';
         }
             ?>
+    <?php endif; ?>
     </section>
 <?php $content = ob_get_clean(); ?>
 <?php require('template.php'); ?>

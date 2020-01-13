@@ -6,6 +6,10 @@ $title = 'Tableau de bord : Membres'; ?>
     <?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
         <section class="admin-report text-center container full-vh bg-light mb-4">
             <h1 class="marg-bot">Gestion de vos membres</h1>
+            <?php if(empty($users) OR $users == NULL): ?>
+                <p>Aucun membre inscrit.</p>
+
+            <?php elseif(!empty($users)): ?>
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
                 <table class="text-center table-striped table-borderless table-responsive table w-100 d-block d-sm-table d-md-table">
                     <thead class="thead-dark">
@@ -32,6 +36,7 @@ $title = 'Tableau de bord : Membres'; ?>
                     <?php endforeach;?>
                 </table>
             </div>
+        <?php endif; ?>
 
         </section>
     <?php elseif (empty($_SESSION['role']) OR $_SESSION['role'] == 'member'):

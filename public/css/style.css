@@ -237,7 +237,7 @@ body
 .comment-head--div
 {
     /*justify-content: space-between;*/
-    outline: solid red;
+    /*outline: solid red;*/
 }
 
 /***********************************************************************************
@@ -281,7 +281,7 @@ body
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        outline: solid blue;
+
     }
 
     .header_title--h1 > *

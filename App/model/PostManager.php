@@ -77,6 +77,7 @@ INSERT INTO blog_posts (post_title, post_extract, post_content, post_date)
         {
             $posts[] = $post;
         }
+
         return $posts;
     }
 

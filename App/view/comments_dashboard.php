@@ -6,6 +6,10 @@ $title = 'Tableau de bord : Commentaires'; ?>
     <?php if(!empty($_SESSION['role']) AND $_SESSION['role'] == 'administrator'): ?>
     <div class="bg-light container full-vh">
         <h1>Gestion des commentaires</h1>
+        <?php if(empty($comments) OR $comments == NULL): ?>
+            <p>Aucun commentaire.</p>
+
+        <?php elseif(!empty($comments)): ?>
         <div class="d-flex marg-top-strong row">
             <a class="btn btn-secondary p-1 marg-auto marg-top marg-bot w-25" href="index?action=viewCommentDashboardOrderByNotRead"><i class="fas fa-book"></i>Trier par commentaires non lus</a>
             <a class="btn btn-secondary p-1 marg-auto marg-bot w-25" href="index?action=viewCommentDashboardOrderByRead"><i class="fas fa-book-open"></i>Trier par commentaires déjà lus</a>
@@ -40,6 +44,7 @@ $title = 'Tableau de bord : Commentaires'; ?>
                 <?php endforeach;?>
             </table>
         </div>
+        <?php endif; ?>
     </div>
 
 
